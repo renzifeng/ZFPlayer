@@ -1,0 +1,18 @@
+PODS:
+  - Masonry (0.6.4)
+  - MSWeakTimer (1.1.0)
+  - XXNibBridge (2.2.3)
+
+DEPENDENCIES:
+  - Masonry
+  - MSWeakTimer
+  - XXNibBridge
+
+SPEC CHECKSUMS:
+  Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  MSWeakTimer: 9426150f933b80ed3acf3f6d228e4b61f0e303c8
+  XXNibBridge: 70adcf1e85a2b5500d9de5f12781944dc51b0521
+
+PODFILE CHECKSUM: 3e5f5e27b67eeb813c3a7fb897a10026d3407ced
+
+COCOAPODS: 1.0.0.beta.3

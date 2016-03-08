@@ -80,6 +80,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 -(void)layoutSubviews
 {
+    [super layoutSubviews];
     self.playerLayer.frame = self.bounds;
 }
 
@@ -360,6 +361,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 //slider滑动事件
 - (void)progressSlider:(UISlider *)slider
 {
+    if (self.isLocked) return;
+    
     //拖动改变视频播放进度
     if (_player.status == AVPlayerStatusReadyToPlay) {
         
@@ -456,6 +459,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
     sender.selected = !sender.selected;
     self.isLocked = sender.selected;
 
+    // 禁用播放按钮点击事件
+    self.maskView.startBtn.userInteractionEnabled = !sender.selected;
+    // 禁用全屏按钮点击事件
+    self.maskView.fullScreenBtn.userInteractionEnabled = !sender.selected;
+    
     NSUserDefaults *settingsData = [NSUserDefaults standardUserDefaults];
     if (sender.selected) {
         [settingsData setObject:@"1" forKey:@"lockScreen"];
@@ -479,6 +487,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)panDirection:(UIPanGestureRecognizer *)pan
 {
+    if (self.isLocked) return;
+    
     //根据在view上Pan的位置，确定是跳音量、亮度
     CGPoint locationPoint = [pan locationInView:self];
     //NSLog(@"========%@",NSStringFromCGPoint(locationPoint));
