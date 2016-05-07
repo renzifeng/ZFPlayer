@@ -68,7 +68,7 @@
 			title.font = [UIFont systemFontOfSize:16];
 			title.textColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
 			title.textAlignment = NSTextAlignmentCenter;
-			title.text = @"亮度";
+			title.text = NSLocalizedString(@"亮度", nil);
 			[self addSubview:title];
 			title;
 		});
