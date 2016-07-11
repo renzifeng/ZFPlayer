@@ -464,6 +464,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 {
     // 单击
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
+    tap.delegate = self;
     [self addGestureRecognizer:tap];
     
     // 双击(播放/暂停)
@@ -1251,9 +1252,10 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 - (void)appDidEnterBackground
 {
     self.didEnterBackground = YES;
-    [self pause];
+    [_player pause];
     self.state = ZFPlayerStatePause;
     [self cancelAutoFadeOutControlBar];
+    self.controlView.startBtn.selected = NO;
 }
 
 /**
@@ -1560,9 +1562,12 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    CGPoint point = [touch locationInView:self.controlView];
-    // （屏幕下方slider区域） || （在cell上播放视频 && 不是全屏状态） || (播放完了) =====>  不响应pan手势
-    if ((point.y > self.bounds.size.height-40) || (self.isCellVideo && !self.isFullScreen) || self.playDidEnd) { return NO; }
+    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        CGPoint point = [touch locationInView:self.controlView];
+        // （屏幕下方slider区域） || （在cell上播放视频 && 不是全屏状态） || (播放完了) =====>  不响应pan手势
+        if ((point.y > self.bounds.size.height-40) || (self.isCellVideo && !self.isFullScreen) || self.playDidEnd) { return NO; }
+        return YES;
+    }
     return YES;
 }
 

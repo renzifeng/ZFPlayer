@@ -56,7 +56,7 @@
 /** 下载中的模型数组*/
 @property (nonatomic, strong, readonly) NSMutableArray *downloadingArray;
 /** ZFDownloadDelegate */
-@property (nonatomic, assign) id<ZFDownloadDelegate> delegate;
+@property (nonatomic, weak) id<ZFDownloadDelegate> delegate;
 
 /**
  *  单例
