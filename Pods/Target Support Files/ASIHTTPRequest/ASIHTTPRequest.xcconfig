@@ -1,0 +1,5 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ASIHTTPRequest" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ASIHTTPRequest" "${PODS_ROOT}/Headers/Public/FDFullscreenPopGesture" "${PODS_ROOT}/Headers/Public/Masonry" "${PODS_ROOT}/Headers/Public/Reachability" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/ZFDownload" "$(SDKROOT)/usr/include/libxml2"
+OTHER_LDFLAGS = -l"xml2.2" -l"z.1" -framework "CFNetwork" -framework "CoreGraphics" -framework "MobileCoreServices"
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

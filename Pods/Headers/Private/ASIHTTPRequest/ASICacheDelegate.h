@@ -1,0 +1,1 @@
+../../../ASIHTTPRequest/Classes/ASICacheDelegate.h

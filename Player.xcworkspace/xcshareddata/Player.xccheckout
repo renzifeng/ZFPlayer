@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>58573A83-45A3-4493-8E75-C4A56DE20CF4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Player</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0B202DCB595C7D52E9531AE4F70774414E9C13BD</key>
+		<string>https://github.com/renzifeng/ZFPlayer.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Player.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0B202DCB595C7D52E9531AE4F70774414E9C13BD</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/renzifeng/ZFPlayer.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0B202DCB595C7D52E9531AE4F70774414E9C13BD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0B202DCB595C7D52E9531AE4F70774414E9C13BD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ZFPlayer</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,1 @@
+../../../ASIHTTPRequest/Classes/S3/ASINSXMLParserCompat.h
