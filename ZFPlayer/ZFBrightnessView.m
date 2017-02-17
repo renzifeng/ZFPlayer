@@ -31,17 +31,16 @@
 @property (nonatomic, strong) UIView			*longView;
 @property (nonatomic, strong) NSMutableArray	*tipArray;
 @property (nonatomic, assign) BOOL				orientationDidChange;
-@property (nonatomic, strong) NSTimer			*timer;
 
 @end
 
 @implementation ZFBrightnessView
 
-+ (instancetype)sharedBrightnesView {
++ (instancetype)sharedBrightnessView {
 	static ZFBrightnessView *instance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		instance = [[ZFBrightnessView alloc]init];
+		instance = [[ZFBrightnessView alloc] init];
 		[[UIApplication sharedApplication].keyWindow addSubview:instance];
 	});
 	return instance;
@@ -51,31 +50,34 @@
 	if (self = [super init]) {
 		self.frame = CGRectMake(ScreenWidth * 0.5, ScreenHeight * 0.5, 155, 155);
 		
-		self.layer.cornerRadius = 10;
-		self.layer.masksToBounds = YES;
-		
-		self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:ZFPlayerSrcName(@"brightness_bg.png")]];
+        self.layer.cornerRadius  = 10;
+        self.layer.masksToBounds = YES;
+        
+        // 使用UIToolbar实现毛玻璃效果，简单粗暴，支持iOS7+
+        UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
+        toolbar.alpha = 0.97;
+        [self addSubview:toolbar];
         
 		self.backImage = ({
-			UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 79, 76)];
-			imgView.image = [UIImage imageNamed:ZFPlayerSrcName(@"playgesture_BrightnessSun6")];
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 79, 76)];
+            imgView.image        = ZFPlayerImage(@"ZFPlayer_brightness");
 			[self addSubview:imgView];
 			imgView;
 		});
 		
 		self.title = ({
-			UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, self.bounds.size.width, 30)];
-			title.font = [UIFont systemFontOfSize:16];
-			title.textColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
-			title.textAlignment = NSTextAlignmentCenter;
-			title.text = @"亮度";
+            UILabel *title      = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, self.bounds.size.width, 30)];
+            title.font          = [UIFont boldSystemFontOfSize:16];
+            title.textColor     = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
+            title.textAlignment = NSTextAlignmentCenter;
+            title.text          = @"亮度";
 			[self addSubview:title];
 			title;
 		});
 		
 		self.longView = ({
-			UIView *longView = [[UIView alloc]initWithFrame:CGRectMake(13, 132, self.bounds.size.width - 26, 7)];
-			longView.backgroundColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
+            UIView *longView         = [[UIView alloc]initWithFrame:CGRectMake(13, 132, self.bounds.size.width - 26, 7)];
+            longView.backgroundColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
 			[self addSubview:longView];
 			longView;
 		});
@@ -99,10 +101,10 @@
 	CGFloat tipY = 1;
 	
 	for (int i = 0; i < 16; i++) {
-		CGFloat tipX = i * (tipW + 1) + 1;
-		UIImageView *image = [[UIImageView alloc] init];
-		image.backgroundColor = [UIColor whiteColor];
-		image.frame = CGRectMake(tipX, tipY, tipW, tipH);
+        CGFloat tipX          = i * (tipW + 1) + 1;
+        UIImageView *image    = [[UIImageView alloc] init];
+        image.backgroundColor = [UIColor whiteColor];
+        image.frame           = CGRectMake(tipX, tipY, tipW, tipH);
 		[self.longView addSubview:image];
 		[self.tipArray addObject:image];
 	}
@@ -110,6 +112,7 @@
 }
 
 #pragma makr - 通知 KVO
+
 - (void)addNotification {
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -127,7 +130,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
-						change:(NSDictionary<NSString *,id> *)change
+						change:(NSDictionary *)change
 					   context:(void *)context {
 	
 	CGFloat sound = [change[@"new"] floatValue];
@@ -138,13 +141,18 @@
 - (void)updateLayer:(NSNotification *)notify {
 	self.orientationDidChange = YES;
 	[self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 #pragma mark - Methond
+
 - (void)appearSoundView {
 	if (self.alpha == 0.0) {
+        self.orientationDidChange = NO;
 		self.alpha = 1.0;
-		[self updateTimer];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self disAppearSoundView];
+        });
 	}
 }
 
@@ -153,41 +161,12 @@
 	if (self.alpha == 1.0) {
 		[UIView animateWithDuration:0.8 animations:^{
 			self.alpha = 0.0;
-		} completion:^(BOOL finished) {
-			
 		}];
 	}
 }
 
-#pragma mark - Timer Methond
-- (void)addtimer {
-	
-	if (self.timer) {
-		return;
-	}
-	
-	self.timer = [NSTimer timerWithTimeInterval:3
-										 target:self
-									   selector:@selector(disAppearSoundView)
-									   userInfo:nil
-										repeats:NO];
-	[[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-}
-
-- (void)removeTimer {
-	
-	if (self.timer) {
-		[self.timer invalidate];
-		self.timer = nil;
-	}
-}
-
-- (void)updateTimer {
-	[self removeTimer];
-	[self addtimer];
-}
-
 #pragma mark - Update View
+
 - (void)updateLongView:(CGFloat)sound {
 	CGFloat stage = 1 / 15.0;
 	NSInteger level = sound / stage;
@@ -203,43 +182,15 @@
 	}
 }
 
-- (void)didMoveToSuperview {
-	//NSLog(@"--- didMoveToSuperview");
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-	[self setNeedsLayout];
-}
-
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
-	if (self.orientationDidChange) {
-		[UIView animateWithDuration:0.25 animations:^{
-			if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortrait
-				|| [UIDevice currentDevice].orientation == UIDeviceOrientationFaceUp) {
-				self.center = CGPointMake(ScreenWidth * 0.5, (ScreenHeight - 10) * 0.5);
-			} else {
-				self.center = CGPointMake(ScreenWidth * 0.5, ScreenHeight * 0.5);
-			}
-		} completion:^(BOOL finished) {
-			self.orientationDidChange = NO;
-		}];
-	} else {
-		if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortrait) {
-			self.center = CGPointMake(ScreenWidth * 0.5, (ScreenHeight - 10) * 0.5);
-		} else {
-			self.center = CGPointMake(ScreenWidth * 0.5, ScreenHeight * 0.5);
-		}
-	}
-	
-	self.backImage.center = CGPointMake(155 * 0.5, 155 * 0.5);
+    self.backImage.center = CGPointMake(155 * 0.5, 155 * 0.5);
+    self.center = CGPointMake(ScreenWidth * 0.5, ScreenHeight * 0.5);
 }
 
 - (void)dealloc {
 	[[UIScreen mainScreen] removeObserver:self forKeyPath:@"brightness"];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 
 @end

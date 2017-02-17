@@ -23,13 +23,17 @@
 
 #import "ZFTableViewController.h"
 #import "ZFPlayerCell.h"
-#import "ZFPlayerModel.h"
+#import "ZFVideoModel.h"
+#import "ZFVideoResolution.h"
 #import <Masonry/Masonry.h>
+#import <ZFDownload/ZFDownloadManager.h>
+#import "ZFPlayer.h"
 
-@interface ZFTableViewController ()
+@interface ZFTableViewController () <ZFPlayerDelegate>
 
-@property (nonatomic, strong) NSMutableArray *dataSource;
-@property (nonatomic, strong) ZFPlayerView   *playerView;
+@property (nonatomic, strong) NSMutableArray      *dataSource;
+@property (nonatomic, strong) ZFPlayerView        *playerView;
+@property (nonatomic, strong) ZFPlayerControlView *controlView;
 
 @end
 
@@ -39,28 +43,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.estimatedRowHeight = 44.0f;
-    
+    self.tableView.estimatedRowHeight = 379.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
-    self.dataSource = @[].mutableCopy;
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"videoData" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *rootDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    
-    NSArray *dailyList = [rootDict objectForKey:@"dailyList"];
-    // 使用KVC解析json
-    for (NSDictionary *dic in dailyList) {
-        NSArray *videoList = [dic objectForKey:@"videoList"];
-        NSMutableArray *sectionArray = @[].mutableCopy;
-        for (NSDictionary *dataDic in videoList) {
-            ZFPlayerModel *model = [[ZFPlayerModel alloc] init];
-            [model setValuesForKeysWithDictionary:dataDic];
-            [sectionArray addObject:model];
-        }
-        [self.dataSource addObject:sectionArray];
-    }
+    [self requestData];
 }
 
 // 页面消失时候
@@ -70,73 +55,115 @@
     [self.playerView resetPlayer];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)requestData
 {
-    if (toInterfaceOrientation == UIInterfaceOrientationPortrait) {
-        self.view.backgroundColor = [UIColor whiteColor];
-    }else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        self.view.backgroundColor = [UIColor blackColor];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"videoData" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSDictionary *rootDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    self.dataSource = @[].mutableCopy;
+    NSArray *videoList = [rootDict objectForKey:@"videoList"];
+    for (NSDictionary *dataDic in videoList) {
+        ZFVideoModel *model = [[ZFVideoModel alloc] init];
+        [model setValuesForKeysWithDictionary:dataDic];
+        [self.dataSource addObject:model];
     }
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.dataSource.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray * arr = self.dataSource[section];
-    return arr.count;
+    return self.dataSource.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    static NSString *identifier = @"playerCell";
-    ZFPlayerCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-
-    __block ZFPlayerModel *model = self.dataSource[indexPath.section][indexPath.row];
-    cell.model = model;
-    
+    static NSString *identifier        = @"playerCell";
+    ZFPlayerCell *cell                 = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+    // 取到对应cell的model
+    __block ZFVideoModel *model        = self.dataSource[indexPath.row];
+    // 赋值model
+    cell.model                         = model;
     __block NSIndexPath *weakIndexPath = indexPath;
-    __block ZFPlayerCell *weakCell = cell;
-    __weak typeof(self) weakSelf = self;
-    cell.playBlock = ^{
-        weakSelf.playerView = [ZFPlayerView playerView];
-        NSURL *videoURL = [NSURL URLWithString:model.playUrl];
-        // 设置player相关参数
-        [weakSelf.playerView setVideoURL:videoURL withTableView:weakSelf.tableView AtIndexPath:weakIndexPath];
-        [weakSelf.playerView addPlayerToCell:weakCell];
+    __block ZFPlayerCell *weakCell     = cell;
+    __weak typeof(self)  weakSelf      = self;
+    // 点击播放的回调
+    cell.playBlock = ^(UIButton *btn){
+        
+        // 分辨率字典（key:分辨率名称，value：分辨率url)
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        for (ZFVideoResolution * resolution in model.playInfo) {
+            [dic setValue:resolution.url forKey:resolution.name];
+        }
+        // 取出字典中的第一视频URL
+        NSURL *videoURL = [NSURL URLWithString:dic.allValues.firstObject];
+        
+        ZFPlayerModel *playerModel = [[ZFPlayerModel alloc] init];
+        playerModel.title            = model.title;
+        playerModel.videoURL         = videoURL;
+        playerModel.placeholderImageURLString = model.coverForFeed;
+        playerModel.tableView        = weakSelf.tableView;
+        playerModel.indexPath        = weakIndexPath;
+        // 赋值分辨率字典
+        playerModel.resolutionDic    = dic;
+        // player的父视图
+        playerModel.fatherView       = weakCell.picView;
+        
+        // 设置播放控制层和model
+        [weakSelf.playerView playerControlView:weakSelf.controlView playerModel:playerModel];
+        // 下载功能
+        weakSelf.playerView.hasDownload = YES;
+        // 自动播放
+        [weakSelf.playerView autoPlayTheVideo];
     };
-    
+
     return cell;
 }
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSArray * modelArray = self.dataSource[section];
-    ZFPlayerModel *model = modelArray[0];
-    return [self getDateFromTimeInterval:model.date];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"didSelectRowAtIndexPath---%zd",indexPath.row);
 }
 
-/**
- *  转换时间戳
- *
- *  @param timeInterval 时间戳
- *
- *  @return 时间字符串
- */
-- (NSString *)getDateFromTimeInterval:(long)timeInterval {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy年MM月dd日";
-    NSDate *createDate = [NSDate dateWithTimeIntervalSince1970:timeInterval/1000];
-    NSString *createStr = [formatter stringFromDate:createDate];
-    return createStr;
+- (ZFPlayerView *)playerView
+{
+    if (!_playerView) {
+        _playerView = [ZFPlayerView sharedPlayerView];
+        _playerView.delegate = self;
+        // 当cell播放视频由全屏变为小屏时候，不回到中间位置
+        _playerView.cellPlayerOnCenter = NO;
+        
+        // 当cell划出屏幕的时候停止播放
+        // _playerView.stopPlayWhileCellNotVisable = YES;
+        //（可选设置）可以设置视频的填充模式，默认为（等比例填充，直到一个维度到达区域边界）
+        // _playerView.playerLayerGravity = ZFPlayerLayerGravityResizeAspect;
+        // 静音
+        // _playerView.mute = YES;
+    }
+    return _playerView;
+}
+
+- (ZFPlayerControlView *)controlView
+{
+    if (!_controlView) {
+        _controlView = [[ZFPlayerControlView alloc] init];
+    }
+    return _controlView;
+}
+
+#pragma mark - ZFPlayerDelegate
+
+- (void)zf_playerDownload:(NSString *)url
+{
+    // 此处是截取的下载地址，可以自己根据服务器的视频名称来赋值
+    NSString *name = [url lastPathComponent];
+    [[ZFDownloadManager sharedDownloadManager] downFileUrl:url filename:name fileimage:nil];
+    // 设置最多同时下载个数（默认是3）
+    [ZFDownloadManager sharedDownloadManager].maxCount = 4;
 }
 
 /*

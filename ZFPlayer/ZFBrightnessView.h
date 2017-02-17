@@ -25,6 +25,11 @@
 
 @interface ZFBrightnessView : UIView
 
-+ (instancetype)sharedBrightnesView;
+/** 调用单例记录播放状态是否锁定屏幕方向*/
+@property (nonatomic, assign) BOOL     isLockScreen;
+/** 是否允许横屏,来控制只有竖屏的状态*/
+@property (nonatomic, assign) BOOL     isAllowLandscape;
+
++ (instancetype)sharedBrightnessView;
 
 @end

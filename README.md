@@ -1,63 +1,313 @@
-# ZFPlayer
-## 基于AVPlayer，实现了各大视频软件的功能
-* 支持横、竖屏切换，在全屏播放模式下还可以锁定屏幕方向
-* 支持本地视频、网络视频播放
-* 左侧1/2位置上下滑动调节屏幕亮度（模拟器调不了亮度，请在真机调试）
-* 右侧1/2位置上下滑动调节音量（模拟器调不了音量，请在真机调试）
-* 左右滑动调节播放进度
+<p align="center">
+<img src="http://7xqbzq.com1.z0.glb.clouddn.com/log.png" alt="ZFPlayer" title="ZFPlayer" width="557"/>
+</p>
 
-使用需要安装cocopods
+<p align="center">
+<a href="https://travis-ci.org/renzifeng/ZFPlayer"><img src="https://travis-ci.org/renzifeng/ZFPlayer.svg?branch=master"></a>
+<a href="https://img.shields.io/cocoapods/v/ZFPlayer.svg"><img src="https://img.shields.io/cocoapods/v/ZFPlayer.svg"></a>
+<a href="https://img.shields.io/cocoapods/v/ZFPlayer.svg"><img src="https://img.shields.io/github/license/renzifeng/ZFPlayer.svg?style=flat"></a>
+<a href="http://cocoadocs.org/docsets/ZFPlayer"><img src="https://img.shields.io/cocoapods/p/ZFPlayer.svg?style=flat"></a>
+<a href="http://weibo.com/zifeng1300"><img src="https://img.shields.io/badge/weibo-@%E4%BB%BB%E5%AD%90%E4%B8%B0-yellow.svg?style=flat"></a>
+</p>
 
-	$ cd ZFPlayer
-	$ pod install
-	
-Open the "Player.xcworkspace"
+A simple video player for iOS, based on AVPlayer. Support the vertical, horizontal screen(lock screen direction). Support adjust volume, brigtness and video progress.
 
-### 用法（支持IB和代码）
-##### IB用法
-直接拖UIView到IB上，宽高比为约束为16：9(优先级改为750，比1000低就行)，代码部分只需要实现
 
-```objc
-self.playerView.videoURL = self.videoURL;
-// 返回按钮事件
-__weak typeof(self) weakSelf = self;
-self.playerView.goBackBlock = ^{
-	[weakSelf.navigationController popViewControllerAnimated:YES];
-};
+[中文说明](https://github.com/renzifeng/ZFPlayer/blob/master/README.zh.md)&emsp;&emsp;[ZFPlayer剖析](http://www.jianshu.com/p/5566077bb25f)&emsp;&emsp;[哪些app使用ZFPlayer](http://www.jianshu.com/p/5fa55a05f87b)
 
+## Features
+- [x] Support for horizontal and vertical play mode, in horizontal mode can also lock the screen direction
+- [x] Support play with online URL and local file
+- [x] Support in TableviewCell playing video
+- [x] Adjust brightness by slide vertical at left side of screen
+- [x] Adjust volume by slide vertical at right side of screen
+- [x] Slide horizontal to fast forward and rewind
+- [x] Full screen mode to drag the slider control progress, display video preview
+- [x] Download 
+- [x] Toggle video resolution
+
+## Requirements
+
+- iOS 7+
+- Xcode 8+
+
+
+## Statistics
+
+What App using ZFPlayer, and on AppStore, please tell me, help me to statistics.
+
+## Component
+
+- Breakpoint Download: [ZFDownload](https://github.com/renzifeng/ZFDownload)
+- Layout: Masonry
+
+## Installation
+
+### CocoaPods    
+
+```ruby
+pod 'ZFPlayer'
 ```
 
-##### 代码实现（Masonry）用法
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+## Usage （Support IB and code）
+##### Set status bar color
+Please add the "View controller-based status bar appearance" field in info.plist and change it to NO
+
+##### IB usage
+Drag IB to UIView,the View class `ZFPlayerView` instead
+```objc
+// view
+ZFPlayerControlView *controlView = [[ZFPlayerControlView alloc] init];
+// model
+ZFPlayerModel *playerModel = [[ZFPlayerModel alloc] init];
+playerModel.fatherView = ...
+playerModel.videoURL = ...
+playerModel.title = ...
+[self.playerView playerControlView:controlView playerModel:playerModel];
+// delegate
+self.playerView.delegate = self;
+// auto play the video
+[self.playerView autoPlayTheVideo];
+```
+
+`ZFPlayerDelegate`
+
+```
+/** backBtn event */
+- (void)zf_playerBackAction;
+/** downloadBtn event */
+- (void)zf_playerDownload:(NSString *)url;
+```
+
+##### Code implementation (Masonry) usage
 
 ```objc
-self.playerView = [ZFPlayerView setupZFPlayer];
+self.playerView = [[ZFPlayerView alloc] init];
 [self.view addSubview:self.playerView];
 [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
- 	make.left.top.right.equalTo(self.view);
-	// 注意此处，宽高比16：9优先级比1000低就行，在因为iPhone 4S宽高比不是16：9
-	make.height.equalTo(self.playerView.mas_width).multipliedBy(9.0f/16.0f).with.priority(750);
+ 	make.top.equalTo(self.view).offset(20);
+ 	make.left.right.equalTo(self.view);
+	// Here a 16:9 aspect ratio, can customize the video aspect ratio
+    make.height.equalTo(self.playerView.mas_width).multipliedBy(9.0f/16.0f);
 }];
-self.playerView.videoURL = self.videoURL;
-// 返回按钮事件
-__weak typeof(self) weakSelf = self;
-self.playerView.goBackBlock = ^{
-	[weakSelf.navigationController popViewControllerAnimated:YES];
-};
+// control view（you can custom）
+ZFPlayerControlView *controlView = [[ZFPlayerControlView alloc] init];
+// model
+ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
+playerModel.fatherView = ...
+playerModel.videoURL = ...
+playerModel.title = ...
+[self.playerView playerControlView:controlView playerModel:playerModel];
+
+// delegate
+self.playerView.delegate = self;
+// auto play the video
+[self.playerView autoPlayTheVideo];
 ```
 
-### 图片效果演示
-![图片效果演示](https://github.com/renzifeng/ZFPlayer/raw/master/screen.gif)
+##### Set the fill mode for the video
 
-![声音调节演示](https://github.com/renzifeng/ZFPlayer/raw/master/volume.png)
+```objc
+ // Set the fill mode of the video, the default settings (ZFPlayerLayerGravityResizeAspect: wait for a proportional fill, until a dimension reaches the area boundary).
+ self.playerView.playerLayerGravity = ZFPlayerLayerGravityResizeAspect;
+```
+##### Is there a breakpoint download function
+```objc
+ // Default is to close the breakpoint download function, such as the need for this feature set here
+ self.playerView.hasDownload = YES;
+```
 
-![亮度调节演示](https://github.com/renzifeng/ZFPlayer/raw/master/brightness.png)
+##### Play video from XX seconds
 
-### ps：本人最近swift做的项目，朋友们给点建议吧：
-[知乎日报Swift](https://github.com/renzifeng/ZFZhiHuDaily)
+ ```objc
+ // Play video from XX seconds
+ playerModel.seekTime = 15;
+ ```
+
+##### Automatically play the video，not automatically play by default
+```objc
+// Automatically play the video
+[self.playerView autoPlayTheVideo];
+```
+
+##### Set the video placeholderImage 
+
+```objc
+//  The video placeholder image
+// If network image and local image set at the same time, ignore the local image, display the network images
+ZFPlayerModel *playerModel = [[ZFPlayerModel alloc]init];
+// local image
+playerModel.placeholderImage = [UIImage imageNamed: @"..."];
+// network image
+playerModel.placeholderImageURLString = @"https://xxx.jpg";
+self.playerView.playerModel = playerModel;
+```
+
+##### Custom control layer
+`self.playerView.controlView = your customView;`
+
+custom view you need to implement the following method in `.m`, you can reference`ZFPlayerControlView.m`
+
+```
+/** 
+ * Set playaer model 
+ */
+- (void)zf_playerModel:(ZFPlayerModel *)playerModel;
+
+/** 
+ * Show controlView
+ */
+- (void)zf_playerShowControlView;
+
+/** 
+ * Hide controlView
+ */
+- (void)zf_playerHideControlView;
+
+/** 
+ * Reset controlView 
+ */
+- (void)zf_playerResetControlView;
+
+/** 
+ * Reset controlView for resolution
+ */
+- (void)zf_playerResetControlViewForResolution;
+
+/** 
+ * Cancel auto fadeout controlView 
+ */
+- (void)zf_playerCancelAutoFadeOutControlView;
+
+/** 
+ * Begin to play
+ */
+- (void)zf_playerItemPlaying;
+
+/** 
+ * Play end 
+ */
+- (void)zf_playerPlayEnd;
+
+/** 
+ * Has download function
+ */
+- (void)zf_playerHasDownloadFunction:(BOOL)sender;
+
+/**
+ * Resolution function
+ */
+- (void)zf_playerResolutionArray:(NSArray *)resolutionArray;
+
+/** 
+ * PlayBtn state (play or pause)
+ */
+- (void)zf_playerPlayBtnState:(BOOL)state;
+
+/** 
+ * LockBtn state 
+ */
+- (void)zf_playerLockBtnState:(BOOL)state;
+
+/**
+ * DownloadBtn state
+ */
+- (void)zf_playerDownloadBtnState:(BOOL)state;
+
+/** 
+ * Player activity
+ */
+- (void)zf_playerActivity:(BOOL)animated;
+
+/**
+ * Set preview View
+ */
+- (void)zf_playerDraggedTime:(NSInteger)draggedTime sliderImage:(UIImage *)image;
+
+/**
+ * Dragged to control video progress
+ 
+ * @param draggedTime Dragged time for video
+ * @param totalTime   Total time for video
+ * @param forawrd     Whether fast forward
+ * @param preview     Is there a preview
+ */
+- (void)zf_playerDraggedTime:(NSInteger)draggedTime totalTime:(NSInteger)totalTime isForward:(BOOL)forawrd hasPreview:(BOOL)preview;
+
+/** 
+ * Dragged end
+ */
+- (void)zf_playerDraggedEnd;
+
+/**
+ * Normal play
+
+ * @param currentTime Current time for video
+ * @param totalTime   Total Time for video
+ * @param value       Slider value(0.0~1.0)
+ */
+- (void)zf_playerCurrentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime sliderValue:(CGFloat)value;
+
+/** 
+ * Progress display buffer
+ */
+- (void)zf_playerSetProgress:(CGFloat)progress;
+
+/** 
+ * Video load failure 
+ */
+- (void)zf_playerItemStatusFailed:(NSError *)error;
+
+/**
+ * Bottom shrink play
+ */
+- (void)zf_playerBottomShrinkPlay;
+
+/**
+ * play on cell
+ */
+- (void)zf_playerCellPlay;
+```
+
+### Picture demonstration
+
+![Picture effect](https://github.com/renzifeng/ZFPlayer/raw/master/screen.gif)
+
+![Sound adjustment demonstration](https://github.com/renzifeng/ZFPlayer/raw/master/volume.png)
+
+![Brightness adjustment demonstration](https://github.com/renzifeng/ZFPlayer/raw/master/brightness.png)
+
+![Fast adjustment demonstration](https://github.com/renzifeng/ZFPlayer/raw/master/fast.png)
+
+![Progress adjustment demonstration](https://github.com/renzifeng/ZFPlayer/raw/master/progress.png)
 
 
-#有技术问题也可以加我的iOS技术群，互相讨论，群号为：213376937
+### Reference link：
 
-# 期待
-- 如果在使用过程中遇到BUG，或发现功能不够用，希望你能Issues我,或者微博联系我：[@任子丰](https://weibo.com/zifeng1300)
-- 如果觉得好用请Star!
+- [https://segmentfault.com/a/1190000004054258](https://segmentfault.com/a/1190000004054258)
+- [http://sky-weihao.github.io/2015/10/06/Video-streaming-and-caching-in-iOS/](http://sky-weihao.github.io/2015/10/06/Video-streaming-and-caching-in-iOS/)
+- [https://developer.apple.com/library/prerelease/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/02_Playback.html#//apple_ref/doc/uid/TP40010188-CH3-SW8](https://developer.apple.com/library/prerelease/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/02_Playback.html#//apple_ref/doc/uid/TP40010188-CH3-SW8)
+
+---
+### Swift Player:
+See the [BMPlayer](https://github.com/BrikerMan/BMPlayer) please, thanks the BMPlayer author's open source.
+
+---
+
+# Contact me
+- Weibo: [@任子丰](https://weibo.com/zifeng1300)
+- Email:  zifeng1300@gmail.com
+- QQ：459643690
+- QQ Group: 213376937（full） 213375947（add this）
+- 最近有换工作的意向，坐标北京，有合适的位置可以联系我！
+
+# License
+
+ZFPlayer is available under the MIT license. See the LICENSE file for more info.
+

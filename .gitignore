@@ -15,5 +15,5 @@ xcuserdata
 *.mobileprovision
 DerivedData
 .idea/
-Pods
-Podfile.lock
+# Pods
+# Podfile.lock

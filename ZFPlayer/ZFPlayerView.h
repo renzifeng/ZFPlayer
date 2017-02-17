@@ -22,70 +22,94 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+#import "ZFPlayer.h"
+#import "ZFPlayerControlView.h"
+#import "ZFPlayerModel.h"
+#import "ZFPlayerControlViewDelegate.h"
 
-typedef void(^ZFPlayerGoBackBlock)(void);
+@protocol ZFPlayerDelegate <NSObject>
+@optional
+/** 返回按钮事件 */
+- (void)zf_playerBackAction;
+/** 下载视频 */
+- (void)zf_playerDownload:(NSString *)url;
 
-@interface ZFPlayerView : UIView
+@end
 
-/** 视频URL */
-@property (nonatomic, strong) NSURL               *videoURL;
-/** 返回按钮Block */
-@property (nonatomic, copy  ) ZFPlayerGoBackBlock goBackBlock;
-/** palyer加到tableView */
-@property (nonatomic, strong) UITableView         *tableView;
-/** player所在cell的indexPath */
-@property (nonatomic, strong) NSIndexPath         *indexPath;
-/** ViewController中页面是否消失 */
-@property (nonatomic, assign) BOOL                viewDisappear;
-/** 是否在cell上播放video */
-@property (nonatomic, assign) BOOL                isCellVideo;
+// playerLayer的填充模式（默认：等比例填充，直到一个维度到达区域边界）
+typedef NS_ENUM(NSInteger, ZFPlayerLayerGravity) {
+     ZFPlayerLayerGravityResize,           // 非均匀模式。两个维度完全填充至整个视图区域
+     ZFPlayerLayerGravityResizeAspect,     // 等比例填充，直到一个维度到达区域边界
+     ZFPlayerLayerGravityResizeAspectFill  // 等比例填充，直到填充满整个视图区域，其中一个维度的部分区域会被裁剪
+};
 
-/**
- *  取消延时隐藏controlView的方法,在ViewController的delloc方法中调用
- *  用于解决：刚打开视频播放器，就关闭该页面，maskView的延时隐藏还未执行。
- */
-- (void)cancelAutoFadeOutControlBar;
+// 播放器的几种状态
+typedef NS_ENUM(NSInteger, ZFPlayerState) {
+    ZFPlayerStateFailed,     // 播放失败
+    ZFPlayerStateBuffering,  // 缓冲中
+    ZFPlayerStatePlaying,    // 播放中
+    ZFPlayerStateStopped,    // 停止播放
+    ZFPlayerStatePause       // 暂停播放
+};
 
-/**
- *  类方法创建，该方法适用于代码创建View
- *
- *  @return ZFPlayer
- */
-+ (instancetype)setupZFPlayer;
+@interface ZFPlayerView : UIView <ZFPlayerControlViewDelagate>
+
+/** 视频model */
+/** 设置playerLayer的填充模式 */
+@property (nonatomic, assign) ZFPlayerLayerGravity    playerLayerGravity;
+/** 是否有下载功能(默认是关闭) */
+@property (nonatomic, assign) BOOL                    hasDownload;
+/** 是否开启预览图 */
+@property (nonatomic, assign) BOOL                    hasPreviewView;
+/** 设置代理 */
+@property (nonatomic, weak) id<ZFPlayerDelegate>      delegate;
+/** 是否被用户暂停 */
+@property (nonatomic, assign, readonly) BOOL          isPauseByUser;
+/** 播发器的几种状态 */
+@property (nonatomic, assign, readonly) ZFPlayerState state;
+/** 静音（默认为NO）*/
+@property (nonatomic, assign) BOOL                    mute;
+/** 当cell划出屏幕的时候停止播放（默认为NO） */
+@property (nonatomic, assign) BOOL                    stopPlayWhileCellNotVisable;
+/** 当cell播放视频由全屏变为小屏时候，是否回到中间位置(默认YES) */
+@property (nonatomic, assign) BOOL                    cellPlayerOnCenter;
+
 /**
  *  单例，用于列表cell上多个视频
  *
  *  @return ZFPlayer
  */
-+ (instancetype)playerView;
++ (instancetype)sharedPlayerView;
 
 /**
- *  player添加到cell上
- *
- *  @param cell 添加player的cell
+ * 指定播放的控制层和模型
+ * 控制层传nil，默认使用ZFPlayerControlView(如自定义可传自定义的控制层)
  */
-- (void)addPlayerToCell:(UITableViewCell *)cell;
+- (void)playerControlView:(UIView *)controlView playerModel:(ZFPlayerModel *)playerModel;
+
+/**
+ *  自动播放，默认不自动播放
+ */
+- (void)autoPlayTheVideo;
 
 /**
  *  重置player
  */
 - (void)resetPlayer;
-/** 
+
+/**
+ *  在当前页面，设置新的视频时候调用此方法
+ */
+- (void)resetToPlayNewVideo:(ZFPlayerModel *)playerModel;
+
+/**
  *  播放
  */
 - (void)play;
-/** 
-  * 暂停 
- */
-- (void)pause;
 
 /**
- *  用于cell上播放player
- *
- *  @param videoURL  视频的URL
- *  @param tableView tableView
- *  @param indexPath indexPath 
+  * 暂停
  */
-- (void)setVideoURL:(NSURL *)videoURL withTableView:(UITableView *)tableView AtIndexPath:(NSIndexPath *)indexPath;
+- (void)pause;
 
 @end
