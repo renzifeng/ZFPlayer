@@ -1272,7 +1272,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)setResolutionDic:(NSDictionary *)resolutionDic {
     _resolutionDic = resolutionDic;
-    [self.controlView zf_playerResolutionArray:[resolutionDic allKeys]];
     self.videoURLArray = [resolutionDic allValues];
 }
 
@@ -1292,11 +1291,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
     NSCAssert(playerModel.fatherView, @"请指定playerView的faterView");
 
     if (playerModel.seekTime) { self.seekTime = playerModel.seekTime; }
+    
     [self.controlView zf_playerModel:playerModel];
+    if (playerModel.resolutionDic) {
+        self.resolutionDic = playerModel.resolutionDic;
+    }
 
     if (playerModel.tableView && playerModel.indexPath && playerModel.videoURL) {
         [self cellVideoWithTableView:playerModel.tableView AtIndexPath:playerModel.indexPath];
-        if (playerModel.resolutionDic) { self.resolutionDic = playerModel.resolutionDic; }
     }
     [self addPlayerToFatherView:playerModel.fatherView];
     self.videoURL = playerModel.videoURL;
