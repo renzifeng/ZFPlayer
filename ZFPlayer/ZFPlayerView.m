@@ -136,6 +136,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)initializeThePlayer {
     self.cellPlayerOnCenter = YES;;
+    _allowAutoRotate = YES;
 }
 
 - (void)dealloc {
@@ -172,7 +173,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // app进入前台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    // 监测设备方向
+    if (_allowAutoRotate) {
+        // 监测设备方向
+        [self addRotationNotifications];
+    }
+}
+
+- (void)addRotationNotifications {
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onDeviceOrientationChange)
@@ -182,7 +189,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onStatusBarOrientationChange)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
-                                               object:nil];
+                                                   object:nil];
+}
+
+- (void)removeRotationNotifications {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 #pragma mark - layoutSubviews
@@ -1302,6 +1314,18 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
     [self addPlayerToFatherView:playerModel.fatherView];
     self.videoURL = playerModel.videoURL;
+}
+
+- (void)setAllowAutoRotate:(BOOL)allowAutoRotate {
+    if (_allowAutoRotate != allowAutoRotate) {
+        _allowAutoRotate = allowAutoRotate;
+        // 取消转屏事件监听
+        [self removeRotationNotifications];
+        if (_allowAutoRotate) {
+            // 添加转屏事件监听
+            [self addRotationNotifications];
+        }
+    }
 }
 
 #pragma mark - Getter
