@@ -439,7 +439,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (self.isAutoPlay) {
         UITouch *touch = [touches anyObject];
         if(touch.tapCount == 1) {
-            [self performSelector:@selector(singleTapAction:) withObject:@(NO) ];
+            if (self.enableFullScreenSwitchWith2Fingers) {
+                [self performSelector:@selector(singleTapAction:) withObject:@(NO) ];
+                return;
+            }
         } else if (touch.tapCount == 2) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAction:) object:nil];
             [self doubleTapAction:touch.gestureRecognizers.lastObject];

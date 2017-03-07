@@ -77,6 +77,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, assign) BOOL                    cellPlayerOnCenter;
 /** 是否允许自动转屏, 默认YES */
 @property (nonatomic, assign) BOOL                    allowAutoRotate;
+/** 允许双指点击进行全屏/飞全屏切换 */
+@property (nonatomic, assign) BOOL                    enableFullScreenSwitchWith2Fingers;
 
 /**
  *  单例，用于列表cell上多个视频
