@@ -33,6 +33,8 @@
 - (void)zf_playerBackAction;
 /** 下载视频 */
 - (void)zf_playerDownload:(NSString *)url;
+/** 更多按钮 */
+- (void)zf_playerMoreAction;
 
 @end
 

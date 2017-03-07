@@ -1437,6 +1437,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
 }
 
+- (void)zf_controlView:(UIView *)controlView moreAction:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(zf_playerMoreAction)]) {
+        [self.delegate zf_playerMoreAction];
+    }
+}
+
 - (void)zf_controlView:(UIView *)controlView progressSliderTap:(CGFloat)value {
     // 视频总时间长度
     CGFloat total = (CGFloat)self.playerItem.duration.value / self.playerItem.duration.timescale;
