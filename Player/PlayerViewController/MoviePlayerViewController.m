@@ -115,7 +115,8 @@
         _playerModel.videoURL         = self.videoURL;
         _playerModel.placeholderImage = [UIImage imageNamed:@"loading_bgView1"];
         _playerModel.fatherView       = self.playerFatherView;
-
+        _playerModel.resolutionDic = @{@"HD" : self.videoURL.absoluteString,
+                                       @"SD" : self.videoURL.absoluteString};
     }
     return _playerModel;
 }

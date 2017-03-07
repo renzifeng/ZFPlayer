@@ -35,8 +35,11 @@
  * 如果和本地图片同时设置，则忽略本地图片，显示网络图片
  */
 @property (nonatomic, copy  ) NSString     *placeholderImageURLString;
-/** 视频分辨率 */
-@property (nonatomic, strong) NSDictionary *resolutionDic;
+/** 
+ * 视频分辨率字典, 分辨率标题与该分辨率对应的视频URL.
+ * 例如: @{@"高清" : @"https://xx/xx-hd.mp4", @"标清" : @"https://xx/xx-sd.mp4"}
+ */
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *resolutionDic;
 /** 从xx秒开始播放视频(默认0) */
 @property (nonatomic, assign) NSInteger    seekTime;
 // cell播放视频，以下属性必须设置值
