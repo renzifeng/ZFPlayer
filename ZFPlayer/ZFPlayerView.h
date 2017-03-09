@@ -54,6 +54,9 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
     ZFPlayerStatePause       // 暂停播放
 };
 
+/**
+ 视频播放器视图
+ */
 @interface ZFPlayerView : UIView <ZFPlayerControlViewDelagate>
 
 /** 视频model */
@@ -79,6 +82,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, assign) BOOL                    allowAutoRotate;
 /** 允许双指点击进行全屏/飞全屏切换 */
 @property (nonatomic, assign) BOOL                    enableFullScreenSwitchWith2Fingers;
+/** 播放器添加到的视图控制器, 包含ZFPlayerView容器视图的视图控制器 */
+@property (nonatomic, weak) UIViewController *rootViewController;
 
 /**
  *  单例，用于列表cell上多个视频

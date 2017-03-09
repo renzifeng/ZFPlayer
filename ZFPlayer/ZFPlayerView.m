@@ -37,6 +37,37 @@ typedef NS_ENUM(NSInteger, PanDirection){
     PanDirectionVerticalMoved    // 纵向移动
 };
 
+@interface ZFPlayerViewController : UIViewController
+
+@end
+
+@implementation ZFPlayerViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+    }
+    return self;
+}
+
+//  是否支持自动转屏
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationLandscapeRight;
+}
+
+@end
+
 @interface ZFPlayerView () <UIGestureRecognizerDelegate,UIAlertViewDelegate>
 
 /** 播放属性 */
@@ -85,6 +116,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) UIImage                *thumbImg;
 /** 亮度view */
 @property (nonatomic, strong) ZFBrightnessView       *brightnessView;
+/** 用于全屏展示的视图控制器 */
+@property (nonatomic, strong) ZFPlayerViewController *fullScreenViewController;
 
 #pragma mark - UITableViewCell PlayerView
 
@@ -255,11 +288,51 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  player添加到fatherView上
  */
 - (void)addPlayerToFatherView:(UIView *)view {
-    [self removeFromSuperview];
-    [view addSubview:self];
-    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_offset(UIEdgeInsetsZero);
-    }];
+    if (self.fullScreenViewController && self.fullScreenViewController.presentingViewController == self.rootViewController) {
+        UIView *playerViewSnapshot = [self snapshotViewAfterScreenUpdates:NO];
+        playerViewSnapshot.transform = CGAffineTransformMakeRotation(M_PI_2);
+        [self.rootViewController.view addSubview:playerViewSnapshot];
+        [playerViewSnapshot mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.mas_equalTo(0);
+            make.width.equalTo(self.rootViewController.view.mas_height);
+            make.height.equalTo(self.rootViewController.view.mas_width);
+        }];
+        [self.rootViewController.view layoutIfNeeded];
+        
+        [self.fullScreenViewController dismissViewControllerAnimated:NO completion:^{
+            [self removeFromSuperview];
+            [playerViewSnapshot addSubview:self];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.mas_equalTo(0);
+            }];
+            [playerViewSnapshot layoutIfNeeded];
+            
+            [playerViewSnapshot mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(view);
+            }];
+            
+            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:NO];
+            [UIView animateWithDuration:[UIApplication sharedApplication].statusBarOrientationAnimationDuration animations:^{
+                playerViewSnapshot.transform = CGAffineTransformIdentity;
+                [self.rootViewController.view layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                [self removeFromSuperview];
+                [playerViewSnapshot removeFromSuperview];
+                [view addSubview:self];
+                [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(view);
+                }];
+                [view layoutIfNeeded];
+            }];
+        }];
+    } else {
+        [self removeFromSuperview];
+        [view addSubview:self];
+        [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_offset(UIEdgeInsetsZero);
+        }];
+        [view layoutIfNeeded];
+    }
 }
 
 /**
@@ -678,6 +751,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (orientation != UIInterfaceOrientationPortrait) {//
         // 这个地方加判断是为了从全屏的一侧,直接到全屏的另一侧不用修改限制,否则会出错;
         if (currentOrientation == UIInterfaceOrientationPortrait) {
+            if (!self.allowAutoRotate && self.rootViewController) {
+                [self forcePlayerViewRotate2FullScreenOrientationLandscapeRight];
+                return;
+            }
+            
             [self removeFromSuperview];
             ZFBrightnessView *brightnessView = [ZFBrightnessView sharedBrightnessView];
             [[UIApplication sharedApplication].keyWindow insertSubview:self belowSubview:brightnessView];
@@ -700,8 +778,57 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.transform = [self getTransformRotationAngle];
     // 开始旋转
     [UIView commitAnimations];
-    [self.controlView layoutIfNeeded];
     [self.controlView setNeedsLayout];
+    [self.controlView layoutIfNeeded];
+}
+
+- (void)forcePlayerViewRotate2FullScreenOrientationLandscapeRight {
+    if (!self.fullScreenViewController) {
+        self.fullScreenViewController = [[ZFPlayerViewController alloc] init];
+        self.fullScreenViewController.view.backgroundColor = [UIColor blackColor];
+    }
+    
+    UIView *containerView = [[UIView alloc] initWithFrame:self.rootViewController.view.bounds];
+    containerView.backgroundColor = [UIColor clearColor];
+    [self.rootViewController.view addSubview:containerView];
+    
+    [self removeFromSuperview];
+    [containerView addSubview:self];
+    
+    [containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playerModel.fatherView);
+    }];
+    [self.rootViewController.view layoutIfNeeded];
+    
+    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(containerView);
+        make.width.equalTo(containerView.mas_height);
+        make.height.equalTo(containerView.mas_width);
+    }];
+    [UIView animateWithDuration:[UIApplication sharedApplication].statusBarOrientationAnimationDuration animations:^{
+        self.transform = CGAffineTransformMakeRotation(M_PI_2);
+        containerView.backgroundColor = [UIColor blackColor];
+        [containerView layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        self.fullScreenViewController.view.backgroundColor = [UIColor clearColor];
+        [self.rootViewController presentViewController:self.fullScreenViewController animated:NO completion:^{
+            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
+            
+            [self removeFromSuperview];
+            self.transform = CGAffineTransformIdentity;
+            
+            [self.fullScreenViewController.view addSubview:self];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.mas_equalTo(0);
+            }];
+            
+            [self.fullScreenViewController.view layoutIfNeeded];
+            [containerView removeFromSuperview];
+        }];
+    }];
 }
 
 /**
