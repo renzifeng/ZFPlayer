@@ -37,11 +37,16 @@ typedef NS_ENUM(NSInteger, PanDirection){
     PanDirectionVerticalMoved    // 纵向移动
 };
 
-@interface ZFPlayerViewController : UIViewController
+#pragma mark - ZFPlayerViewController
+
+/**
+ 用于屏幕旋转的视图控制器
+ */
+@interface ZFFullscreenPlayerViewController : UIViewController
 
 @end
 
-@implementation ZFPlayerViewController
+@implementation ZFFullscreenPlayerViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -58,7 +63,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    if (self.isBeingPresented || self.isBeingDismissed) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    return UIInterfaceOrientationMaskLandscapeRight;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
@@ -67,6 +75,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 @end
+
+#pragma mark - ZFPlayerView
 
 @interface ZFPlayerView () <UIGestureRecognizerDelegate,UIAlertViewDelegate>
 
@@ -117,7 +127,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 /** 亮度view */
 @property (nonatomic, strong) ZFBrightnessView       *brightnessView;
 /** 用于全屏展示的视图控制器 */
-@property (nonatomic, strong) ZFPlayerViewController *fullScreenViewController;
+@property (nonatomic, strong) ZFFullscreenPlayerViewController *fullScreenViewController;
 
 #pragma mark - UITableViewCell PlayerView
 
@@ -784,7 +794,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)forcePlayerViewRotate2FullScreenOrientationLandscapeRight {
     if (!self.fullScreenViewController) {
-        self.fullScreenViewController = [[ZFPlayerViewController alloc] init];
+        self.fullScreenViewController = [[ZFFullscreenPlayerViewController alloc] init];
         self.fullScreenViewController.view.backgroundColor = [UIColor blackColor];
     }
     
