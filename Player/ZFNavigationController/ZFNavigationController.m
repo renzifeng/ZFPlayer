@@ -197,10 +197,19 @@
         self.screenShotView.maskView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.4];
     } else if (recognizer.state == UIGestureRecognizerStateChanged){
         // 移动view
+        
+            if(tx<0)
+            {
+                return;
+            }
+
             width_scale = tx / SCREEN_WIDTH;
             self.view.transform = CGAffineTransformTranslate(CGAffineTransformIdentity,tx, 0);;
             self.screenShotView.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4 - width_scale * 0.5];
             self.screenShotView.imageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset + tx * self.showViewOffsetScale, 0);
+        
+        
+        
 
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint velocity = [recognizer velocityInView:self.view];
