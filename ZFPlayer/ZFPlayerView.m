@@ -63,9 +63,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    if (self.isBeingPresented || self.isBeingDismissed) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }
     return UIInterfaceOrientationMaskLandscapeRight;
 }
 
