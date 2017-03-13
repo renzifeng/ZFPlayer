@@ -1166,8 +1166,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
             weakSelf.isDragged = NO;
             // 结束滑动
             [weakSelf.controlView zf_playerDraggedEnd];
-            if (!weakSelf.playerItem.isPlaybackLikelyToKeepUp && !weakSelf.isLocalVideo) { weakSelf.state = ZFPlayerStateBuffering; }
-            
+            if (!weakSelf.isLocalVideo) {
+                if (weakSelf.playerItem.isPlaybackLikelyToKeepUp) {
+                    weakSelf.state = ZFPlayerStatePlaying;
+                } else {
+                    weakSelf.state = ZFPlayerStateBuffering;
+                }
+            }
         }];
     }
 }
@@ -1670,6 +1675,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         NSInteger dragedSeconds = floorf(total * slider.value);
         [self seekToTime:dragedSeconds completionHandler:nil];
     }
+    self.playDidEnd = NO;
 }
 
 #pragma clang diagnostic pop
