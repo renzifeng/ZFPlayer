@@ -71,6 +71,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     return UIInterfaceOrientationLandscapeRight;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 @end
 
 #pragma mark - ZFPlayerView
@@ -142,6 +146,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, assign) BOOL                   isChangeResolution;
 /** 是否正在拖拽 */
 @property (nonatomic, assign) BOOL                   isDragged;
+/** 是否正在旋转屏幕 */
+@property (nonatomic, assign) BOOL isRotating;
 
 @property (nonatomic, strong) UIView                 *controlView;
 @property (nonatomic, strong) ZFPlayerModel          *playerModel;
@@ -295,8 +301,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  player添加到fatherView上
  */
 - (void)addPlayerToFatherView:(UIView *)view {
-    if (self.fullScreenViewController && self.fullScreenViewController.presentingViewController == self.rootViewController) {
-        UIView *playerViewSnapshot = [self snapshotViewAfterScreenUpdates:NO];
+    if (self.fullScreenViewController && self.rootViewController != nil) {
+        self.isRotating = YES;// 记录正在旋转屏幕
+        
+        UIView *playerViewSnapshot = [self snapshotViewAfterScreenUpdates:YES];
         playerViewSnapshot.transform = CGAffineTransformMakeRotation(M_PI_2);
         [self.rootViewController.view addSubview:playerViewSnapshot];
         [playerViewSnapshot mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -330,6 +338,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
                     make.edges.equalTo(view);
                 }];
                 [view layoutIfNeeded];
+                
+                self.isRotating = NO;// 完成旋转屏幕
             }];
         }];
     } else {
@@ -790,6 +800,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)forcePlayerViewRotate2FullScreenOrientationLandscapeRight {
+    self.isRotating = YES;// 记录正在旋转屏幕
+    
     if (!self.fullScreenViewController) {
         self.fullScreenViewController = [[ZFFullscreenPlayerViewController alloc] init];
         self.fullScreenViewController.view.backgroundColor = [UIColor blackColor];
@@ -834,6 +846,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
             
             [self.fullScreenViewController.view layoutIfNeeded];
             [containerView removeFromSuperview];
+            
+            self.isRotating = NO;// 完成旋转屏幕
         }];
     }];
 }
