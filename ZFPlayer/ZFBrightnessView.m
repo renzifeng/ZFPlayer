@@ -193,4 +193,16 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)setIsStatusBarHidden:(BOOL)isStatusBarHidden {
+    _isStatusBarHidden = isStatusBarHidden;
+    UIWindow *window = [[UIApplication sharedApplication].delegate window];
+    [[window zf_currentViewController] setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)setIsLandscape:(BOOL)isLandscape {
+    _isLandscape = isLandscape;
+    UIWindow *window = [[UIApplication sharedApplication].delegate window];
+    [[window zf_currentViewController] setNeedsStatusBarAppearanceUpdate];
+}
+
 @end

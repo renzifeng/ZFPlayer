@@ -1,5 +1,5 @@
 //
-//  UIViewController+ZFPlayerRotation.m
+//  UINavigationController+ZFFullscreenPopGesture.h
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,35 +21,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "UIViewController+ZFPlayerRotation.h"
+#import <UIKit/UIKit.h>
 
-@implementation UIViewController (ZFPlayerRotation)
+@interface UIViewController (ZFFullscreenPopGesture)
 
-/**
- * 默认所有都不支持转屏,如需个别页面支持除竖屏外的其他方向，请在viewController重新下边这三个方法
- */
-
-// 是否支持自动转屏
-- (BOOL)shouldAutorotate {
-    return NO;
-}
-
-// 支持哪些屏幕方向
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
-}
-
-// 默认的屏幕方向（当前ViewController必须是通过模态出来的UIViewController（模态带导航的无效）方式展现出来的，才会调用这个方法）
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleDefault; // your own style
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return NO; // your own visibility code
-}
+/// 隐藏NavigationBar（默认NO）
+@property (nonatomic, assign) BOOL zf_prefersNavigationBarHidden;
+/// 关闭某个控制器的pop手势（默认NO）
+@property (nonatomic, assign) BOOL zf_interactivePopDisabled;
+/// 自定义的滑动返回手势是否与其他手势共存，一般使用默认值(默认返回NO：不与任何手势共存)
+@property (nonatomic, assign) BOOL zf_recognizeSimultaneouslyEnable;
 
 @end
+
+typedef NS_ENUM(NSInteger,ZFFullscreenPopGestureStyle) {
+    ZFFullscreenPopGestureGradientStyle,   // 根据滑动偏移量背景颜色渐变
+    ZFFullscreenPopGestureShadowStyle      // 侧边阴影效果，类似系统的滑动样式
+};
+
+@interface UINavigationController (ZFFullscreenPopGesture)<UIGestureRecognizerDelegate>
+/** 默认ZFFullscreenPopGestureGradientStyle */
+@property (nonatomic, assign) ZFFullscreenPopGestureStyle popGestureStyle;
+
+@end
+

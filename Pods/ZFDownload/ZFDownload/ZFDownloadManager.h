@@ -49,15 +49,15 @@
 
 /** 单例 */
 + (ZFDownloadManager *)sharedDownloadManager;
-/** 
+/**
  * 清除所有正在下载的请求
  */
 - (void)clearAllRquests;
-/** 
+/**
  * 清除所有下载完的文件
  */
 - (void)clearAllFinished;
-/** 
+/**
  * 恢复下载
  */
 - (void)resumeRequest:(ZFHttpRequest *)request;
@@ -65,34 +65,34 @@
  * 删除这个下载请求
  */
 - (void)deleteRequest:(ZFHttpRequest *)request;
-/** 
+/**
  * 停止这个下载请求
  */
 - (void)stopRequest:(ZFHttpRequest *)request;
-/** 
+/**
  * 保存下载完成的文件信息到plist
  */
 - (void)saveFinishedFile;
-/** 
+/**
  * 删除某一个下载完成的文件
  */
 - (void)deleteFinishFile:(ZFFileModel *)selectFile;
-/** 
+/**
  * 下载视频时候调用
  */
 - (void)downFileUrl:(NSString*)url
            filename:(NSString*)name
           fileimage:(UIImage *)image;
-/** 
- * 开始任务 
+/**
+ * 开始任务
  */
 - (void)startLoad;
-/** 
+/**
  * 全部开始（等于最大下载个数，超过的还是等待下载状态）
  */
 - (void)startAllDownloads;
 /**
- * 全部暂停 
+ * 全部暂停
  */
 - (void)pauseAllDownloads;
 

@@ -44,8 +44,8 @@
 @property (strong, nonatomic) NSURL                  *originalURL;
 @property (strong, nonatomic) NSDictionary           *userInfo;
 @property (assign, nonatomic) NSInteger              tag;
-@property (strong, nonatomic) NSString               *downloadDestinationPath;
-@property (strong, nonatomic) NSString               *temporaryFileDownloadPath;
+@property (copy, nonatomic) NSString                 *downloadDestinationPath;
+@property (copy, nonatomic) NSString                 *temporaryFileDownloadPath;
 @property (strong,readonly,nonatomic) NSError *error;
 
 - (instancetype)initWithURL:(NSURL*)url;

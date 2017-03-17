@@ -28,15 +28,15 @@ static ZFDownloadManager *sharedDownloadManager = nil;
 @interface ZFDownloadManager ()
 
 /** 本地临时文件夹文件的个数 */
-@property (nonatomic,assign ) NSInteger      count;
+@property (nonatomic,assign) NSInteger  count;
 /** 已下载完成的文件列表（文件对象）*/
-@property (atomic,strong ) NSMutableArray *finishedlist;
+@property (strong) NSMutableArray       *finishedlist;
 /** 正在下载的文件列表(ASIHttpRequest对象)*/
-@property (atomic,strong ) NSMutableArray *downinglist;
+@property (strong) NSMutableArray       *downinglist;
 /** 未下载完成的临时文件数组（文件对象)*/
-@property (atomic,strong ) NSMutableArray *filelist;
+@property (strong) NSMutableArray       *filelist;
 /** 下载文件的模型 */
-@property (nonatomic,strong ) ZFFileModel      *fileInfo;
+@property (nonatomic,strong) ZFFileModel *fileInfo;
 
 @end
 
@@ -149,14 +149,12 @@ static ZFDownloadManager *sharedDownloadManager = nil;
 
 - (void)beginRequest:(ZFFileModel *)fileInfo isBeginDown:(BOOL)isBeginDown
 {
-    for(ZFHttpRequest *tempRequest in self.downinglist)
-    {
+    for(ZFHttpRequest *tempRequest in self.downinglist) {
         /**
          * 注意这里判读是否是同一下载的方法，asihttprequest有三种url： url，originalurl，redirectURL
          * 经过实践，应该使用originalurl,就是最先获得到的原下载地址
          **/
-        if([[[tempRequest.url absoluteString] lastPathComponent] isEqualToString:[fileInfo.fileURL lastPathComponent]])
-        {
+        if([[[tempRequest.url absoluteString] lastPathComponent] isEqualToString:[fileInfo.fileURL lastPathComponent]]) {
             if ([tempRequest isExecuting] && isBeginDown) {
                 return;
             } else if ([tempRequest isExecuting] && !isBeginDown) {
@@ -258,6 +256,7 @@ static ZFDownloadManager *sharedDownloadManager = nil;
         if (!file.error) {
             if (file.downloadState == ZFDownloading) {
                 [self beginRequest:file isBeginDown:YES];
+                file.startTime = [NSDate date];
             } else {
                 [self beginRequest:file isBeginDown:NO];
             }
@@ -590,18 +589,42 @@ static ZFDownloadManager *sharedDownloadManager = nil;
 - (void)request:(ZFHttpRequest *)request didReceiveBytes:(long long)bytes
 {
     ZFFileModel *fileInfo = [request.userInfo objectForKey:@"File"];
-    NSLog(@"%@,%lld",fileInfo.fileReceivedSize,bytes);
+    // NSLog(@"%@,%lld",fileInfo.fileReceivedSize,bytes);
     if (fileInfo.isFirstReceived) {
         fileInfo.isFirstReceived = NO;
         fileInfo.fileReceivedSize = [NSString stringWithFormat:@"%lld",bytes];
     } else if(!fileInfo.isFirstReceived) {
         fileInfo.fileReceivedSize = [NSString stringWithFormat:@"%lld",[fileInfo.fileReceivedSize longLongValue]+bytes];
     }
+    NSUInteger receivedSize = [fileInfo.fileReceivedSize longLongValue];
+    NSUInteger expectedSize = [fileInfo.fileSize longLongValue];
+    
+    // 每秒下载速度
+    NSTimeInterval downloadTime = -1 * [fileInfo.startTime timeIntervalSinceNow];
+    CGFloat speed = (CGFloat)receivedSize / (CGFloat)downloadTime;
+    if (speed == 0) { return; }
+    
+    CGFloat speedSec = [ZFCommonHelper calculateFileSizeInUnit:(unsigned long long)speed];
+    NSString *unit = [ZFCommonHelper calculateUnit:(unsigned long long)speed];
+    NSString *speedStr = [NSString stringWithFormat:@"%.2f%@/s",speedSec,unit];
+    fileInfo.speed = speedStr;
+    
+    // 剩余下载时间
+    NSMutableString *remainingTimeStr = [[NSMutableString alloc] init];
+    NSUInteger remainingContentLength = expectedSize - receivedSize;
+    CGFloat remainingTime = (CGFloat)(remainingContentLength / speed);
+    NSInteger hours = remainingTime / 3600;
+    NSInteger minutes = (remainingTime - hours * 3600) / 60;
+    CGFloat seconds = remainingTime - hours * 3600 - minutes * 60;
+    
+    if (hours > 0)   {[remainingTimeStr appendFormat:@"%zd小时 ",hours];}
+    if (minutes > 0) {[remainingTimeStr appendFormat:@"%zd分 ",minutes];}
+    if (seconds > 0) {[remainingTimeStr appendFormat:@"%.1f秒",seconds];}
+    fileInfo.remainingTime = remainingTimeStr;
     
     if([self.downloadDelegate respondsToSelector:@selector(updateCellProgress:)]) {
         [self.downloadDelegate updateCellProgress:request];
     }
-    
 }
 
 // 将正在下载的文件请求ASIHttpRequest从队列里移除，并将其配置文件删除掉,然后向已下载列表里添加该文件对象
@@ -639,14 +662,14 @@ static ZFDownloadManager *sharedDownloadManager = nil;
         NSInteger delindex = -1;
         NSString *path = FILE_PATH(_fileInfo.fileName);
         if([ZFCommonHelper isExistFile:path]) { //已经下载过一次该文件
-            for (ZFFileModel *info in _finishedlist) {
+            for (ZFFileModel *info in [self.finishedlist mutableCopy]) {
                 if ([info.fileName isEqualToString:_fileInfo.fileName]) {
                     // 删除文件
                     [self deleteFinishFile:info];
                 }
             }
         } else { // 如果正在下载中，择重新下载
-            for(ZFHttpRequest *request in self.downinglist) {
+            for(ZFHttpRequest *request in [self.downinglist mutableCopy]) {
                 ZFFileModel *ZFFileModel = [request.userInfo objectForKey:@"File"];
                 if([ZFFileModel.fileName isEqualToString:_fileInfo.fileName])
                 {
@@ -659,7 +682,7 @@ static ZFDownloadManager *sharedDownloadManager = nil;
             }
             [_downinglist removeObjectAtIndex:delindex];
             
-            for (ZFFileModel *file in _filelist) {
+            for (ZFFileModel *file in [self.filelist mutableCopy]) {
                 if ([file.fileName isEqualToString:_fileInfo.fileName]) {
                     delindex = [_filelist indexOfObject:file];
                     break;

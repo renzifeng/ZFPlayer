@@ -26,8 +26,7 @@
 
 @implementation ZFCommonHelper
 
-+ (NSString *)getFileSizeString:(NSString *)size
-{
++ (NSString *)getFileSizeString:(NSString *)size {
     if([size floatValue]>=1024*1024)//大于1M，则转化成M单位的字符串
     {
         return [NSString stringWithFormat:@"%1.2fM",[size floatValue]/1024/1024];
@@ -42,8 +41,7 @@
     }
 }
 
-+ (float)getFileSizeNumber:(NSString *)size
-{
++ (float)getFileSizeNumber:(NSString *)size {
     NSInteger indexM=[size rangeOfString:@"M"].location;
     NSInteger indexK=[size rangeOfString:@"K"].location;
     NSInteger indexB=[size rangeOfString:@"B"].location;
@@ -65,42 +63,50 @@
     }
 }
 
-+ (BOOL)isExistFile:(NSString *)fileName
-{
++ (BOOL)isExistFile:(NSString *)fileName {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     return [fileManager fileExistsAtPath:fileName];
 }
 
-+ (NSDate *)makeDate:(NSString *)birthday
-{
++ (NSDate *)makeDate:(NSString *)birthday {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *date = [df dateFromString:birthday];
     return date;
 }
 
-+ (NSString *)dateToString:(NSDate*)date
-{
++ (NSString *)dateToString:(NSDate*)date {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *datestr = [df stringFromDate:date];
     return datestr;
 }
 
-+ (NSString *)createFolder:(NSString *)path
-{
++ (NSString *)createFolder:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
-    if(![fileManager fileExistsAtPath:path])
-    {
+    if(![fileManager fileExistsAtPath:path]) {
         [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
-        if(!error)
-        {
+        if(!error) {
             NSLog(@"%@",[error description]);
-            
         }
     }
     return path;
+}
+
+
++ (CGFloat)calculateFileSizeInUnit:(unsigned long long)contentLength {
+    if (contentLength >= pow(1024, 3)) { return (CGFloat) (contentLength / (CGFloat)pow(1024, 3)); }
+    else if (contentLength >= pow(1024, 2)) { return (CGFloat) (contentLength / (CGFloat)pow(1024, 2)); }
+    else if (contentLength >= 1024) { return (CGFloat) (contentLength / (CGFloat)1024); }
+    else { return (CGFloat) (contentLength); }
+}
+
++ (NSString *)calculateUnit:(unsigned long long)contentLength {
+    if(contentLength >= pow(1024, 3)) { return @"GB";}
+    else if(contentLength >= pow(1024, 2)) { return @"MB"; }
+    else if(contentLength >= 1024) { return @"KB"; }
+    else { return @"B"; }
 }
 
 @end

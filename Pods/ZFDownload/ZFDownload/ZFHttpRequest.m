@@ -42,7 +42,7 @@
         [_realRequest setNumberOfTimesToRetryOnTimeout:2];
         [_realRequest setAllowResumeForFileDownloads:YES];//支持断点续传
         [_realRequest setTimeOutSeconds:30.0f];
-
+        
     }
     return self;
 }
@@ -69,7 +69,7 @@
 
 - (BOOL)isFinished
 {
-  return  [_realRequest isFinished];
+    return  [_realRequest isFinished];
 }
 
 - (BOOL)isExecuting

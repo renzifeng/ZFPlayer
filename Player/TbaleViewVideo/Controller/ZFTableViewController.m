@@ -68,6 +68,18 @@
     }
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    // 这里设置横竖屏不同颜色的statusbar
+    if (ZFPlayerShared.isLandscape) {
+        return UIStatusBarStyleLightContent;
+    }
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return ZFPlayerShared.isStatusBarHidden;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
