@@ -129,6 +129,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) ZFBrightnessView       *brightnessView;
 /** 用于全屏展示的视图控制器 */
 @property (nonatomic, strong) ZFFullscreenPlayerViewController *fullScreenViewController;
+/** 视频填充模式 */
+@property (nonatomic, copy) NSString                 *videoGravity;
 
 #pragma mark - UITableViewCell PlayerView
 
@@ -343,12 +345,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
             }];
         }];
     } else {
-        [self removeFromSuperview];
-        [view addSubview:self];
-        [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.mas_offset(UIEdgeInsetsZero);
-        }];
-        [view layoutIfNeeded];
+        // 这里应该添加判断，因为view有可能为空，当view为空时[view addSubview:self]会crash
+        if (view) {
+            [self removeFromSuperview];
+            [view addSubview:self];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.mas_offset(UIEdgeInsetsZero);
+            }];
+            [view layoutIfNeeded];
+        }
     }
 }
 
@@ -473,7 +478,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
     self.backgroundColor = [UIColor blackColor];
     // 此处为默认视频填充模式
-    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+    self.playerLayer.videoGravity = self.videoGravity;
     
     // 自动播放
     self.isAutoPlay = YES;
@@ -1418,12 +1423,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
     switch (playerLayerGravity) {
         case ZFPlayerLayerGravityResize:
             self.playerLayer.videoGravity = AVLayerVideoGravityResize;
+            self.videoGravity = AVLayerVideoGravityResize;
             break;
         case ZFPlayerLayerGravityResizeAspect:
             self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+            self.videoGravity = AVLayerVideoGravityResizeAspect;
             break;
         case ZFPlayerLayerGravityResizeAspectFill:
             self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            self.videoGravity = AVLayerVideoGravityResizeAspectFill;
             break;
         default:
             break;
@@ -1461,6 +1469,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (playerModel.seekTime) { self.seekTime = playerModel.seekTime; }
     
     [self.controlView zf_playerModel:playerModel];
+
     if (playerModel.resolutionDic) {
         self.resolutionDic = playerModel.resolutionDic;
     }
@@ -1498,6 +1507,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
         _brightnessView = [ZFBrightnessView sharedBrightnessView];
     }
     return _brightnessView;
+}
+
+- (NSString *)videoGravity {
+    if (!_videoGravity) {
+        _videoGravity = AVLayerVideoGravityResizeAspect;
+    }
+    return _videoGravity;
 }
 
 #pragma mark - ZFPlayerControlViewDelegate

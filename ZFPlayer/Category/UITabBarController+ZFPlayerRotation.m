@@ -26,8 +26,7 @@
 
 @implementation UITabBarController (ZFPlayerRotation)
 
-+ (void)load
-{
++ (void)load {
     SEL selectors[] = {
         @selector(selectedIndex)
     };
@@ -45,8 +44,7 @@
     }
 }
 
-- (NSInteger)zf_selectedIndex
-{
+- (NSInteger)zf_selectedIndex {
     NSInteger index = [self zf_selectedIndex];
     if (index > self.viewControllers.count) { return 0; }
     return index;
@@ -58,8 +56,7 @@
  */
 
 // 是否支持自动转屏
-- (BOOL)shouldAutorotate
-{
+- (BOOL)shouldAutorotate {
     UIViewController *vc = self.viewControllers[self.selectedIndex];
     if ([vc isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)vc;
@@ -70,8 +67,7 @@
 }
 
 // 支持哪些屏幕方向
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     UIViewController *vc = self.viewControllers[self.selectedIndex];
     if ([vc isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)vc;

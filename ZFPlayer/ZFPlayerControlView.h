@@ -25,10 +25,6 @@
 #import "ASValueTrackingSlider.h"
 #import "ZFPlayer.h"
 
-typedef void(^ChangeResolutionBlock)(UIButton *button);
-typedef void(^SliderTapBlock)(CGFloat value);
-
 @interface ZFPlayerControlView : UIView 
-
 
 @end

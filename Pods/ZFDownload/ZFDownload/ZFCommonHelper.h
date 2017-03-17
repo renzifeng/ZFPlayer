@@ -57,4 +57,7 @@
 + (BOOL)isExistFile:(NSString *)fileName;
 + (NSString *)createFolder:(NSString *)path;
 
++ (CGFloat)calculateFileSizeInUnit:(unsigned long long)contentLength;
++ (NSString *)calculateUnit:(unsigned long long)contentLength;
+
 @end

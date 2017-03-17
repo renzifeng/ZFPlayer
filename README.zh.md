@@ -38,6 +38,7 @@
 ## 组件
 
 - 断点下载: [ZFDownload](https://github.com/renzifeng/ZFDownload)
+- 导航: [ZFNavigationController](https://github.com/renzifeng/ZFNavigationController)（滑动返回页面时候视频播放不卡顿）
 - 布局: Masonry
 
 
@@ -310,6 +311,10 @@ self.playerView.playerModel = playerModel;
 - 邮箱: zifeng1300@gmail.com
 - QQ：459643690
 - QQ群：213376937（已满） 213375947（添加这个）
+
+# 广告时间
+
+有不错的iOS职位可以联系我，坐标北京，谢谢！！
 
 # License
 

@@ -39,6 +39,7 @@ What App using ZFPlayer, and on AppStore, please tell me, help me to statistics.
 ## Component
 
 - Breakpoint Download: [ZFDownload](https://github.com/renzifeng/ZFDownload)
+- ZFNavigationController: [ZFNavigationController](https://github.com/renzifeng/ZFNavigationController)
 - Layout: Masonry
 
 ## Installation
