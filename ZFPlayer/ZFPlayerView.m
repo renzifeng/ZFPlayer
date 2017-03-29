@@ -26,6 +26,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIView+CustomControlView.h"
 #import "ZFPlayer.h"
+#import "Masonry.h"
 
 //忽略编译器的警告
 #pragma clang diagnostic push

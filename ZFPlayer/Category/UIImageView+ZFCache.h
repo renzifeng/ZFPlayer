@@ -50,8 +50,6 @@ typedef void (^ZFImageBlock)(UIImage *image);
 
 /**
  *  Get/Set the callback block when download the image finished.
- *
- *  @param image The image object from network or from disk.
  */
 @property (nonatomic, copy) ZFImageBlock completion;
 
@@ -87,7 +85,7 @@ typedef void (^ZFImageBlock)(UIImage *image);
  * The download is asynchronous and cached.
  *
  * @param url         The url for the image.
- * @param placeholder The image to be set initially, until the image request finishes.
+ * @param placeholderImage The image to be set initially, until the image request finishes.
  */
 - (void)setImageWithURLString:(NSString *)url placeholder:(UIImage *)placeholderImage;
 
@@ -97,7 +95,7 @@ typedef void (^ZFImageBlock)(UIImage *image);
  * The download is asynchronous and cached.
  *
  * @param url            The url for the image.
- * @param placeholder    The image to be set initially, until the image request finishes.
+ * @param placeholderImage The image to be set initially, until the image request finishes.
  * @param completion     A block called when operation has been completed. This block has no return value
  *                       and takes the requested UIImage as first parameter. In case of error the image parameter
  *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
@@ -114,7 +112,7 @@ typedef void (^ZFImageBlock)(UIImage *image);
  * The download is asynchronous and cached.
  *
  * @param url            The url for the image.
- * @param placeholderImageName    The image name to be set initially, until the image request finishes.
+ * @param placeholderImageName The image name to be set initially, until the image request finishes.
  * @param completion     A block called when operation has been completed. This block has no return value
  *                       and takes the requested UIImage as first parameter. In case of error the image parameter
  *                       is nil and the second parameter may contain an NSError. The third parameter is a Boolean
