@@ -131,6 +131,8 @@
 - (ZFPlayerView *)playerView {
     if (!_playerView) {
         _playerView = [[ZFPlayerView alloc] init];
+        _playerView.allowAutoRotate = NO;
+        _playerView.rootViewController = self;
         
         /*****************************************************************************************
          *   // 指定控制层(可自定义)
