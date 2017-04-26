@@ -336,6 +336,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [_player pause];
 }
 
+/**
+ * 镜像
+ */
+- (void)mirror:(BOOL)on{
+    
+}
+
 #pragma mark - Private Method
 
 /**
@@ -1365,6 +1372,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }];
 }
 
+- (void)setHasMirror:(BOOL)hasMirror
+{
+    _hasMirror = hasMirror;
+    [self.controlView zf_playerHasMirrorFunction:hasMirror];
+}
+
 - (void)setPlayerModel:(ZFPlayerModel *)playerModel {
     _playerModel = playerModel;
 
@@ -1530,6 +1543,21 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if ([self.delegate respondsToSelector:@selector(zf_playerDownload:)]) {
         [self.delegate zf_playerDownload:urlStr];
     }
+}
+
+- (void)zf_controlView:(UIView *)controlView mirrorVideoAction:(UIButton *)sender {
+    
+    if (sender.isSelected) {
+        NSLog(@"mirror.select");
+        self.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        controlView.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    }else{
+        NSLog(@"mirror");
+        self.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        controlView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+    }
+    
+    //TODO:
 }
 
 - (void)zf_controlView:(UIView *)controlView progressSliderTap:(CGFloat)value {
