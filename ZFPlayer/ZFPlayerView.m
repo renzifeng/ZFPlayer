@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, assign) BOOL                   isFullScreen;
 /** 是否为镜像 */
 @property (nonatomic, assign) BOOL                   isMirror;
+/** 是否为快速播放 */
+@property (nonatomic, assign) BOOL                   isRate;
 /** 是否锁定屏幕方向 */
 @property (nonatomic, assign) BOOL                   isLocked;
 /** 是否在调节音量*/
@@ -1385,6 +1387,12 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self.controlView zf_playerHasMirrorFunction:hasMirror];
 }
 
+- (void)setHasRate:(BOOL)hasRate
+{
+    _hasRate = hasRate;
+    [self.controlView zf_playerHasRateFunction:_hasRate];
+}
+
 - (void)setPlayerModel:(ZFPlayerModel *)playerModel {
     _playerModel = playerModel;
 
@@ -1556,6 +1564,24 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
     [self mirrorEvent:sender.isSelected];
     
+}
+
+- (void)zf_controlView:(UIView *)controlView rateVideoAction:(UIButton *)sender
+{
+    NSString *title = sender.titleLabel.text;
+    float rate = 1.0f;
+    if ([title isEqualToString:@"x1.0"]) {
+        rate = 1.5f;
+    }else if ([title isEqualToString:@"x1.5"]){
+        rate = 2.0f;
+    }else if ([title isEqualToString:@"x2.0"]){
+        rate = 0.5f;
+    }else if ([title isEqualToString:@"x0.5"]){
+        rate = 1.0f;
+    }
+    self.player.rate = rate;
+    [sender setTitle:[NSString stringWithFormat:@"x%.1f",rate] forState:UIControlStateNormal];
+    NSLog(@"%f",rate);
 }
 
 - (void)zf_controlView:(UIView *)controlView progressSliderTap:(CGFloat)value {

@@ -82,6 +82,10 @@
  * 是否有镜像功能
  */
 - (void)zf_playerHasMirrorFunction:(BOOL)sender {}
+/**
+ * 是否有快速播放功能
+ */
+- (void)zf_playerHasRateFunction:(BOOL)sender {}
 
 /**
  * 下载按钮状态

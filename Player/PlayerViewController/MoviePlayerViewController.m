@@ -164,8 +164,9 @@
         // _playerView.playerLayerGravity = ZFPlayerLayerGravityResize;
         
         // 打开下载功能（默认没有这个功能）
-        _playerView.hasDownload = NO;
+        _playerView.hasDownload = YES;
         _playerView.hasMirror = YES;
+        _playerView.hasRate = YES;
         // 打开预览图
         self.playerView.hasPreviewView = YES;
 

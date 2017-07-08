@@ -91,6 +91,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 @property (nonatomic, strong) NSArray                 *resolutionArray;
 /** 镜像按钮 */
 @property (nonatomic, strong) UIButton                *mirrorBtn;
+/** 播放速度按钮 */
+@property (nonatomic, strong) UIButton                *rateBtn;
 
 /** 显示控制层 */
 @property (nonatomic, assign, getter=isShowing) BOOL  showing;
@@ -137,6 +139,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         [self.fastView addSubview:self.fastProgressView];
         
         [self.topImageView addSubview:self.mirrorBtn];
+        [self.topImageView addSubview:self.rateBtn];
         [self.topImageView addSubview:self.resolutionBtn];
         [self.topImageView addSubview:self.titleLabel];
         [self addSubview:self.closeBtn];
@@ -198,14 +201,21 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     [self.mirrorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(30);
-        make.trailing.equalTo(self.downLoadBtn.mas_leading).offset(-10);
+        make.trailing.equalTo(self.downLoadBtn.mas_leading).offset(-6);
+        make.centerY.equalTo(self.backBtn.mas_centerY);
+    }];
+    
+    [self.rateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(40);
+        make.height.mas_equalTo(30);
+        make.trailing.equalTo(self.mirrorBtn.mas_leading).offset(-6);
         make.centerY.equalTo(self.backBtn.mas_centerY);
     }];
 
     [self.resolutionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(25);
-        make.trailing.equalTo(self.mirrorBtn.mas_leading).offset(-10);
+        make.trailing.equalTo(self.rateBtn.mas_leading).offset(-6);
         make.centerY.equalTo(self.backBtn.mas_centerY);
     }];
     
@@ -431,6 +441,13 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     sender.selected = !sender.selected;
     if ([self.delegate respondsToSelector:@selector(zf_controlView:mirrorVideoAction:)]) {
         [self.delegate zf_controlView:self mirrorVideoAction:sender];
+    }
+}
+
+- (void)rateBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
+    if ([self.delegate respondsToSelector:@selector(zf_controlView:rateVideoAction:)]) {
+        [self.delegate zf_controlView:self rateVideoAction:sender];
     }
 }
 
@@ -801,6 +818,16 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     return _mirrorBtn;
 }
 
+- (UIButton *)rateBtn {
+    if (!_rateBtn) {
+        _rateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_rateBtn setTitle:@"x1.0" forState:UIControlStateNormal];
+        _rateBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_rateBtn addTarget:self action:@selector(rateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rateBtn;
+}
+
 - (UIButton *)resolutionBtn {
     if (!_resolutionBtn) {
         _resolutionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -920,6 +947,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.failBtn.hidden              = YES;
     self.placeholderImageView.alpha  = 1;
     self.mirrorBtn.hidden            = YES;
+    self.rateBtn.hidden              = YES;
     [self hideControlView];
 }
 
@@ -928,6 +956,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.repeatBtn.hidden       = YES;
     self.resolutionView.hidden  = YES;
     self.mirrorBtn.hidden       = YES;
+    self.rateBtn.hidden         = YES;
     self.playeBtn.hidden        = YES;
     self.downLoadBtn.enabled    = YES;
     self.failBtn.hidden         = YES;
@@ -1139,6 +1168,12 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (void)zf_playerHasMirrorFunction:(BOOL)sender {
     self.mirrorBtn.hidden = !sender;
 }
+/**
+ * 是否有镜像功能
+ */
+- (void)zf_playerHasRateFunction:(BOOL)sender {
+    self.rateBtn.hidden = !sender;
+}
 
 /**
  是否有切换分辨率功能
@@ -1198,6 +1233,11 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 /** 镜像按钮状态 */
 - (void)zf_playerMirrorBtnState:(BOOL)state {
     self.mirrorBtn.enabled = state;
+}
+
+/** 镜像按钮状态 */
+- (void)zf_playerRateBtnState:(BOOL)state {
+    self.rateBtn.enabled = state;
 }
 
 #pragma clang diagnostic pop

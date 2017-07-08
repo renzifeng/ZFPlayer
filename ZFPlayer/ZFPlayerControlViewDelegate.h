@@ -50,6 +50,8 @@
 - (void)zf_controlView:(UIView *)controlView downloadVideoAction:(UIButton *)sender;
 /** 镜像按钮事件 */
 - (void)zf_controlView:(UIView *)controlView mirrorVideoAction:(UIButton *)sender;
+/** 播放速度按钮事件 */
+- (void)zf_controlView:(UIView *)controlView rateVideoAction:(UIButton *)sender;
 /** 切换分辨率按钮事件 */
 - (void)zf_controlView:(UIView *)controlView resolutionAction:(UIButton *)sender;
 /** slider的点击事件（点击slider控制进度） */
