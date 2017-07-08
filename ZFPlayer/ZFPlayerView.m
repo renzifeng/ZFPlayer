@@ -59,6 +59,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, assign) ZFPlayerState          state;
 /** 是否为全屏 */
 @property (nonatomic, assign) BOOL                   isFullScreen;
+/** 是否为镜像 */
+@property (nonatomic, assign) BOOL                   isMirror;
 /** 是否锁定屏幕方向 */
 @property (nonatomic, assign) BOOL                   isLocked;
 /** 是否在调节音量*/
@@ -510,7 +512,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             
         case AVAudioSessionRouteChangeReasonCategoryChange:
             // called at start - also when other audio wants to play
-            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+//            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
             break;
     }
 }
@@ -693,6 +695,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)toOrientation:(UIInterfaceOrientation)orientation {
+    
+    
     // 获取到当前状态条的方向
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     // 判断如果当前方向和要旋转的方向一致,那么不做任何操作
@@ -722,8 +726,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // 给你的播放视频的view视图设置旋转
     self.transform = CGAffineTransformIdentity;
     self.transform = [self getTransformRotationAngle];
+    
     // 开始旋转
     [UIView commitAnimations];
+    
 }
 
 /**
@@ -742,6 +748,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else if(orientation == UIInterfaceOrientationLandscapeRight){
         return CGAffineTransformMakeRotation(M_PI_2);
     }
+    
     return CGAffineTransformIdentity;
 }
 
@@ -1547,17 +1554,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)zf_controlView:(UIView *)controlView mirrorVideoAction:(UIButton *)sender {
     
-    if (sender.isSelected) {
-        NSLog(@"mirror.select");
-        self.transform = CGAffineTransformMakeScale(-1.0, 1.0);
-        controlView.transform = CGAffineTransformMakeScale(-1.0, 1.0);
-    }else{
-        NSLog(@"mirror");
-        self.transform = CGAffineTransformMakeScale(1.0, 1.0);
-        controlView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-    }
+    [self mirrorEvent:sender.isSelected];
     
-    //TODO:
 }
 
 - (void)zf_controlView:(UIView *)controlView progressSliderTap:(CGFloat)value {
@@ -1600,7 +1598,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 self.imageGenerator.appliesPreferredTrackTransform = YES;
                 self.imageGenerator.maximumSize = CGSizeMake(100, 56);
                 AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-                    NSLog(@"%zd",result);
+//                    NSLog(@"%zd",result);
                     if (result != AVAssetImageGeneratorSucceeded) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [controlView zf_playerDraggedTime:dragedSeconds sliderImage:self.thumbImg ? : ZFPlayerImage(@"ZFPlayer_loading_bgView")];
@@ -1648,6 +1646,17 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if ([self.delegate respondsToSelector:@selector(zf_playerControlViewWillHidden:isFullscreen:)]) {
         [self.delegate zf_playerControlViewWillHidden:controlView isFullscreen:fullscreen];
     }
+}
+
+#pragma mark -mirror
+- (void)mirrorEvent:(BOOL)isMirror
+{
+    if (isMirror) {
+        self.playerLayer.transform = CATransform3DScale(CATransform3DMakeRotation(0, 0, 0, 0), -1, 1, 1);
+    }else{
+        self.playerLayer.transform = CATransform3DScale(CATransform3DMakeRotation(0, 0, 0, 0), 1, 1, 1);
+    }
+    self.isMirror = !isMirror;
 }
 
 #pragma clang diagnostic pop

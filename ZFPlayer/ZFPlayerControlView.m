@@ -196,7 +196,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }];
     
     [self.mirrorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(30);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(30);
         make.trailing.equalTo(self.downLoadBtn.mas_leading).offset(-10);
         make.centerY.equalTo(self.backBtn.mas_centerY);
     }];
@@ -792,8 +793,9 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (UIButton *)mirrorBtn {
     if (!_mirrorBtn) {
         _mirrorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_mirrorBtn setImage:ZFPlayerImage(@"ZFPlayer_fullscreen") forState:UIControlStateNormal];
-        [_mirrorBtn setImage:ZFPlayerImage(@"ZFPlayer_fullscreen") forState:UIControlStateDisabled];
+        [_mirrorBtn setTitle:@"镜面" forState:UIControlStateNormal];
+        [_mirrorBtn setTitle:@"取消镜面" forState:UIControlStateSelected];
+        _mirrorBtn.titleLabel.font = [UIFont systemFontOfSize:12];
         [_mirrorBtn addTarget:self action:@selector(mirrorBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _mirrorBtn;
@@ -917,6 +919,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.lockBtn.hidden              = !self.isFullScreen;
     self.failBtn.hidden              = YES;
     self.placeholderImageView.alpha  = 1;
+    self.mirrorBtn.hidden            = YES;
     [self hideControlView];
 }
 
@@ -924,6 +927,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.fastView.hidden        = YES;
     self.repeatBtn.hidden       = YES;
     self.resolutionView.hidden  = YES;
+    self.mirrorBtn.hidden       = YES;
     self.playeBtn.hidden        = YES;
     self.downLoadBtn.enabled    = YES;
     self.failBtn.hidden         = YES;
@@ -1127,6 +1131,13 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
  */
 - (void)zf_playerHasDownloadFunction:(BOOL)sender {
     self.downLoadBtn.hidden = !sender;
+}
+
+/**
+ * 是否有镜像功能
+ */
+- (void)zf_playerHasMirrorFunction:(BOOL)sender {
+    self.mirrorBtn.hidden = !sender;
 }
 
 /**
