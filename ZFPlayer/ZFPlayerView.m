@@ -1570,17 +1570,22 @@ typedef NS_ENUM(NSInteger, PanDirection){
 {
     NSString *title = sender.titleLabel.text;
     float rate = 1.0f;
-    if ([title isEqualToString:@"x1.0"]) {
-        rate = 1.5f;
-    }else if ([title isEqualToString:@"x1.5"]){
-        rate = 2.0f;
-    }else if ([title isEqualToString:@"x2.0"]){
+    if ([title isEqualToString:@"正常"]) {
         rate = 0.5f;
-    }else if ([title isEqualToString:@"x0.5"]){
+    }else if ([title isEqualToString:@"50%"]){
+        rate = 0.2f;
+    }else if ([title isEqualToString:@"20%"]){
+        rate = 0.1f;
+    }else if ([title isEqualToString:@"10%"]){
         rate = 1.0f;
     }
     self.player.rate = rate;
-    [sender setTitle:[NSString stringWithFormat:@"x%.1f",rate] forState:UIControlStateNormal];
+    if (rate == 1.0f){
+        [sender setTitle:@"正常" forState:UIControlStateNormal];
+    }else
+    {
+        [sender setTitle:[NSString stringWithFormat:@"%.f%@",rate * 100, @"%"] forState:UIControlStateNormal];
+    }
     NSLog(@"%f",rate);
 }
 

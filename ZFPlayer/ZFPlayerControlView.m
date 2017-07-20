@@ -821,7 +821,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (UIButton *)rateBtn {
     if (!_rateBtn) {
         _rateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_rateBtn setTitle:@"x1.0" forState:UIControlStateNormal];
+        [_rateBtn setTitle:@"正常" forState:UIControlStateNormal];
         _rateBtn.titleLabel.font = [UIFont systemFontOfSize:12];
         [_rateBtn addTarget:self action:@selector(rateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
