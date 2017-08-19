@@ -324,6 +324,47 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  播放
  */
 - (void)play {
+    Reachability *reach = [Reachability reachabilityWithHostName:@"www.hcios.com"];
+    switch([reach currentReachabilityStatus]){
+            
+        case ReachableViaWWAN:
+        {
+            UIAlertController *actionSheetController = [UIAlertController alertControllerWithTitle:@"提示" message:@"当前为移动网络播放视频会耗费流量，确定播放？" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *pickAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self confirmPlay];
+            }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [actionSheetController addAction:pickAction];
+            [actionSheetController addAction:cancelAction];
+            [[self viewController]presentViewController:actionSheetController animated:YES completion:nil];
+            
+        }
+            break;
+            
+        case ReachableViaWiFi:
+        {
+            [self confirmPlay];
+        }
+            break;
+            
+        default:
+        {
+            UIAlertController *actionSheetController = [UIAlertController alertControllerWithTitle:@"提示" message:@"失去网络连接" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [actionSheetController addAction:cancelAction];
+            [[self viewController]presentViewController:actionSheetController animated:YES completion:nil];
+        }
+            break;
+    }
+}
+
+- (void)confirmPlay
+{
     [self.controlView zf_playerPlayBtnState:YES];
     if (self.state == ZFPlayerStatePause) { self.state = ZFPlayerStatePlaying; }
     self.isPauseByUser = NO;
@@ -1691,5 +1732,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 #pragma clang diagnostic pop
-
+- (UIViewController *)viewController {
+    UIResponder *responder = self;
+    while (![responder isKindOfClass:[UIViewController class]]) {
+        responder = [responder nextResponder];
+        if (nil == responder) {
+            break;
+        }
+    }
+    return (UIViewController *)responder;
+}
 @end
