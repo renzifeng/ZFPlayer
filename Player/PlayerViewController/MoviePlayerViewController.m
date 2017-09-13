@@ -138,6 +138,7 @@
         _playerModel.videoURL         = self.videoURL;
         _playerModel.placeholderImage = [UIImage imageNamed:@"loading_bgView1"];
         _playerModel.fatherView       = self.playerFatherView;
+
 //        _playerModel.resolutionDic = @{@"高清" : self.videoURL.absoluteString,
 //                                       @"标清" : self.videoURL.absoluteString};
     }
@@ -164,8 +165,10 @@
         // _playerView.playerLayerGravity = ZFPlayerLayerGravityResize;
         
         // 打开下载功能（默认没有这个功能）
-        _playerView.hasDownload    = YES;
-        
+        _playerView.hasDownload = YES;
+        _playerView.hasMirror = YES;
+        _playerView.hasRate = YES;
+        [_playerView _fullScreenAction];
         // 打开预览图
         self.playerView.hasPreviewView = YES;
 

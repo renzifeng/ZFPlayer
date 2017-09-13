@@ -62,6 +62,10 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, assign) ZFPlayerLayerGravity    playerLayerGravity;
 /** 是否有下载功能(默认是关闭) */
 @property (nonatomic, assign) BOOL                    hasDownload;
+/** 是否有镜像功能(默认是关闭) */
+@property (nonatomic, assign) BOOL                    hasMirror;
+/** 是否有快速播放功能(默认是关闭) */
+@property (nonatomic, assign) BOOL                    hasRate;
 /** 是否开启预览图 */
 @property (nonatomic, assign) BOOL                    hasPreviewView;
 /** 设置代理 */
@@ -121,5 +125,10 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
   * 暂停
  */
 - (void)pause;
+
+/**
+ * 全屏
+ */
+- (void)_fullScreenAction;
 
 @end

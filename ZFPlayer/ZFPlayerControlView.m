@@ -89,6 +89,10 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 @property (nonatomic, strong) UIProgressView          *bottomProgressView;
 /** 分辨率的名称 */
 @property (nonatomic, strong) NSArray                 *resolutionArray;
+/** 镜像按钮 */
+@property (nonatomic, strong) UIButton                *mirrorBtn;
+/** 播放速度按钮 */
+@property (nonatomic, strong) UIButton                *rateBtn;
 
 /** 显示控制层 */
 @property (nonatomic, assign, getter=isShowing) BOOL  showing;
@@ -134,6 +138,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         [self.fastView addSubview:self.fastTimeLabel];
         [self.fastView addSubview:self.fastProgressView];
         
+        [self.topImageView addSubview:self.mirrorBtn];
+        [self.topImageView addSubview:self.rateBtn];
         [self.topImageView addSubview:self.resolutionBtn];
         [self.topImageView addSubview:self.titleLabel];
         [self addSubview:self.closeBtn];
@@ -143,6 +149,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         [self makeSubViewsConstraints];
         
         self.downLoadBtn.hidden     = YES;
+        self.mirrorBtn.hidden       = NO;
         self.resolutionBtn.hidden   = YES;
         // 初始化时重置controlView
         [self zf_playerResetControlView];
@@ -190,11 +197,25 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         make.trailing.equalTo(self.topImageView.mas_trailing).offset(-10);
         make.centerY.equalTo(self.backBtn.mas_centerY);
     }];
+    
+    [self.mirrorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(30);
+        make.trailing.equalTo(self.downLoadBtn.mas_leading).offset(-6);
+        make.centerY.equalTo(self.backBtn.mas_centerY);
+    }];
+    
+    [self.rateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(40);
+        make.height.mas_equalTo(30);
+        make.trailing.equalTo(self.mirrorBtn.mas_leading).offset(-6);
+        make.centerY.equalTo(self.backBtn.mas_centerY);
+    }];
 
     [self.resolutionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(25);
-        make.trailing.equalTo(self.downLoadBtn.mas_leading).offset(-10);
+        make.trailing.equalTo(self.rateBtn.mas_leading).offset(-6);
         make.centerY.equalTo(self.backBtn.mas_centerY);
     }];
     
@@ -413,6 +434,20 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (void)downloadBtnClick:(UIButton *)sender {
     if ([self.delegate respondsToSelector:@selector(zf_controlView:downloadVideoAction:)]) {
         [self.delegate zf_controlView:self downloadVideoAction:sender];
+    }
+}
+
+- (void)mirrorBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
+    if ([self.delegate respondsToSelector:@selector(zf_controlView:mirrorVideoAction:)]) {
+        [self.delegate zf_controlView:self mirrorVideoAction:sender];
+    }
+}
+
+- (void)rateBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
+    if ([self.delegate respondsToSelector:@selector(zf_controlView:rateVideoAction:)]) {
+        [self.delegate zf_controlView:self rateVideoAction:sender];
     }
 }
 
@@ -772,6 +807,27 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     return _downLoadBtn;
 }
 
+- (UIButton *)mirrorBtn {
+    if (!_mirrorBtn) {
+        _mirrorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_mirrorBtn setTitle:@"镜面" forState:UIControlStateNormal];
+        [_mirrorBtn setTitle:@"取消镜面" forState:UIControlStateSelected];
+        _mirrorBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_mirrorBtn addTarget:self action:@selector(mirrorBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _mirrorBtn;
+}
+
+- (UIButton *)rateBtn {
+    if (!_rateBtn) {
+        _rateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_rateBtn setTitle:@"正常" forState:UIControlStateNormal];
+        _rateBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_rateBtn addTarget:self action:@selector(rateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rateBtn;
+}
+
 - (UIButton *)resolutionBtn {
     if (!_resolutionBtn) {
         _resolutionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -890,6 +946,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.lockBtn.hidden              = !self.isFullScreen;
     self.failBtn.hidden              = YES;
     self.placeholderImageView.alpha  = 1;
+    self.mirrorBtn.hidden            = YES;
+    self.rateBtn.hidden              = YES;
     [self hideControlView];
 }
 
@@ -897,6 +955,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.fastView.hidden        = YES;
     self.repeatBtn.hidden       = YES;
     self.resolutionView.hidden  = YES;
+    self.mirrorBtn.hidden       = YES;
+    self.rateBtn.hidden         = YES;
     self.playeBtn.hidden        = YES;
     self.downLoadBtn.enabled    = YES;
     self.failBtn.hidden         = YES;
@@ -1103,6 +1163,19 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 }
 
 /**
+ * 是否有镜像功能
+ */
+- (void)zf_playerHasMirrorFunction:(BOOL)sender {
+    self.mirrorBtn.hidden = !sender;
+}
+/**
+ * 是否有镜像功能
+ */
+- (void)zf_playerHasRateFunction:(BOOL)sender {
+    self.rateBtn.hidden = !sender;
+}
+
+/**
  是否有切换分辨率功能
  */
 - (void)zf_playerResolutionArray:(NSArray *)resolutionArray {
@@ -1155,6 +1228,16 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 /** 下载按钮状态 */
 - (void)zf_playerDownloadBtnState:(BOOL)state {
     self.downLoadBtn.enabled = state;
+}
+
+/** 镜像按钮状态 */
+- (void)zf_playerMirrorBtnState:(BOOL)state {
+    self.mirrorBtn.enabled = state;
+}
+
+/** 镜像按钮状态 */
+- (void)zf_playerRateBtnState:(BOOL)state {
+    self.rateBtn.enabled = state;
 }
 
 #pragma clang diagnostic pop

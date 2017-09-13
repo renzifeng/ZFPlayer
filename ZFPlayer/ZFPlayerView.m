@@ -59,6 +59,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, assign) ZFPlayerState          state;
 /** 是否为全屏 */
 @property (nonatomic, assign) BOOL                   isFullScreen;
+/** 是否为镜像 */
+@property (nonatomic, assign) BOOL                   isMirror;
+/** 是否为快速播放 */
+@property (nonatomic, assign) BOOL                   isRate;
 /** 是否锁定屏幕方向 */
 @property (nonatomic, assign) BOOL                   isLocked;
 /** 是否在调节音量*/
@@ -318,6 +322,47 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  播放
  */
 - (void)play {
+    Reachability *reach = [Reachability reachabilityWithHostName:@"www.hcios.com"];
+    switch([reach currentReachabilityStatus]){
+            
+        case ReachableViaWWAN:
+        {
+            UIAlertController *actionSheetController = [UIAlertController alertControllerWithTitle:@"提示" message:@"当前为移动网络播放视频会耗费流量，确定播放？" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *pickAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self confirmPlay];
+            }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [actionSheetController addAction:pickAction];
+            [actionSheetController addAction:cancelAction];
+            [[self viewController]presentViewController:actionSheetController animated:YES completion:nil];
+            
+        }
+            break;
+            
+        case ReachableViaWiFi:
+        {
+            [self confirmPlay];
+        }
+            break;
+            
+        default:
+        {
+            UIAlertController *actionSheetController = [UIAlertController alertControllerWithTitle:@"提示" message:@"失去网络连接" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [actionSheetController addAction:cancelAction];
+            [[self viewController]presentViewController:actionSheetController animated:YES completion:nil];
+        }
+            break;
+    }
+}
+
+- (void)confirmPlay
+{
     [self.controlView zf_playerPlayBtnState:YES];
     if (self.state == ZFPlayerStatePause) { self.state = ZFPlayerStatePlaying; }
     self.isPauseByUser = NO;
@@ -332,6 +377,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (self.state == ZFPlayerStatePlaying) { self.state = ZFPlayerStatePause;}
     self.isPauseByUser = YES;
     [_player pause];
+}
+
+/**
+ * 镜像
+ */
+- (void)mirror:(BOOL)on{
+    
 }
 
 #pragma mark - Private Method
@@ -501,7 +553,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             
         case AVAudioSessionRouteChangeReasonCategoryChange:
             // called at start - also when other audio wants to play
-            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+//            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
             break;
     }
 }
@@ -684,6 +736,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)toOrientation:(UIInterfaceOrientation)orientation {
+    
+    
     // 获取到当前状态条的方向
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     // 判断如果当前方向和要旋转的方向一致,那么不做任何操作
@@ -713,8 +767,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // 给你的播放视频的view视图设置旋转
     self.transform = CGAffineTransformIdentity;
     self.transform = [self getTransformRotationAngle];
+    
     // 开始旋转
     [UIView commitAnimations];
+    
 }
 
 /**
@@ -733,6 +789,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else if(orientation == UIInterfaceOrientationLandscapeRight){
         return CGAffineTransformMakeRotation(M_PI_2);
     }
+    
     return CGAffineTransformIdentity;
 }
 
@@ -1363,6 +1420,18 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }];
 }
 
+- (void)setHasMirror:(BOOL)hasMirror
+{
+    _hasMirror = hasMirror;
+    [self.controlView zf_playerHasMirrorFunction:hasMirror];
+}
+
+- (void)setHasRate:(BOOL)hasRate
+{
+    _hasRate = hasRate;
+    [self.controlView zf_playerHasRateFunction:_hasRate];
+}
+
 - (void)setPlayerModel:(ZFPlayerModel *)playerModel {
     _playerModel = playerModel;
 
@@ -1530,6 +1599,35 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
 }
 
+- (void)zf_controlView:(UIView *)controlView mirrorVideoAction:(UIButton *)sender {
+    
+    [self mirrorEvent:sender.isSelected];
+    
+}
+
+- (void)zf_controlView:(UIView *)controlView rateVideoAction:(UIButton *)sender
+{
+    NSString *title = sender.titleLabel.text;
+    float rate = 1.0f;
+    if ([title isEqualToString:@"正常"]) {
+        rate = 0.5f;
+    }else if ([title isEqualToString:@"50%"]){
+        rate = 0.2f;
+    }else if ([title isEqualToString:@"20%"]){
+        rate = 0.1f;
+    }else if ([title isEqualToString:@"10%"]){
+        rate = 1.0f;
+    }
+    self.player.rate = rate;
+    if (rate == 1.0f){
+        [sender setTitle:@"正常" forState:UIControlStateNormal];
+    }else
+    {
+        [sender setTitle:[NSString stringWithFormat:@"%.f%@",rate * 100, @"%"] forState:UIControlStateNormal];
+    }
+    NSLog(@"%f",rate);
+}
+
 - (void)zf_controlView:(UIView *)controlView progressSliderTap:(CGFloat)value {
     // 视频总时间长度
     CGFloat total = (CGFloat)self.playerItem.duration.value / self.playerItem.duration.timescale;
@@ -1570,7 +1668,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 self.imageGenerator.appliesPreferredTrackTransform = YES;
                 self.imageGenerator.maximumSize = CGSizeMake(100, 56);
                 AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-                    NSLog(@"%zd",result);
+//                    NSLog(@"%zd",result);
                     if (result != AVAssetImageGeneratorSucceeded) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [controlView zf_playerDraggedTime:dragedSeconds sliderImage:self.thumbImg ? : ZFPlayerImage(@"ZFPlayer_loading_bgView")];
@@ -1620,6 +1718,26 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
 }
 
-#pragma clang diagnostic pop
+#pragma mark -mirror
+- (void)mirrorEvent:(BOOL)isMirror
+{
+    if (isMirror) {
+        self.playerLayer.transform = CATransform3DScale(CATransform3DMakeRotation(0, 0, 0, 0), -1, 1, 1);
+    }else{
+        self.playerLayer.transform = CATransform3DScale(CATransform3DMakeRotation(0, 0, 0, 0), 1, 1, 1);
+    }
+    self.isMirror = !isMirror;
+}
 
+#pragma clang diagnostic pop
+- (UIViewController *)viewController {
+    UIResponder *responder = self;
+    while (![responder isKindOfClass:[UIViewController class]]) {
+        responder = [responder nextResponder];
+        if (nil == responder) {
+            break;
+        }
+    }
+    return (UIViewController *)responder;
+}
 @end
