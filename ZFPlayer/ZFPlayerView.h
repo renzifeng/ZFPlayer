@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerState) {
 @property (nonatomic, weak) id<ZFPlayerDelegate>      delegate;
 /** 是否被用户暂停 */
 @property (nonatomic, assign, readonly) BOOL          isPauseByUser;
-/** 播发器的几种状态 */
+/** 播放器的几种状态 */
 @property (nonatomic, assign, readonly) ZFPlayerState state;
 /** 静音（默认为NO）*/
 @property (nonatomic, assign) BOOL                    mute;
