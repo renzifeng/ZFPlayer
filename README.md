@@ -158,7 +158,7 @@ custom view you need to implement the following method in `.m`, you can referenc
 
 ```
 /** 
- * Set playaer model 
+ * Set player model 
  */
 - (void)zf_playerModel:(ZFPlayerModel *)playerModel;
 
