@@ -46,7 +46,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 /** 缓冲进度条 */
 @property (nonatomic, strong) UIProgressView          *progressView;
 /** 滑杆 */
-@property (nonatomic, strong) ASValueTrackingSlider   *videoSlider;
+@property (nonatomic, strong) ZFASValueTrackingSlider   *videoSlider;
 /** 全屏按钮 */
 @property (nonatomic, strong) UIButton                *fullScreenBtn;
 /** 锁定屏幕方向按钮 */
@@ -247,7 +247,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }];
     
     [self.lockBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.mas_leading).offset(iPhoneX?35:15);
+        make.leading.equalTo(self.mas_leading).offset(15);
         make.centerY.equalTo(self.mas_centerY);
         make.width.height.mas_equalTo(32);
     }];
@@ -435,7 +435,7 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }
 }
 
-- (void)progressSliderTouchBegan:(ASValueTrackingSlider *)sender {
+- (void)progressSliderTouchBegan:(ZFASValueTrackingSlider *)sender {
     [self zf_playerCancelAutoFadeOutControlView];
     self.videoSlider.popUpView.hidden = YES;
     if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderTouchBegan:)]) {
@@ -443,13 +443,13 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     }
 }
 
-- (void)progressSliderValueChanged:(ASValueTrackingSlider *)sender {
+- (void)progressSliderValueChanged:(ZFASValueTrackingSlider *)sender {
     if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderValueChanged:)]) {
         [self.delegate zf_controlView:self progressSliderValueChanged:sender];
     }
 }
 
-- (void)progressSliderTouchEnded:(ASValueTrackingSlider *)sender {
+- (void)progressSliderTouchEnded:(ZFASValueTrackingSlider *)sender {
     self.showing = YES;
     if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderTouchEnded:)]) {
         [self.delegate zf_controlView:self progressSliderTouchEnded:sender];
@@ -507,6 +507,10 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         make.leading.equalTo(self.topImageView.mas_leading).offset(10);
         make.width.height.mas_equalTo(40);
     }];
+}
+
+- (void)hideBackBt{
+    self.backBtn.hidden = YES;
 }
 /**
  *  设置竖屏的约束
@@ -690,9 +694,9 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     return _progressView;
 }
 
-- (ASValueTrackingSlider *)videoSlider {
+- (ZFASValueTrackingSlider *)videoSlider {
     if (!_videoSlider) {
-        _videoSlider                       = [[ASValueTrackingSlider alloc] init];
+        _videoSlider                       = [[ZFASValueTrackingSlider alloc] init];
         _videoSlider.popUpViewCornerRadius = 0.0;
         _videoSlider.popUpViewColor = RGBA(19, 19, 9, 1);
         _videoSlider.popUpViewArrowLength = 8;

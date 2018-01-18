@@ -1,5 +1,5 @@
 //
-//  ASValuePopUpView.m
+//  ZFASValuePopUpView.m
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "ASValuePopUpView.h"
+#import "ZFASValuePopUpView.h"
 
 @implementation CALayer (ASAnimationAdditions)
 
@@ -37,9 +37,9 @@
 }
 @end
 
-NSString *const SliderFillColorAnim = @"fillColor";
+NSString *const ZFSliderFillColorAnim = @"fillColor";
 
-@implementation ASValuePopUpView
+@implementation ZFASValuePopUpView
 {
     BOOL _shouldAnimate;
     CFTimeInterval _animDuration;
@@ -121,7 +121,7 @@ NSString *const SliderFillColorAnim = @"fillColor";
 - (void)setColor:(UIColor *)color
 {
     _pathLayer.fillColor = color.CGColor;
-    [_colorAnimLayer removeAnimationForKey:SliderFillColorAnim]; // single color, no animation required
+    [_colorAnimLayer removeAnimationForKey:ZFSliderFillColorAnim]; // single color, no animation required
 }
 
 - (UIColor *)opaqueColor
@@ -148,7 +148,7 @@ NSString *const SliderFillColorAnim = @"fillColor";
         [cgColors addObject:(id)col.CGColor];
     }
     
-    CAKeyframeAnimation *colorAnim = [CAKeyframeAnimation animationWithKeyPath:SliderFillColorAnim];
+    CAKeyframeAnimation *colorAnim = [CAKeyframeAnimation animationWithKeyPath:ZFSliderFillColorAnim];
     colorAnim.keyTimes = keyTimes;
     colorAnim.values = cgColors;
     colorAnim.fillMode = kCAFillModeBoth;
@@ -161,12 +161,12 @@ NSString *const SliderFillColorAnim = @"fillColor";
     _colorAnimLayer.speed = FLT_MIN;
     _colorAnimLayer.timeOffset = 0.0;
     
-    [_colorAnimLayer addAnimation:colorAnim forKey:SliderFillColorAnim];
+    [_colorAnimLayer addAnimation:colorAnim forKey:ZFSliderFillColorAnim];
 }
 
 - (void)setAnimationOffset:(CGFloat)animOffset returnColor:(void (^)(UIColor *opaqueReturnColor))block
 {
-    if ([_colorAnimLayer animationForKey:SliderFillColorAnim]) {
+    if ([_colorAnimLayer animationForKey:ZFSliderFillColorAnim]) {
         _colorAnimLayer.timeOffset = animOffset;
         _pathLayer.fillColor = [_colorAnimLayer.presentationLayer fillColor];
         block([self opaqueColor]);

@@ -1,5 +1,5 @@
-//
-//  ASValueTrackingSlider.h
+
+//  ZFASValueTrackingSlider.h
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -22,11 +22,11 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "ASValuePopUpView.h"
+#import "ZFASValuePopUpView.h"
 
-@protocol ASValueTrackingSliderDelegate;
+@protocol ZFASValueTrackingSliderDelegate;
 
-@interface ASValueTrackingSlider : UISlider
+@interface ZFASValueTrackingSlider : UISlider
 
 // present the popUpView manually, without touch event.
 - (void)showPopUpViewAnimated:(BOOL)animated;
@@ -45,7 +45,7 @@
 // to specify the exact position of colors on the slider scale, pass an NSArray of NSNumbers
 - (void)setPopUpViewAnimatedColors:(NSArray *)popUpViewAnimatedColors withPositions:(NSArray *)positions;
 
-@property (strong, nonatomic, readonly) ASValuePopUpView *popUpView;
+@property (strong, nonatomic, readonly) ZFASValuePopUpView *popUpView;
 // cornerRadius of the popUpView, default is 4.0
 @property (nonatomic) CGFloat popUpViewCornerRadius;
 
@@ -61,7 +61,7 @@
 @property (nonatomic) BOOL autoAdjustTrackColor; // (default is YES)
 
 // delegate is only needed when used with a TableView or CollectionView - see below
-@property (weak, nonatomic) id<ASValueTrackingSliderDelegate> delegate;
+@property (weak, nonatomic) id<ZFASValueTrackingSliderDelegate> delegate;
 /** 设置时间 */
 - (void)setText:(NSString *)text;
 /** 设置预览图 */
@@ -69,13 +69,13 @@
 
 @end
 
-// when embedding an ASValueTrackingSlider inside a TableView or CollectionView
+// when embedding an ZFASValueTrackingSlider inside a TableView or CollectionView
 // you need to ensure that the cell it resides in is brought to the front of the view hierarchy
 // to prevent the popUpView from being obscured
-@protocol ASValueTrackingSliderDelegate <NSObject>
-- (void)sliderWillDisplayPopUpView:(ASValueTrackingSlider *)slider;
+@protocol ZFASValueTrackingSliderDelegate <NSObject>
+- (void)sliderWillDisplayPopUpView:(ZFASValueTrackingSlider *)slider;
 
 @optional
-- (void)sliderWillHidePopUpView:(ASValueTrackingSlider *)slider;
-- (void)sliderDidHidePopUpView:(ASValueTrackingSlider *)slider;
+- (void)sliderWillHidePopUpView:(ZFASValueTrackingSlider *)slider;
+- (void)sliderDidHidePopUpView:(ZFASValueTrackingSlider *)slider;
 @end

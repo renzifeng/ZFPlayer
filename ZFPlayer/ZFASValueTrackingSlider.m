@@ -1,5 +1,5 @@
 //
-//  ASValueTrackingSlider.m
+//  ZFASValueTrackingSlider.m
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,14 +21,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "ASValueTrackingSlider.h"
+#import "ZFASValueTrackingSlider.h"
 
-@interface ASValueTrackingSlider() <ASValuePopUpViewDelegate>
-@property (strong, nonatomic) ASValuePopUpView *popUpView;
+@interface ZFASValueTrackingSlider() <ZFASValuePopUpViewDelegate>
+@property (strong, nonatomic) ZFASValuePopUpView *popUpView;
 @property (nonatomic) BOOL popUpViewAlwaysOn; // default is NO
 @end
 
-@implementation ASValueTrackingSlider
+@implementation ZFASValueTrackingSlider
 {
     NSNumberFormatter *_numberFormatter;
     UIColor *_popUpViewColor;
@@ -189,7 +189,7 @@
     [self _hidePopUpViewAnimated:animated];
 }
 
-#pragma mark - ASValuePopUpViewDelegate
+#pragma mark - ZFASValuePopUpViewDelegate
 
 - (void)colorDidUpdate:(UIColor *)opaqueColor
 {
@@ -217,7 +217,7 @@
     [formatter setMinimumFractionDigits:2];
     _numberFormatter = formatter;
 
-    self.popUpView = [[ASValuePopUpView alloc] initWithFrame:CGRectZero];
+    self.popUpView = [[ZFASValuePopUpView alloc] initWithFrame:CGRectZero];
     self.popUpViewColor = [UIColor colorWithHue:0.6 saturation:0.6 brightness:0.5 alpha:0.8];
 
     self.popUpView.alpha = 0.0;

@@ -1,5 +1,5 @@
 //
-//  UIViewController+ZFPlayerRotation.m
+//  ZFASValuePopUpView.h
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,35 +21,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "UIViewController+ZFPlayerRotation.h"
+#import <UIKit/UIKit.h>
 
-@implementation UIViewController (ZFPlayerRotation)
+@protocol ZFASValuePopUpViewDelegate <NSObject>
+- (CGFloat)currentValueOffset; //expects value in the range 0.0 - 1.0
+- (void)colorDidUpdate:(UIColor *)opaqueColor;
+@end
 
-/**
- * 默认所有都不支持转屏,如需个别页面支持除竖屏外的其他方向，请在viewController重新下边这三个方法
- */
+@interface ZFASValuePopUpView : UIView
 
-// 是否支持自动转屏
-- (BOOL)shouldAutorotate {
-    return NO;
-}
+@property (weak, nonatomic) id <ZFASValuePopUpViewDelegate> delegate;
+@property (nonatomic) CGFloat cornerRadius;
+@property (nonatomic) CGFloat arrowLength;
+@property (nonatomic) CGFloat widthPaddingFactor;
+@property (nonatomic) CGFloat heightPaddingFactor;
 
-// 支持哪些屏幕方向
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
-}
+- (UIColor *)color;
+- (void)setColor:(UIColor *)color;
+- (UIColor *)opaqueColor;
 
-// 默认的屏幕方向（当前ViewController必须是通过模态出来的UIViewController（模态带导航的无效）方式展现出来的，才会调用这个方法）
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
-}
+- (void)setText:(NSString *)text;
+- (void)setImage:(UIImage *)image;
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleDefault; // your own style
-}
+- (void)setAnimatedColors:(NSArray *)animatedColors withKeyTimes:(NSArray *)keyTimes;
 
-- (BOOL)prefersStatusBarHidden {
-    return NO; // your own visibility code
-}
+- (void)setAnimationOffset:(CGFloat)animOffset returnColor:(void (^)(UIColor *opaqueReturnColor))block;
+
+- (void)setFrame:(CGRect)frame arrowOffset:(CGFloat)arrowOffset;
+
+- (void)animateBlock:(void (^)(CFTimeInterval duration))block;
+
+- (void)showAnimated:(BOOL)animated;
+- (void)hideAnimated:(BOOL)animated completionBlock:(void (^)())block;
 
 @end

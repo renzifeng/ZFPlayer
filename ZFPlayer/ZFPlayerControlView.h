@@ -22,9 +22,11 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "ASValueTrackingSlider.h"
-//#import "ZFPlayer.h"
+#import "ZFASValueTrackingSlider.h"
+#import "ZFPlayer.h"
 
 @interface ZFPlayerControlView : UIView 
+
+- (void)hideBackBt;
 
 @end

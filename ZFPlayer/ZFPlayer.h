@@ -22,8 +22,6 @@
 // THE SOFTWARE.
 
 #define iPhone4s ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
-#define iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
-
 // 监听TableView的contentOffset
 #define kZFPlayerViewContentOffset          @"contentOffset"
 // player的单例
@@ -50,7 +48,9 @@
 #import "ZFPlayerModel.h"
 #import "ZFPlayerControlView.h"
 #import "ZFBrightnessView.h"
+#import "UITabBarController+ZFPlayerRotation.h"
 #import "UIViewController+ZFPlayerRotation.h"
+#import "UINavigationController+ZFPlayerRotation.h"
 #import "UIImageView+ZFCache.h"
 #import "UIWindow+CurrentViewController.h"
 #import "ZFPlayerControlViewDelegate.h"

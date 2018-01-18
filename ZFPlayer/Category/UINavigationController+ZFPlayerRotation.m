@@ -1,5 +1,5 @@
 //
-//  UIViewController+ZFPlayerRotation.m
+//  UINavigationController+ZFPlayerRotation.m
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,35 +21,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "UIViewController+ZFPlayerRotation.h"
+#import "UINavigationController+ZFPlayerRotation.h"
+#import <objc/runtime.h>
 
-@implementation UIViewController (ZFPlayerRotation)
+@implementation UINavigationController (ZFPlayerRotation)
 
 /**
- * 默认所有都不支持转屏,如需个别页面支持除竖屏外的其他方向，请在viewController重新下边这三个方法
+ * 如果window的根视图是UINavigationController，则会先调用这个Category，然后调用UIViewController+ZFPlayerRotation
+ * 只需要在支持除竖屏以外方向的页面重新下边三个方法
  */
 
 // 是否支持自动转屏
 - (BOOL)shouldAutorotate {
-    return NO;
+    return [self.topViewController shouldAutorotate];
 }
 
 // 支持哪些屏幕方向
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return [self.topViewController supportedInterfaceOrientations];
 }
 
 // 默认的屏幕方向（当前ViewController必须是通过模态出来的UIViewController（模态带导航的无效）方式展现出来的，才会调用这个方法）
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
+    return [self.topViewController preferredInterfaceOrientationForPresentation];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleDefault; // your own style
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.topViewController;
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return NO; // your own visibility code
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.topViewController;
 }
 
 @end
