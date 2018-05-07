@@ -25,7 +25,7 @@
 #import "ZFPlayer.h"
 
 @interface UIView (CustomControlView)
-@property (nonatomic, weak) id<ZFPlayerControlViewDelagate> delegate;
+@property (nonatomic, weak) id<ZFPlayerControlViewDelagate> zfDelegate;
 
 /** 
  * 设置播放模型 

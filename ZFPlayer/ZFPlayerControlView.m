@@ -334,8 +334,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     self.resolutionBtn.selected = NO;
     // topImageView上的按钮的文字
     [self.resolutionBtn setTitle:sender.titleLabel.text forState:UIControlStateNormal];
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:resolutionAction:)]) {
-        [self.delegate zf_controlView:self resolutionAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:resolutionAction:)]) {
+        [self.zfDelegate zf_controlView:self resolutionAction:sender];
     }
 }
 
@@ -349,8 +349,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         CGFloat length = slider.frame.size.width;
         // 视频跳转的value
         CGFloat tapValue = point.x / length;
-        if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderTap:)]) {
-            [self.delegate zf_controlView:self progressSliderTap:tapValue];
+        if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:progressSliderTap:)]) {
+            [self.zfDelegate zf_controlView:self progressSliderTap:tapValue];
         }
     }
 }
@@ -362,12 +362,12 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     // 在cell上并且是竖屏时候响应关闭事件
     if (self.isCellVideo && orientation == UIInterfaceOrientationPortrait) {
-        if ([self.delegate respondsToSelector:@selector(zf_controlView:closeAction:)]) {
-            [self.delegate zf_controlView:self closeAction:sender];
+        if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:closeAction:)]) {
+            [self.zfDelegate zf_controlView:self closeAction:sender];
         }
     } else {
-        if ([self.delegate respondsToSelector:@selector(zf_controlView:backAction:)]) {
-            [self.delegate zf_controlView:self backAction:sender];
+        if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:backAction:)]) {
+            [self.zfDelegate zf_controlView:self backAction:sender];
         }
     }
 }
@@ -376,28 +376,28 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     sender.selected = !sender.selected;
     self.showing = NO;
     [self zf_playerShowControlView];
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:lockScreenAction:)]) {
-        [self.delegate zf_controlView:self lockScreenAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:lockScreenAction:)]) {
+        [self.zfDelegate zf_controlView:self lockScreenAction:sender];
     }
 }
 
 - (void)playBtnClick:(UIButton *)sender {
     sender.selected = !sender.selected;
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:playAction:)]) {
-        [self.delegate zf_controlView:self playAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:playAction:)]) {
+        [self.zfDelegate zf_controlView:self playAction:sender];
     }
 }
 
 - (void)closeBtnClick:(UIButton *)sender {
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:closeAction:)]) {
-        [self.delegate zf_controlView:self closeAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:closeAction:)]) {
+        [self.zfDelegate zf_controlView:self closeAction:sender];
     }
 }
 
 - (void)fullScreenBtnClick:(UIButton *)sender {
     sender.selected = !sender.selected;
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:fullScreenAction:)]) {
-        [self.delegate zf_controlView:self fullScreenAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:fullScreenAction:)]) {
+        [self.zfDelegate zf_controlView:self fullScreenAction:sender];
     }
 }
 
@@ -405,14 +405,14 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     // 重置控制层View
     [self zf_playerResetControlView];
     [self zf_playerShowControlView];
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:repeatPlayAction:)]) {
-        [self.delegate zf_controlView:self repeatPlayAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:repeatPlayAction:)]) {
+        [self.zfDelegate zf_controlView:self repeatPlayAction:sender];
     }
 }
 
 - (void)downloadBtnClick:(UIButton *)sender {
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:downloadVideoAction:)]) {
-        [self.delegate zf_controlView:self downloadVideoAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:downloadVideoAction:)]) {
+        [self.zfDelegate zf_controlView:self downloadVideoAction:sender];
     }
 }
 
@@ -423,36 +423,36 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 }
 
 - (void)centerPlayBtnClick:(UIButton *)sender {
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:cneterPlayAction:)]) {
-        [self.delegate zf_controlView:self cneterPlayAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:cneterPlayAction:)]) {
+        [self.zfDelegate zf_controlView:self cneterPlayAction:sender];
     }
 }
 
 - (void)failBtnClick:(UIButton *)sender {
     self.failBtn.hidden = YES;
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:failAction:)]) {
-        [self.delegate zf_controlView:self failAction:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:failAction:)]) {
+        [self.zfDelegate zf_controlView:self failAction:sender];
     }
 }
 
 - (void)progressSliderTouchBegan:(ASValueTrackingSlider *)sender {
     [self zf_playerCancelAutoFadeOutControlView];
     self.videoSlider.popUpView.hidden = YES;
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderTouchBegan:)]) {
-        [self.delegate zf_controlView:self progressSliderTouchBegan:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:progressSliderTouchBegan:)]) {
+        [self.zfDelegate zf_controlView:self progressSliderTouchBegan:sender];
     }
 }
 
 - (void)progressSliderValueChanged:(ASValueTrackingSlider *)sender {
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderValueChanged:)]) {
-        [self.delegate zf_controlView:self progressSliderValueChanged:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:progressSliderValueChanged:)]) {
+        [self.zfDelegate zf_controlView:self progressSliderValueChanged:sender];
     }
 }
 
 - (void)progressSliderTouchEnded:(ASValueTrackingSlider *)sender {
     self.showing = YES;
-    if ([self.delegate respondsToSelector:@selector(zf_controlView:progressSliderTouchEnded:)]) {
-        [self.delegate zf_controlView:self progressSliderTouchEnded:sender];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlView:progressSliderTouchEnded:)]) {
+        [self.zfDelegate zf_controlView:self progressSliderTouchEnded:sender];
     }
 }
 
@@ -946,8 +946,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
  *  显示控制层
  */
 - (void)zf_playerShowControlView {
-    if ([self.delegate respondsToSelector:@selector(zf_controlViewWillShow:isFullscreen:)]) {
-        [self.delegate zf_controlViewWillShow:self isFullscreen:self.isFullScreen];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlViewWillShow:isFullscreen:)]) {
+        [self.zfDelegate zf_controlViewWillShow:self isFullscreen:self.isFullScreen];
     }
     [self zf_playerCancelAutoFadeOutControlView];
     [UIView animateWithDuration:ZFPlayerControlBarAutoFadeOutTimeInterval animations:^{
@@ -962,8 +962,8 @@ static const CGFloat ZFPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
  *  隐藏控制层
  */
 - (void)zf_playerHideControlView {
-    if ([self.delegate respondsToSelector:@selector(zf_controlViewWillHidden:isFullscreen:)]) {
-        [self.delegate zf_controlViewWillHidden:self isFullscreen:self.isFullScreen];
+    if ([self.zfDelegate respondsToSelector:@selector(zf_controlViewWillHidden:isFullscreen:)]) {
+        [self.zfDelegate zf_controlViewWillHidden:self isFullscreen:self.isFullScreen];
     }
     [self zf_playerCancelAutoFadeOutControlView];
     [UIView animateWithDuration:ZFPlayerControlBarAutoFadeOutTimeInterval animations:^{

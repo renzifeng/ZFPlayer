@@ -34,7 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.dataSource = @[ @"http://120.25.226.186:32812/resources/videos/minion_01.mp4",
-                         @"http://120.25.226.186:32812/resources/videos/minion_02.mp4",
+                         @"https://dev.zhibocloud.cn/api/v2/files/114",
                          @"http://120.25.226.186:32812/resources/videos/minion_03.mp4",
                          @"http://120.25.226.186:32812/resources/videos/minion_04.mp4",
                          @"http://120.25.226.186:32812/resources/videos/minion_05.mp4",

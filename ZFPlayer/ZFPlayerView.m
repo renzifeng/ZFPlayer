@@ -118,9 +118,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) NSDictionary           *resolutionDic;
 
 @property (nonatomic, strong) UIColor                *statusOriginBackgroundColor;
+@property (nonatomic, strong) UIVisualEffectView *effectView;
 @end
 
 @implementation ZFPlayerView
+
+- (BOOL)currentInFullScreen {
+    return self.frame.size.height == ScreenHeight;
+}
 
 #pragma mark - life Cycle
 
@@ -146,6 +151,27 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)initializeThePlayer {
     self.cellPlayerOnCenter = YES;
+}
+
+- (UIImageView *)placeholderBlurImageView {
+    if (_placeholderBlurImageView == nil) {
+        _placeholderBlurImageView = [[UIImageView alloc] init];
+        _placeholderBlurImageView.userInteractionEnabled = YES;
+        _placeholderBlurImageView.contentScaleFactor = UIScreen.mainScreen.scale;
+        _placeholderBlurImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _placeholderBlurImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        _placeholderBlurImageView.clipsToBounds = YES;
+    }
+    return _placeholderBlurImageView;
+}
+
+- (UIVisualEffectView *)effectView {
+    if (_effectView == nil) {
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        _effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        _effectView.alpha = 0.8f;
+    }
+    return _effectView;
 }
 
 - (void)dealloc {
@@ -203,6 +229,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.playerLayer.frame = self.bounds;
+    self.placeholderBlurImageView.frame = self.bounds;
+    self.effectView.frame = self.bounds;
 }
 
 #pragma mark - Public Method
@@ -282,6 +310,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self pause];
     // 移除原来的layer
     [self.playerLayer removeFromSuperlayer];
+    [self.placeholderBlurImageView removeFromSuperview];
     // 把player置为nil
     self.imageGenerator = nil;
     self.player         = nil;
@@ -376,6 +405,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
     // 初始化playerLayer
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    [self.placeholderBlurImageView addSubview:self.effectView];
     
     self.backgroundColor = [UIColor blackColor];
     // 此处为默认视频填充模式
@@ -421,7 +451,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.doubleTap.delegate                = self;
     self.doubleTap.numberOfTouchesRequired = 1; //手指数
     self.doubleTap.numberOfTapsRequired    = 2;
-    [self addGestureRecognizer:self.doubleTap];
+//    [self addGestureRecognizer:self.doubleTap];
 
     // 解决点击当前view时候响应其他控件事件
     [self.singleTap setDelaysTouchesBegan:YES];
@@ -529,6 +559,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 [self layoutIfNeeded];
                 // 添加playerLayer到self.layer
                 [self.layer insertSublayer:self.playerLayer atIndex:0];
+                [self insertSubview:self.placeholderBlurImageView atIndex:0];
                 self.state = ZFPlayerStatePlaying;
                 // 加载完成后，再添加平移手势
                 if (!self.disablePanGesture) {
@@ -712,39 +743,40 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [[UIApplication sharedApplication].keyWindow bringSubviewToFront:brightnessView];
             [[UIApplication sharedApplication].keyWindow insertSubview:self belowSubview:brightnessView];
             [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-                if (self.forcePortrait) {
+//                if (self.forcePortrait) {
                     make.width.equalTo(@(ScreenWidth));
                     make.center.equalTo([UIApplication sharedApplication].keyWindow);
-                    make.top.equalTo(@([self.class getNavBarTopHeight]));
-                    make.bottom.equalTo(@0);
-                } else {
-                    make.width.equalTo(@(ScreenHeight));
-                    make.height.equalTo(@(ScreenWidth));
-                    make.center.equalTo([UIApplication sharedApplication].keyWindow);
-                }
+                    make.top.equalTo(@0);
+                    make.height.equalTo(@(ScreenHeight));
+//                } else {
+//                    // 竖着布局一次?
+//                    make.width.equalTo(@(ScreenHeight));
+//                    make.height.equalTo(@(ScreenWidth));
+//                    make.center.equalTo([UIApplication sharedApplication].keyWindow);
+//                }
             }];
         }
     }
     // iOS6.0之后,设置状态条的方法能使用的前提是shouldAutorotate为NO,也就是说这个视图控制器内,旋转要关掉;
     // 也就是说在实现这个方法的时候-(BOOL)shouldAutorotate返回值要为NO
-    if (self.forcePortrait) {
-        [self changeStatusBackgroundColor:self.backgroundColor];
-    }
-    else {
-        [[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
-    }
+//    if (self.forcePortrait) {
+//
+//    }
+//    else {
+//        [[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
+//    }
 
-    // 获取旋转状态条需要的时间:
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.3];
-    // 更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
-    // 给你的播放视频的view视图设置旋转
-    self.transform = CGAffineTransformIdentity;
-    if (!self.forcePortrait) {
-        self.transform = [self getTransformRotationAngle];
-    }
-    // 开始旋转
-    [UIView commitAnimations];
+//     获取旋转状态条需要的时间:
+//    [UIView beginAnimations:nil context:nil];
+//    [UIView setAnimationDuration:0.3];
+//    // 更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
+//    // 给你的播放视频的view视图设置旋转
+//    self.transform = CGAffineTransformIdentity;
+//    if (!self.forcePortrait) {
+//        self.transform = [self getTransformRotationAngle];
+//    }
+//    // 开始旋转
+//    [UIView commitAnimations];
 }
 
 /**
@@ -894,10 +926,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)changeStatusBackgroundColor:(UIColor *)color {
-    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-        statusBar.backgroundColor = color;
-    }
+//    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+//    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+//        statusBar.backgroundColor = color;
+//    }
 }
 
 - (UIColor *)getOriginStatusBackgroundColor {
@@ -1028,14 +1060,19 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 /** 全屏 */
 - (void)_fullScreenAction {
-    self.statusOriginBackgroundColor = [self getOriginStatusBackgroundColor];
+//    self.statusOriginBackgroundColor = [self getOriginStatusBackgroundColor];
     if (ZFPlayerShared.isLockScreen) {
-        [self unLockTheScreen];
+        // 调用AppDelegate单例记录播放状态是否锁屏
+        ZFPlayerShared.isLockScreen = NO;
+        [self.controlView zf_playerLockBtnState:NO];
+        self.isLocked = NO;
+        [self interfaceOrientation:UIInterfaceOrientationPortrait];
         return;
     }
     if (self.isFullScreen) {
         [self interfaceOrientation:UIInterfaceOrientationPortrait];
         self.isFullScreen = NO;
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         return;
     } else {
         UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
@@ -1045,6 +1082,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];
         }
         self.isFullScreen = YES;
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
     }
 }
 
@@ -1149,14 +1187,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 // 给sumTime初值
                 CMTime time       = self.player.currentTime;
                 self.sumTime      = time.value/time.timescale;
-            } else if (x < y) { // 垂直移动
-                self.panDirection = PanDirectionVerticalMoved;
-                // 开始滑动的时候,状态改为正在控制音量
-                if (locationPoint.x > self.bounds.size.width / 2) {
-                    self.isVolume = YES;
-                }else { // 状态改为显示亮度调节
-                    self.isVolume = NO;
-                }
             }
             break;
         }
@@ -1164,10 +1194,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
             switch (self.panDirection) {
                 case PanDirectionHorizontalMoved:{
                     [self horizontalMoved:veloctyPoint.x]; // 水平移动的方法只要x方向的值
-                    break;
-                }
-                case PanDirectionVerticalMoved:{
-                    [self verticalMoved:veloctyPoint.y]; // 垂直移动方法只要y方向的值
                     break;
                 }
                 default:
@@ -1184,11 +1210,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
                     [self seekToTime:self.sumTime completionHandler:nil];
                     // 把sumTime滞空，不然会越加越多
                     self.sumTime = 0;
-                    break;
-                }
-                case PanDirectionVerticalMoved:{
-                    // 垂直移动结束后，把状态改为不再控制音量
-                    self.isVolume = NO;
                     break;
                 }
                 default:
@@ -1408,7 +1429,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)setControlView:(UIView *)controlView {
     if (_controlView) { return; }
     _controlView = controlView;
-    controlView.delegate = self;
+    controlView.zfDelegate = self;
     [self addSubview:controlView];
     [controlView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(UIEdgeInsetsZero);

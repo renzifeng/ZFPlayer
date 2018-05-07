@@ -28,6 +28,7 @@
 #import <ZFDownload/ZFDownloadManager.h>
 #import "ZFPlayer.h"
 #import "UINavigationController+ZFFullscreenPopGesture.h"
+#import "CustomPlayerControlView.h"
 
 @interface MoviePlayerViewController () <ZFPlayerDelegate>
 /** 播放器View的父视图*/
@@ -155,7 +156,7 @@
          *   // 控制层传nil，默认使用ZFPlayerControlView(如自定义可传自定义的控制层)
          *   // 等效于 [_playerView playerModel:self.playerModel];
          ******************************************************************************************/
-        [_playerView playerControlView:nil playerModel:self.playerModel];
+        [_playerView playerControlView:[[CustomPlayerControlView alloc] init] playerModel:self.playerModel];
         
         // 设置代理
         _playerView.delegate = self;
@@ -165,11 +166,12 @@
         
         // 打开下载功能（默认没有这个功能）
         _playerView.hasDownload    = YES;
+        _playerView.disablePanGesture = YES;
         
         // 打开预览图
         _playerView.hasPreviewView = YES;
 
-//        _playerView.forcePortrait = YES;
+        _playerView.forcePortrait = YES;
         /// 默认全屏播放
 //        _playerView.fullScreenPlay = YES;
 

@@ -28,6 +28,7 @@
 #import <Masonry/Masonry.h>
 #import <ZFDownload/ZFDownloadManager.h>
 #import "ZFPlayer.h"
+#import "CustomPlayerControlView.h"
 
 @interface ZFTableViewController () <ZFPlayerDelegate>
 
@@ -123,15 +124,15 @@
         playerModel.resolutionDic    = dic;
         // player的父视图tag
         playerModel.fatherViewTag    = weakCell.picView.tag;
-        
+
         // 设置播放控制层和model
-        [weakSelf.playerView playerControlView:nil playerModel:playerModel];
+        [weakSelf.playerView playerControlView:[[CustomPlayerControlView alloc] init] playerModel:playerModel];
         // 下载功能
         weakSelf.playerView.hasDownload = YES;
         // 自动播放
         [weakSelf.playerView autoPlayTheVideo];
     };
-    
+
     return cell;
 }
 
@@ -155,9 +156,9 @@
         // 移除屏幕移除player
         // _playerView.stopPlayWhileCellNotVisable = YES;
 
-        _playerView.forcePortrait = NO;
+        _playerView.forcePortrait = YES;
 
-        ZFPlayerShared.isLockScreen = YES;
+        ZFPlayerShared.isLockScreen = NO;
         ZFPlayerShared.isStatusBarHidden = NO;
     }
     return _playerView;
