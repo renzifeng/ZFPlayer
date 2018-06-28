@@ -309,6 +309,7 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
         if (velocity.x > 0) { style = YES; }
         if (velocity.x < 0) { style = NO; }
         if (velocity.x == 0) { return; }
+        if (totalMovieDuration == 0) { return; }
         [self sliderValueChangingValue:self.sumTime/totalMovieDuration isForward:style];
     } else if (direction == ZFPanDirectionV) {
         if (location == ZFPanLocationLeft) { /// 调节亮度
