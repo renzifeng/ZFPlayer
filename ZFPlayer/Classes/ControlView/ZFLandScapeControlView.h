@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) UILabel *totalTimeLabel;
 /// 锁定屏幕按钮
 @property (nonatomic, strong, readonly) UIButton *lockBtn;
+/// 退出全屏按钮
+@property (nonatomic, strong, readonly) UIButton *shrinkScreenBtn;
 
 @property (nonatomic, weak) ZFPlayerController *player;
 @property (nonatomic, copy, nullable) void(^sliderValueChanging)(CGFloat value,BOOL forward);
