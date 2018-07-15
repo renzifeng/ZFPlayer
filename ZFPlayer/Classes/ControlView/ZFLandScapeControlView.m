@@ -53,6 +53,8 @@
 @property (nonatomic, strong) UILabel *totalTimeLabel;
 /// 锁定屏幕按钮
 @property (nonatomic, strong) UIButton *lockBtn;
+/// 退出全屏按钮
+@property (nonatomic, strong) UIButton *shrinkScreenBtn;
 
 @property (nonatomic, assign) double durationTime;
 
@@ -78,6 +80,7 @@
         [self.bottomToolView addSubview:self.slider];
         [self.bottomToolView addSubview:self.totalTimeLabel];
         [self addSubview:self.lockBtn];
+        [self.bottomToolView addSubview:self.shrinkScreenBtn];
         
         // 设置子控件的响应事件
         [self makeSubViewsAction];
@@ -139,8 +142,15 @@
     self.currentTimeLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.currentTimeLabel.centerY = self.playOrPauseBtn.centerY;
     
-    min_w = 50;
     min_x = self.bottomToolView.width - min_w - ((iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: min_margin);
+    min_y = 0;
+    min_w = 50;
+    min_h = 30;
+    self.shrinkScreenBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
+    self.shrinkScreenBtn.centerY = self.playOrPauseBtn.centerY;
+    
+    min_w = 50;
+    min_x = self.shrinkScreenBtn.left - 4 - min_w;
     min_y = 0;
     min_h = 30;
     self.totalTimeLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
@@ -165,6 +175,7 @@
     [self.backBtn addTarget:self action:@selector(backBtnClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playOrPauseBtn addTarget:self action:@selector(playPauseButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.lockBtn addTarget:self action:@selector(lockButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.shrinkScreenBtn addTarget:self action:@selector(shrinkScreenButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)layOutControllerViews {
@@ -312,6 +323,10 @@
     self.player.lockedScreen = sender.selected;
 }
 
+- (void)shrinkScreenButtonClickAction:(UIButton *)sender {
+    [self.player enterFullScreen:NO animated:YES];
+}
+
 #pragma mark - 
 
 /**
@@ -430,4 +445,11 @@
     return _lockBtn;
 }
 
+- (UIButton *)shrinkScreenBtn {
+    if (!_shrinkScreenBtn) {
+        _shrinkScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_shrinkScreenBtn setImage:ZFPlayer_Image(@"ZFPlayer_shrinkscreen") forState:UIControlStateNormal];
+    }
+    return _shrinkScreenBtn;
+}
 @end
