@@ -81,9 +81,9 @@ ZFPlayerController *player = [ZFPlayerController alloc] initWithScrollView:table
 #### ZFPlayerSource
 This class is used to provide player source, and you must conform the ZFPlayerSource protocol, you can reference the `ZFPlayerSource` class.
 
-NSURL,AVAsset default imp protocol
+NSURL,AVAsset,AVPlayerItem default imp protocol
 
-this means you can use NSURL AVAsset and their subclasss
+this means you can use NSURL AVAsset AVPlayerItem and their subclasss
 
 
 #### ZFPlayerMediaPlayback

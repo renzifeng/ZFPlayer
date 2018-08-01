@@ -24,6 +24,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ZFPlayerView.h"
+#import "ZFPlayerSource.h"
 #import <AVFoundation/AVFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -51,13 +52,6 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
     ZFPlayerScalingModeFill        // Non-uniform scale. Both render dimensions will exactly match the visible bounds.
 };
 
-//一个视频播放源
-@protocol ZFPlayerSource <NSObject>
-
-@required
-- (AVAsset* )playerSource;
-
-@end
 
 @protocol ZFPlayerMediaPlayback <NSObject>
 

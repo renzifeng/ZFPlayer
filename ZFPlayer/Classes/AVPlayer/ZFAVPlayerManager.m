@@ -244,8 +244,8 @@ static NSString *const kPresentationSize         = @"presentationSize";
 }
 
 - (void)initializePlayer {
-    _asset = [_playerSource playerSource];
-    _playerItem = [AVPlayerItem playerItemWithAsset:_asset];
+    _playerItem = [_playerSource playerSource];
+    _asset = _playerItem.asset;
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     [self enableAudioTracks:YES inPlayerItem:_playerItem];

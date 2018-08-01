@@ -11,7 +11,7 @@
 
 
 //实现协议
-- (AVAsset* )playerSource{
-    return [[AVURLAsset alloc] initWithURL:self options:nil];
+- (AVPlayerItem* )playerSource{
+    return [[AVPlayerItem alloc] initWithURL:self];
 }
 @end

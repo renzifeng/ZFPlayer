@@ -10,17 +10,8 @@
 @implementation AVAsset (ZFPlayerSource)
 
 //实现协议
-- (AVAsset* )playerSource{
-    return self;
-}
-
-@end
-
-@implementation AVURLAsset (ZFPlayerSource)
-
-//实现协议
-- (AVAsset* )playerSource{
-    return self;
+- (AVPlayerItem* )playerSource{
+    return [[AVPlayerItem alloc] initWithAsset:self];
 }
 
 @end
