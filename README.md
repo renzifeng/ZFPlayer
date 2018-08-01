@@ -78,6 +78,14 @@ ZFPlayerController *player = [ZFPlayerController playerWithScrollView:tableView 
 ZFPlayerController *player = [ZFPlayerController alloc] initWithScrollView:tableView playerManager:playerManager containerViewTag:containerViewTag];
 ```
 
+#### ZFPlayerSource
+This class is used to provide player source, and you must conform the ZFPlayerSource protocol, you can reference the `ZFPlayerSource` class.
+
+NSURL,AVAsset default imp protocol
+
+this means you can use NSURL AVAsset and their subclasss
+
+
 #### ZFPlayerMediaPlayback
 For the playerMnager,you must conform `ZFPlayerMediaPlayback` protocol,custom playermanager can supports any player SDK，such as `AVPlayer`,`MPMoviePlayerController`,`ijkplayer`,`vlc`,`PLPlayerKit`,`KSYMediaPlayer`and so on，you can reference the `ZFAVPlayerManager`class.
 
