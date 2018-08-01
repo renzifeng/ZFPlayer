@@ -47,7 +47,7 @@
         [self setNeedsStatusBarAppearanceUpdate];
     };
     NSString *URLString = [@"http://flv3.bn.netease.com/tvmrepo/2018/6/H/9/EDJTRBEH9/SD/EDJTRBEH9-mobile.mp4" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    playerManager.assetURL = [NSURL URLWithString:URLString];
+    playerManager.playerSource = [NSURL URLWithString:URLString];
     
     [self.controlView showTitle:@"视频标题" coverURLString:@"https://upload-images.jianshu.io/upload_images/635942-14593722fe3f0695.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" fullScreenMode:ZFFullScreenModeLandscape];
 }

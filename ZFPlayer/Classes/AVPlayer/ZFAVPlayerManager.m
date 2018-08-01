@@ -92,7 +92,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     id _itemEndObserver;
     ZFKVOController *_playerItemKVO;
 }
-@property (nonatomic, strong, readonly) AVURLAsset *asset;
+@property (nonatomic, strong, readonly) AVAsset *asset;
 @property (nonatomic, strong, readonly) AVPlayerItem *playerItem;
 @property (nonatomic, strong, readonly) AVPlayer *player;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
@@ -111,7 +111,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
 @synthesize bufferTime                     = _bufferTime;
 @synthesize playState                      = _playState;
 @synthesize loadState                      = _loadState;
-@synthesize assetURL                       = _assetURL;
+@synthesize playerSource                   = _playerSource;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
 @synthesize playerPlayStatChanged          = _playerPlayStatChanged;
 @synthesize playerLoadStatChanged          = _playerLoadStatChanged;
@@ -134,11 +134,11 @@ static NSString *const kPresentationSize         = @"presentationSize";
 }
 
 - (void)prepareToPlay {
-    if (!_assetURL) return;
+    if (!_playerSource) return;
     _isPreparedToPlay = YES;
     [self initializePlayer];
     self.loadState = ZFPlayerLoadStatePrepare;
-    if (_playerPrepareToPlay) _playerPrepareToPlay(self, self.assetURL);
+    if (_playerPrepareToPlay) _playerPrepareToPlay(self, _playerSource);
     [self play];
 }
 
@@ -174,7 +174,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     _itemEndObserver = nil;
     _isPlaying = NO;
     _player = nil;
-    _assetURL = nil;
+    _playerSource = nil;
     self->_currentTime = 0;
     self->_totalTime = 0;
     self->_bufferTime = 0;
@@ -189,8 +189,8 @@ static NSString *const kPresentationSize         = @"presentationSize";
 }
 
 /// Replace the current playback address
-- (void)replaceCurrentAssetURL:(NSURL *)assetURL {
-    self.assetURL = assetURL;
+- (void)replaceCurrentPlayerSource:(id<ZFAVPlayerSource>)playerSource {
+    self.playerSource = playerSource;
 }
 
 - (void)seekToTime:(NSTimeInterval)time completionHandler:(void (^ __nullable)(BOOL finished))completionHandler {
@@ -244,7 +244,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
 }
 
 - (void)initializePlayer {
-    _asset = [AVURLAsset assetWithURL:self.assetURL];
+    _asset = [_playerSource playerSource];
     _playerItem = [AVPlayerItem playerItemWithAsset:_asset];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
@@ -426,9 +426,9 @@ static NSString *const kPresentationSize         = @"presentationSize";
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setAssetURL:(NSURL *)assetURL {
+- (void)setPlayerSource:(id<ZFAVPlayerSource>)playerSource {
     if (self.player) [self stop];
-    _assetURL = assetURL;
+    _playerSource = playerSource;
     [self prepareToPlay];
 }
 

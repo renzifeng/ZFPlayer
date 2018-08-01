@@ -46,7 +46,7 @@ static NSString *kIdentifier = @"kIdentifier";
     /// player的tag值必须在cell里设置
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:100];
     self.player.controlView = self.controlView;
-//    self.player.assetURLs = self.urls;
+//    self.player.playerSources = self.urls;
     /// 移动网络依然自动播放
     self.player.WWANAutoPlay = YES;
     
@@ -115,7 +115,7 @@ static NSString *kIdentifier = @"kIdentifier";
             NSURL *url = [NSURL URLWithString:URLString];
             [self.urls addObject:url];
         }
-        self.player.assetURLs = self.urls;
+        self.player.playerSources = self.urls;
         [self.tableView reloadData];
         
         /// 找到可播放的cell

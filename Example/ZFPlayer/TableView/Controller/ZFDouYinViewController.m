@@ -51,7 +51,7 @@ static NSString *kIdentifier = @"kIdentifier";
     
     /// player,tag值必须在cell里设置
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:100];
-    self.player.assetURLs = self.urls;
+    self.player.playerSources = self.urls;
     self.player.disableGestureTypes = ZFPlayerDisableGestureTypesDoubleTap | ZFPlayerDisableGestureTypesPan | ZFPlayerDisableGestureTypesPinch;
     self.player.controlView = self.controlView;
     self.player.allowOrentitaionRotation = NO;
@@ -118,7 +118,7 @@ static NSString *kIdentifier = @"kIdentifier";
     if (index == self.dataSource.count-1) {
         /// 加载下一页数据
         [self requestData];
-        self.player.assetURLs = self.urls;
+        self.player.playerSources = self.urls;
         [self.tableView reloadData];
     }
 }
@@ -206,7 +206,7 @@ static NSString *kIdentifier = @"kIdentifier";
             if (indexPath.row == self.dataSource.count-1) {
                 /// 加载下一页数据
                 [self requestData];
-                self.player.assetURLs = self.urls;
+                self.player.playerSources = self.urls;
                 [self.tableView reloadData];
             }
             [self playTheVideoAtIndexPath:indexPath scrollToTop:NO];

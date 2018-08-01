@@ -22,9 +22,14 @@ DEPENDENCIES:
   - MJRefresh
   - ZFPlayer (from `../`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - FDFullscreenPopGesture
+    - MJRefresh
+
 EXTERNAL SOURCES:
   ZFPlayer:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
@@ -33,4 +38,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d89c8924201984050dab836fc7915aa711da3cd6
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

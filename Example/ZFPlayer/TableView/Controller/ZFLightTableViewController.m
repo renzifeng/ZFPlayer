@@ -44,7 +44,7 @@ static NSString *kIdentifier = @"kIdentifier";
     /// player的tag值必须在cell里设置
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:100];
     self.player.controlView = self.controlView;
-    self.player.assetURLs = self.urls;
+    self.player.playerSources = self.urls;
     /// 0.8是消失80%时候
     self.player.playerDisapperaPercent = 0.8;
     /// 移动网络依然自动播放

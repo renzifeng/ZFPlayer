@@ -24,6 +24,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ZFPlayerView.h"
+#import <AVFoundation/AVFoundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,6 +50,14 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
     ZFPlayerScalingModeAspectFill, // Uniform scale until the movie fills the visible bounds. One dimension may have clipped contents.
     ZFPlayerScalingModeFill        // Non-uniform scale. Both render dimensions will exactly match the visible bounds.
 };
+
+//一个视频播放源
+@protocol ZFAVPlayerSource <NSObject>
+
+@required
+- (AVAsset* )playerSource;
+
+@end
 
 @protocol ZFPlayerMediaPlayback <NSObject>
 
@@ -98,8 +107,8 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
  */
 @property (nonatomic, readonly) BOOL isPreparedToPlay;
 
-/// The play asset URL.
-@property (nonatomic) NSURL *assetURL;
+/// The play source.
+@property (nonatomic) id<ZFAVPlayerSource> playerSource;
 
 /// The video size.
 @property (nonatomic, readonly) CGSize presentationSize;
@@ -115,7 +124,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 ///------------------------------------
 
 /// The block invoked when the player is Ready to play.
-@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, NSURL *assetURL);
+@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, id<ZFAVPlayerSource> playerSource);
 
 /// The block invoked when the player play progress changed.
 @property (nonatomic, copy, nullable) void(^playerPlayTimeChanged)(id<ZFPlayerMediaPlayback> asset, NSTimeInterval currentTime, NSTimeInterval duration);
@@ -164,7 +173,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 - (void)seekToTime:(NSTimeInterval)time completionHandler:(void (^ __nullable)(BOOL finished))completionHandler;
 
 /// Replace the current playback URL.
-- (void)replaceCurrentAssetURL:(NSURL *)assetURL __attribute__((deprecated("use the property `assetURL` instead.")));;
+- (void)replaceCurrentAssetURL:(id<ZFAVPlayerSource>)playerSource __attribute__((deprecated("use the property `playerSource` instead.")));;
 
 @end
 

@@ -364,7 +364,7 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
 }
 
 /// 准备播放
-- (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(NSURL *)assetURL {
+- (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(NSURL *)playerSource {
     [self hideControlViewWithAnimated:NO];
 }
 

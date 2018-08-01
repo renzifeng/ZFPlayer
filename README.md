@@ -104,7 +104,7 @@ Class<ZFPlayerMediaPlayback> *playerManager = ...;
 /// playerController
 ZFPlayerController *player = [ZFPlayerController playerWithPlayerManager:playerManager containerView:self.containerView];
 player.controlView = controlView<ZFPlayerMediaControl>;
-playerManager.assetURL = [NSURL URLWithString:...];
+playerManager.playerSource = [NSURL URLWithString:...];
 ```
 
 #### List style
@@ -116,7 +116,7 @@ Class<ZFPlayerMediaPlayback> *playerManager = ...;
 /// playerController
 ZFPlayerController *player = [ZFPlayerController playerWithScrollView:tableView playerManager:playerManager containerViewTag:tag<NSInteger>];
 player.controlView = controlView<ZFPlayerMediaControl>;
-self.player.assetURLs = array<NSURL *>;
+self.player.playerSources = array<NSURL *>;
 ```
 
 Rotate the video the viewController must implement

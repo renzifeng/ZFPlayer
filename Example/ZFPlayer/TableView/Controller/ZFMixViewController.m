@@ -161,7 +161,7 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
 - (void)playTheVideoAtIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop {
     NSInteger index = (indexPath.row-1)/2;
     ZFTableViewCellLayout *layout = self.dataSource[index];
-    [self.player playTheIndexPath:indexPath assetURL:[NSURL URLWithString:layout.data.video_url] scrollToTop:scrollToTop];
+    [self.player playTheIndexPath:indexPath playerSource:[NSURL URLWithString:layout.data.video_url] scrollToTop:scrollToTop];
     [self.controlView showTitle:layout.data.title
                  coverURLString:layout.data.thumbnail_url
                  fullScreenMode:layout.isVerticalVideo?ZFFullScreenModePortrait:ZFFullScreenModeLandscape];

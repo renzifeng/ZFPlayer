@@ -23,7 +23,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 @property (nonatomic, strong) UIButton *playBtn;
 @property (nonatomic, strong) UIButton *changeBtn;
 @property (nonatomic, strong) UIButton *nextBtn;
-@property (nonatomic, strong) NSArray <NSURL *>*assetURLs;
+@property (nonatomic, strong) NSArray <NSURL *>*playerSources;
 
 @end
 
@@ -65,7 +65,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
         }
     };
     
-    self.assetURLs = @[[NSURL URLWithString:@"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4"],
+    self.playerSources = @[[NSURL URLWithString:@"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4"],
                        [NSURL URLWithString:@"http://114.80.19.202:18080/zqdn.mp4"],
                        [NSURL URLWithString:@"http://flv3.bn.netease.com/tvmrepo/2018/6/9/R/EDJTRAD9R/SD/EDJTRAD9R-mobile.mp4"],
                        [NSURL URLWithString:@"http://dlhls.cdn.zhanqi.tv/zqlive/34338_PVMT5.m3u8"],
@@ -77,7 +77,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
                        [NSURL URLWithString:@"http://tb-video.bdstatic.com/tieba-smallvideo/5_6d3243c354755b781f6cc80f60756ee5.mp4"],
                        [NSURL URLWithString:@"http://tb-video.bdstatic.com/tieba-movideo/11233547_ac127ce9e993877dce0eebceaa04d6c2_593d93a619b0.mp4"]];
     
-    self.player.assetURLs = self.assetURLs;
+    self.player.playerSources = self.playerSources;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -119,7 +119,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 
 - (void)changeVideo:(UIButton *)sender {
     NSString *URLString = @"https://ylmtst.yejingying.com/asset/video/20180525184959_mW8WVQVd.mp4";
-    self.player.assetURL = [NSURL URLWithString:URLString];
+    self.player.playerSource = [NSURL URLWithString:URLString];
     [self.controlView showTitle:@"抖音" coverURLString:kVideoCover fullScreenMode:ZFFullScreenModePortrait];
 }
 

@@ -53,7 +53,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 @synthesize bufferTime                     = _bufferTime;
 @synthesize playState                      = _playState;
 @synthesize loadState                      = _loadState;
-@synthesize assetURL                       = _assetURL;
+@synthesize playerSource                       = _playerSource;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
 @synthesize playerPlayStatChanged          = _playerPlayStatChanged;
 @synthesize playerLoadStatChanged          = _playerLoadStatChanged;
@@ -87,11 +87,11 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 }
 
 - (void)prepareToPlay {
-    if (!_assetURL) return;
+    if (!_playerSource) return;
     _isPreparedToPlay = YES;
     self.loadState = ZFPlayerLoadStatePrepare;
     [self initializePlayer];
-    if (self.playerPrepareToPlay) self.playerPrepareToPlay(self, self.assetURL);
+    if (self.playerPrepareToPlay) self.playerPrepareToPlay(self, self.playerSource);
     [self.player prepareToPlay];
 }
 
@@ -132,9 +132,9 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 }
 
 /// 更换当前的播放地址
-- (void)replaceCurrentAssetURL:(NSURL *)assetURL {
+- (void)replaceCurrentAssetURL:(NSURL *)playerSource {
     if (self.player) [self stop];
-    _assetURL = assetURL;
+    _playerSource = playerSource;
     [self prepareToPlay];
 }
 
@@ -153,7 +153,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 }
 
 - (void)initializePlayer {
-    self.player = [[KSYMoviePlayerController alloc] initWithContentURL:_assetURL];
+    self.player = [[KSYMoviePlayerController alloc] initWithContentURL:_playerSource];
     self.player.shouldAutoplay = YES;
     [self addPlayerNotification];
     
@@ -312,7 +312,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 }
 
 - (void)suggestReloadChange:(NSNotification *)notify {
-    [self.player reload:self.assetURL];
+    [self.player reload:self.playerSource];
 }
 
 #pragma mark - getter
@@ -341,9 +341,9 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setAssetURL:(NSURL *)assetURL {
-    _assetURL = assetURL;
-    [self replaceCurrentAssetURL:assetURL];
+- (void)setAssetURL:(NSURL *)playerSource {
+    _playerSource = playerSource;
+    [self replaceCurrentAssetURL:playerSource];
 }
 
 - (void)setRate:(float)rate {

@@ -106,15 +106,15 @@
 
 - (void)playerManagerCallbcak {
     @weakify(self)
-    self.currentPlayerManager.playerPrepareToPlay = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, NSURL * _Nonnull assetURL) {
+    self.currentPlayerManager.playerPrepareToPlay = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, id<ZFAVPlayerSource> _Nonnull playerSource) {
         @strongify(self)
         [self layoutPlayerSubViews];
         self.currentPlayerManager.view.hidden = NO;
         [self.notification addNotification];
         [self addDeviceOrientationObserver];
-        if (self.playerPrepareToPlay) self.playerPrepareToPlay(asset,assetURL);
+        if (self.playerPrepareToPlay) self.playerPrepareToPlay(asset,playerSource);
         if ([self.controlView respondsToSelector:@selector(videoPlayer:prepareToPlay:)]) {
-            [self.controlView videoPlayer:self prepareToPlay:assetURL];
+            [self.controlView videoPlayer:self prepareToPlay:playerSource];
         }
     };
     
@@ -296,54 +296,54 @@
 }
 
 - (void)playTheNext {
-    if (self.assetURLs.count > 0) {
+    if (self.playerSources.count > 0) {
         NSInteger index = self.currentPlayIndex + 1;
-        if (index >= self.assetURLs.count) return;
-        NSURL *assetURL = [self.assetURLs objectAtIndex:index];
-        self.assetURL = assetURL;
-        self.currentPlayIndex = [self.assetURLs indexOfObject:assetURL];
+        if (index >= self.playerSources.count) return;
+        id<ZFAVPlayerSource> playerSource = [self.playerSources objectAtIndex:index];
+        self.playerSource = playerSource;
+        self.currentPlayIndex = [self.playerSources indexOfObject:playerSource];
     }
 }
 
 - (void)playThePrevious {
-    if (self.assetURLs.count > 0) {
+    if (self.playerSources.count > 0) {
         NSInteger index = self.currentPlayIndex - 1;
         if (index < 0) return;
-        NSURL *assetURL = [self.assetURLs objectAtIndex:index];
-        self.assetURL = assetURL;
-        self.currentPlayIndex = [self.assetURLs indexOfObject:assetURL];
+        NSURL *playerSource = [self.playerSources objectAtIndex:index];
+        self.playerSource = playerSource;
+        self.currentPlayIndex = [self.playerSources indexOfObject:playerSource];
     }
 }
 
 - (void)playTheIndex:(NSInteger)index {
-    if (self.assetURLs.count > 0) {
-        if (index >= self.assetURLs.count) return;
-        NSURL *assetURL = [self.assetURLs objectAtIndex:index];
-        self.assetURL = assetURL;
+    if (self.playerSources.count > 0) {
+        if (index >= self.playerSources.count) return;
+        NSURL *playerSource = [self.playerSources objectAtIndex:index];
+        self.playerSource = playerSource;
         self.currentPlayIndex = index;
     }
 }
 
 #pragma mark - getter
 
-- (NSURL *)assetURL {
+- (id<ZFAVPlayerSource>)playerSource {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (NSArray<NSURL *> *)assetURLs {
+- (NSArray<id<ZFAVPlayerSource>> *)playerSources {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (BOOL)isLastAssetURL {
-    if (self.assetURLs.count > 0) {
-        return self.assetURL == self.assetURLs.lastObject;
+- (BOOL)isLastPlayerSource {
+    if (self.playerSources.count > 0) {
+        return self.playerSource == self.playerSources.lastObject;
     }
     return NO;
 }
 
 - (BOOL)isFirstAssetURL {
-    if (self.assetURLs.count > 0) {
-        return self.assetURL == self.assetURLs.firstObject;
+    if (self.playerSources.count > 0) {
+        return self.playerSource == self.playerSources.firstObject;
     }
     return NO;
 }
@@ -425,13 +425,13 @@
 
 #pragma mark - setter
 
-- (void)setAssetURL:(NSURL *)assetURL {
-    objc_setAssociatedObject(self, @selector(assetURL), assetURL, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    self.currentPlayerManager.assetURL = assetURL;
+- (void)setPlayerSource:(id<ZFAVPlayerSource>)playerSource {
+    objc_setAssociatedObject(self, @selector(playerSource), playerSource, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    self.currentPlayerManager.playerSource = playerSource;
 }
 
-- (void)setAssetURLs:(NSArray<NSURL *> * _Nullable)assetURLs {
-    objc_setAssociatedObject(self, @selector(assetURLs), assetURLs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setPlayerSources:(NSArray<id<ZFAVPlayerSource>> * _Nullable)playerSources {
+    objc_setAssociatedObject(self, @selector(playerSources), playerSources, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setVolume:(float)volume {
@@ -472,7 +472,7 @@
     objc_setAssociatedObject(self, @selector(pauseWhenAppResignActive), @(pauseWhenAppResignActive), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerPrepareToPlay:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSURL * _Nonnull))playerPrepareToPlay {
+- (void)setPlayerPrepareToPlay:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, id<ZFAVPlayerSource> _Nonnull))playerPrepareToPlay {
     objc_setAssociatedObject(self, @selector(playerPrepareToPlay), playerPrepareToPlay, OBJC_ASSOCIATION_COPY);
 }
 
@@ -1023,11 +1023,11 @@
 #pragma mark - Public method
 
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop completionHandler:(void (^ _Nullable)(void))completionHandler {
-    NSURL *assetURL;
+    NSURL *playerSource;
     if (self.sectionAssetURLs.count) {
-        assetURL = self.sectionAssetURLs[indexPath.section][indexPath.row];
-    } else if (self.assetURLs.count) {
-        assetURL = self.assetURLs[indexPath.row];
+        playerSource = self.sectionAssetURLs[indexPath.section][indexPath.row];
+    } else if (self.playerSources.count) {
+        playerSource = self.playerSources[indexPath.row];
         self.currentPlayIndex = indexPath.row;
     }
     if (scrollToTop) {
@@ -1036,34 +1036,34 @@
             @strongify(self)
             if (completionHandler) completionHandler();
             self.playingIndexPath = indexPath;
-            self.assetURL = assetURL;
+            self.playerSource = playerSource;
             [self.scrollView zf_scrollViewDidStopScroll];
         }];
     } else {
         if (completionHandler) completionHandler();
         self.playingIndexPath = indexPath;
-        self.assetURL = assetURL;
+        self.playerSource = playerSource;
     }
 }
 
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop {
     self.playingIndexPath = indexPath;
-    NSURL *assetURL;
+    NSURL *playerSource;
     if (self.sectionAssetURLs.count) {
-        assetURL = self.sectionAssetURLs[indexPath.section][indexPath.row];
-    } else if (self.assetURLs.count) {
-        assetURL = self.assetURLs[indexPath.row];
+        playerSource = self.sectionAssetURLs[indexPath.section][indexPath.row];
+    } else if (self.playerSources.count) {
+        playerSource = self.playerSources[indexPath.row];
         self.currentPlayIndex = indexPath.row;
     }
-    self.assetURL = assetURL;
+    self.playerSource = playerSource;
     if (scrollToTop) {
         [self.scrollView zf_scrollToRowAtIndexPath:indexPath completionHandler:nil];
     }
 }
 
-- (void)playTheIndexPath:(NSIndexPath *)indexPath assetURL:(NSURL *)assetURL scrollToTop:(BOOL)scrollToTop {
+- (void)playTheIndexPath:(NSIndexPath *)indexPath playerSource:(NSURL *)playerSource scrollToTop:(BOOL)scrollToTop {
     self.playingIndexPath = indexPath;
-    self.assetURL = assetURL;
+    self.playerSource = playerSource;
     if (scrollToTop) {
         [self.scrollView zf_scrollToRowAtIndexPath:indexPath completionHandler:nil];
     }

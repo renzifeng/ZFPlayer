@@ -49,7 +49,7 @@
 @synthesize bufferTime                     = _bufferTime;
 @synthesize playState                      = _playState;
 @synthesize loadState                      = _loadState;
-@synthesize assetURL                       = _assetURL;
+@synthesize playerSource                       = _playerSource;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
 @synthesize playerPlayStatChanged          = _playerPlayStatChanged;
 @synthesize playerLoadStatChanged          = _playerLoadStatChanged;
@@ -76,11 +76,11 @@
 }
 
 - (void)prepareToPlay {
-    if (!_assetURL) return;
+    if (!_playerSource) return;
     _isPreparedToPlay = YES;
     [self initializePlayer];
     self.loadState = ZFPlayerLoadStatePrepare;
-    if (self.playerPrepareToPlay) self.playerPrepareToPlay(self, self.assetURL);
+    if (self.playerPrepareToPlay) self.playerPrepareToPlay(self, self.playerSource);
 }
 
 - (void)reloadPlayer {
@@ -110,7 +110,7 @@
     [self.player shutdown];
     [self.player.view removeFromSuperview];
     self.player = nil;
-    _assetURL = nil;
+    _playerSource = nil;
     [self.timer invalidate];
     
     self.timer = nil;
@@ -130,8 +130,8 @@
 }
 
 /// Replace the current playback address
-- (void)replaceCurrentAssetURL:(NSURL *)assetURL {
-    self.assetURL = assetURL;
+- (void)replaceCurrentAssetURL:(NSURL *)playerSource {
+    self.playerSource = playerSource;
 }
 
 - (void)seekToTime:(NSTimeInterval)time completionHandler:(void (^ __nullable)(BOOL finished))completionHandler {
@@ -146,7 +146,7 @@
 #pragma mark - private method
 
 - (void)initializePlayer {
-    self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.assetURL withOptions:self.options];
+    self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.playerSource withOptions:self.options];
     [self.player prepareToPlay];
     self.player.shouldAutoplay = NO;
     
@@ -366,9 +366,9 @@
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setAssetURL:(NSURL *)assetURL {
+- (void)setAssetURL:(NSURL *)playerSource {
     if (self.player) [self stop];
-    _assetURL = assetURL;
+    _playerSource = playerSource;
     [self prepareToPlay];
 }
 
