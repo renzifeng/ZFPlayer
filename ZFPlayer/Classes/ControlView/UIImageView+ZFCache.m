@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 #import "UIImageView+ZFCache.h"
+#import "ZFPlayerMediaPlayback.h"
 #import <objc/runtime.h>
 #import <CommonCrypto/CommonDigest.h>
 
@@ -53,7 +54,7 @@
     self.task = task;
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(id<ZFPlayerSource>)location {
     NSData *data = [NSData dataWithContentsOfURL:location];
     
     if (self.progressBlock) {

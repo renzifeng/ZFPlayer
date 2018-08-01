@@ -57,7 +57,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
         @strongify(self)
         [self.player playTheNext];
-        if (!self.player.isLastAssetURL) {
+        if (!self.player.isLastPlayerSource) {
             NSString *title = [NSString stringWithFormat:@"视频标题%zd",self.player.currentPlayIndex];
             [self.controlView showTitle:title coverURLString:kVideoCover fullScreenMode:ZFFullScreenModeLandscape];
         } else {
@@ -130,7 +130,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 
 - (void)nextClick:(UIButton *)sender {
     [self.player playTheNext];
-    if (!self.player.isLastAssetURL) {
+    if (!self.player.isLastPlayerSource) {
         NSString *title = [NSString stringWithFormat:@"视频标题%zd",self.player.currentPlayIndex];
         [self.controlView showTitle:title coverURLString:kVideoCover fullScreenMode:ZFFullScreenModeLandscape];
     } else {

@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Playback state
 
 /// When the player prepare to play the video.
-- (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(NSURL *)playerSource;
+- (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(id<ZFPlayerSource>)playerSource;
 
 /// When th player playback state changed.
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer playStateChanged:(ZFPlayerPlaybackState)state;

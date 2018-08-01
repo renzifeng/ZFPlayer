@@ -106,7 +106,7 @@
 
 - (void)playerManagerCallbcak {
     @weakify(self)
-    self.currentPlayerManager.playerPrepareToPlay = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, id<ZFAVPlayerSource> _Nonnull playerSource) {
+    self.currentPlayerManager.playerPrepareToPlay = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, id<ZFPlayerSource> _Nonnull playerSource) {
         @strongify(self)
         [self layoutPlayerSubViews];
         self.currentPlayerManager.view.hidden = NO;
@@ -299,7 +299,7 @@
     if (self.playerSources.count > 0) {
         NSInteger index = self.currentPlayIndex + 1;
         if (index >= self.playerSources.count) return;
-        id<ZFAVPlayerSource> playerSource = [self.playerSources objectAtIndex:index];
+        id<ZFPlayerSource> playerSource = [self.playerSources objectAtIndex:index];
         self.playerSource = playerSource;
         self.currentPlayIndex = [self.playerSources indexOfObject:playerSource];
     }
@@ -309,7 +309,7 @@
     if (self.playerSources.count > 0) {
         NSInteger index = self.currentPlayIndex - 1;
         if (index < 0) return;
-        NSURL *playerSource = [self.playerSources objectAtIndex:index];
+        id<ZFPlayerSource>playerSource = [self.playerSources objectAtIndex:index];
         self.playerSource = playerSource;
         self.currentPlayIndex = [self.playerSources indexOfObject:playerSource];
     }
@@ -318,7 +318,7 @@
 - (void)playTheIndex:(NSInteger)index {
     if (self.playerSources.count > 0) {
         if (index >= self.playerSources.count) return;
-        NSURL *playerSource = [self.playerSources objectAtIndex:index];
+        id<ZFPlayerSource>playerSource = [self.playerSources objectAtIndex:index];
         self.playerSource = playerSource;
         self.currentPlayIndex = index;
     }
@@ -326,11 +326,11 @@
 
 #pragma mark - getter
 
-- (id<ZFAVPlayerSource>)playerSource {
+- (id<ZFPlayerSource>)playerSource {
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (NSArray<id<ZFAVPlayerSource>> *)playerSources {
+- (NSArray<id<ZFPlayerSource>> *)playerSources {
     return objc_getAssociatedObject(self, _cmd);
 }
 
@@ -341,7 +341,7 @@
     return NO;
 }
 
-- (BOOL)isFirstAssetURL {
+- (BOOL)isFirstPlayerSource {
     if (self.playerSources.count > 0) {
         return self.playerSource == self.playerSources.firstObject;
     }
@@ -387,7 +387,7 @@
     return YES;
 }
 
-- (void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSURL * _Nonnull))playerPrepareToPlay {
+- (void (^)(id<ZFPlayerMediaPlayback> _Nonnull, id<ZFPlayerSource> _Nonnull))playerPrepareToPlay {
     return objc_getAssociatedObject(self, _cmd);
 }
 
@@ -425,12 +425,12 @@
 
 #pragma mark - setter
 
-- (void)setPlayerSource:(id<ZFAVPlayerSource>)playerSource {
+- (void)setPlayerSource:(id<ZFPlayerSource>)playerSource {
     objc_setAssociatedObject(self, @selector(playerSource), playerSource, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     self.currentPlayerManager.playerSource = playerSource;
 }
 
-- (void)setPlayerSources:(NSArray<id<ZFAVPlayerSource>> * _Nullable)playerSources {
+- (void)setPlayerSources:(NSArray<id<ZFPlayerSource>> * _Nullable)playerSources {
     objc_setAssociatedObject(self, @selector(playerSources), playerSources, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -472,7 +472,7 @@
     objc_setAssociatedObject(self, @selector(pauseWhenAppResignActive), @(pauseWhenAppResignActive), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerPrepareToPlay:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, id<ZFAVPlayerSource> _Nonnull))playerPrepareToPlay {
+- (void)setPlayerPrepareToPlay:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, id<ZFPlayerSource> _Nonnull))playerPrepareToPlay {
     objc_setAssociatedObject(self, @selector(playerPrepareToPlay), playerPrepareToPlay, OBJC_ASSOCIATION_COPY);
 }
 
@@ -881,8 +881,8 @@
     self.scrollView.zf_shouldAutoPlay = shouldAutoPlay;
 }
 
-- (void)setSectionAssetURLs:(NSArray<NSArray<NSURL *> *> * _Nullable)sectionAssetURLs {
-    objc_setAssociatedObject(self, @selector(sectionAssetURLs), sectionAssetURLs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setSectionPlayerSources:(NSArray<NSArray<id<ZFPlayerSource>> *> * _Nullable)sectionPlayerSources {
+    objc_setAssociatedObject(self, @selector(sectionPlayerSources), sectionPlayerSources, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setSmallFloatView:(ZFFloatView * _Nullable)smallFloatView {
@@ -970,7 +970,7 @@
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (NSArray<NSArray<NSURL *> *> *)sectionAssetURLs {
+- (NSArray<NSArray<id<ZFPlayerSource>> *> *)sectionPlayerSources {
     return objc_getAssociatedObject(self, _cmd);
 }
 
@@ -1023,9 +1023,9 @@
 #pragma mark - Public method
 
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop completionHandler:(void (^ _Nullable)(void))completionHandler {
-    NSURL *playerSource;
-    if (self.sectionAssetURLs.count) {
-        playerSource = self.sectionAssetURLs[indexPath.section][indexPath.row];
+    id<ZFPlayerSource>playerSource;
+    if (self.sectionPlayerSources.count) {
+        playerSource = self.sectionPlayerSources[indexPath.section][indexPath.row];
     } else if (self.playerSources.count) {
         playerSource = self.playerSources[indexPath.row];
         self.currentPlayIndex = indexPath.row;
@@ -1048,9 +1048,9 @@
 
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop {
     self.playingIndexPath = indexPath;
-    NSURL *playerSource;
-    if (self.sectionAssetURLs.count) {
-        playerSource = self.sectionAssetURLs[indexPath.section][indexPath.row];
+    id<ZFPlayerSource>playerSource;
+    if (self.sectionPlayerSources.count) {
+        playerSource = self.sectionPlayerSources[indexPath.section][indexPath.row];
     } else if (self.playerSources.count) {
         playerSource = self.playerSources[indexPath.row];
         self.currentPlayIndex = indexPath.row;
@@ -1061,7 +1061,7 @@
     }
 }
 
-- (void)playTheIndexPath:(NSIndexPath *)indexPath playerSource:(NSURL *)playerSource scrollToTop:(BOOL)scrollToTop {
+- (void)playTheIndexPath:(NSIndexPath *)indexPath playerSource:(id<ZFPlayerSource>)playerSource scrollToTop:(BOOL)scrollToTop {
     self.playingIndexPath = indexPath;
     self.playerSource = playerSource;
     if (scrollToTop) {

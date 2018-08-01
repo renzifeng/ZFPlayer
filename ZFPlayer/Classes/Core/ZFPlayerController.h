@@ -121,20 +121,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) float brightness;
 
 /// The play asset URL.
-@property (nonatomic) id<ZFAVPlayerSource> playerSource;
+@property (nonatomic) id<ZFPlayerSource> playerSource;
 
-/// if tableView or collectionView has only one section , use sectionAssetURLs.
+/// if tableView or collectionView has only one section , use sectionPlayerSources.
 /// if normal model set this can use `playTheNext` `playThePrevious` `playTheIndex:`.
-@property (nonatomic, copy, nullable) NSArray <id<ZFAVPlayerSource>>*playerSources;
+@property (nonatomic, copy, nullable) NSArray <id<ZFPlayerSource>>*playerSources;
 
 /// The currently playing index,limited to one-dimensional arrays.
 @property (nonatomic) NSInteger currentPlayIndex;
 
 /// is the last asset URL in `playerSources`.
-@property (nonatomic, readonly) BOOL isLastAssetURL;
+@property (nonatomic, readonly) BOOL isLastPlayerSource;
 
 /// is the first asset URL in `playerSources`.
-@property (nonatomic, readonly) BOOL isFirstAssetURL;
+@property (nonatomic, readonly) BOOL isFirstPlayerSource;
 
 /// If Yes, player will be called pause method When Received `UIApplicationWillResignActiveNotification` notification.
 /// default is YES.
@@ -148,7 +148,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, getter=isViewControllerDisappear) BOOL viewControllerDisappear;
 
 /// The block invoked when the player is Ready to play.
-@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, NSURL *playerSource);
+@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, id<ZFPlayerSource>playerSource);
 
 /// The block invoked when the player play progress changed.
 @property (nonatomic, copy, nullable) void(^playerPlayTimeChanged)(id<ZFPlayerMediaPlayback> asset, NSTimeInterval currentTime, NSTimeInterval duration);
@@ -292,8 +292,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 1.0 is the player did appear.
 @property (nonatomic) CGFloat playerApperaPercent;
 
-/// if tableView or collectionView has more section, use sectionAssetURLs.
-@property (nonatomic, copy, nullable) NSArray <NSArray <NSURL *>*>*sectionAssetURLs;
+/// if tableView or collectionView has more section, use sectionPlayerSources.
+@property (nonatomic, copy, nullable) NSArray <NSArray <id<ZFPlayerSource>>*>*sectionPlayerSources;
 
 /// The block invoked When the player appearing.
 @property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerApperaPercent);
@@ -316,16 +316,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// stop the current playing video on cell.
 - (void)stopCurrentPlayingCell;
 
-/// Play the indexPath of url, while the `playerSources` or `sectionAssetURLs` is not NULL.
+/// Play the indexPath of url, while the `playerSources` or `sectionPlayerSources` is not NULL.
 /// `scrollToTop` scroll the current cell to top with animations.
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop;
 
 /// Play the indexPath with playerSource.
 /// `playerSource` is the player playerSource.
 /// `scrollToTop` scroll the current cell to top with animations.
-- (void)playTheIndexPath:(NSIndexPath *)indexPath playerSource:(id<ZFAVPlayerSource>)playerSource scrollToTop:(BOOL)scrollToTop;
+- (void)playTheIndexPath:(NSIndexPath *)indexPath playerSource:(id<ZFPlayerSource>)playerSource scrollToTop:(BOOL)scrollToTop;
 
-/// Play the indexPath of url ,while the `playerSources` or `sectionAssetURLs` is not NULL.
+/// Play the indexPath of url ,while the `playerSources` or `sectionPlayerSources` is not NULL.
 /// `scrollToTop` scroll the current cell to top with animations.
 /// Scroll completion callback.
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop completionHandler:(void (^ __nullable)(void))completionHandler;

@@ -189,7 +189,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
 }
 
 /// Replace the current playback address
-- (void)replaceCurrentPlayerSource:(id<ZFAVPlayerSource>)playerSource {
+- (void)replaceCurrentPlayerSource:(id<ZFPlayerSource>)playerSource {
     self.playerSource = playerSource;
 }
 
@@ -426,7 +426,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setPlayerSource:(id<ZFAVPlayerSource>)playerSource {
+- (void)setPlayerSource:(id<ZFPlayerSource>)playerSource {
     if (self.player) [self stop];
     _playerSource = playerSource;
     [self prepareToPlay];

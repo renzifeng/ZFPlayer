@@ -132,7 +132,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 }
 
 /// 更换当前的播放地址
-- (void)replaceCurrentAssetURL:(NSURL *)playerSource {
+- (void)replaceCurrentPlayerSource:(id<ZFPlayerSource>)playerSource {
     if (self.player) [self stop];
     _playerSource = playerSource;
     [self prepareToPlay];
@@ -341,9 +341,9 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setAssetURL:(NSURL *)playerSource {
+- (void)setPlayerSource:(id<ZFPlayerSource>)playerSource {
     _playerSource = playerSource;
-    [self replaceCurrentAssetURL:playerSource];
+    [self replaceCurrentPlayerSource:playerSource];
 }
 
 - (void)setRate:(float)rate {

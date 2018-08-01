@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 };
 
 //一个视频播放源
-@protocol ZFAVPlayerSource <NSObject>
+@protocol ZFPlayerSource <NSObject>
 
 @required
 - (AVAsset* )playerSource;
@@ -108,7 +108,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 @property (nonatomic, readonly) BOOL isPreparedToPlay;
 
 /// The play source.
-@property (nonatomic) id<ZFAVPlayerSource> playerSource;
+@property (nonatomic) id<ZFPlayerSource> playerSource;
 
 /// The video size.
 @property (nonatomic, readonly) CGSize presentationSize;
@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 ///------------------------------------
 
 /// The block invoked when the player is Ready to play.
-@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, id<ZFAVPlayerSource> playerSource);
+@property (nonatomic, copy, nullable) void(^playerPrepareToPlay)(id<ZFPlayerMediaPlayback> asset, id<ZFPlayerSource> playerSource);
 
 /// The block invoked when the player play progress changed.
 @property (nonatomic, copy, nullable) void(^playerPlayTimeChanged)(id<ZFPlayerMediaPlayback> asset, NSTimeInterval currentTime, NSTimeInterval duration);
@@ -173,7 +173,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 - (void)seekToTime:(NSTimeInterval)time completionHandler:(void (^ __nullable)(BOOL finished))completionHandler;
 
 /// Replace the current playback URL.
-- (void)replaceCurrentAssetURL:(id<ZFAVPlayerSource>)playerSource __attribute__((deprecated("use the property `playerSource` instead.")));;
+- (void)replaceCurrentPlayerSource:(id<ZFPlayerSource>)playerSource __attribute__((deprecated("use the property `playerSource` instead.")));;
 
 @end
 

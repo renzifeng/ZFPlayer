@@ -130,7 +130,7 @@
 }
 
 /// Replace the current playback address
-- (void)replaceCurrentAssetURL:(NSURL *)playerSource {
+- (void)replaceCurrentPlayerSource:(id<ZFPlayerSource>)playerSource {
     self.playerSource = playerSource;
 }
 
@@ -366,7 +366,7 @@
     if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
 }
 
-- (void)setAssetURL:(NSURL *)playerSource {
+- (void)setPlayerSource:(id<ZFPlayerSource>)playerSource {
     if (self.player) [self stop];
     _playerSource = playerSource;
     [self prepareToPlay];
