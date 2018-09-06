@@ -99,15 +99,15 @@ typedef NS_ENUM(NSUInteger, ZFPlayerScrollDerection) {
 
 @end
 
-@interface UIScrollView (ZFPlayerCannotCalled)
+@interface UIScrollView (ZFPlayerCannotBeCalled)
 
-/// The block invoked When the player appearing.
-@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerApperaPercent);
+/// The block invoked When the player is appearing.
+@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerAppearPercent);
 
-/// The block invoked When the player disappearing.
-@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisapperaPercent);
+/// The block invoked When the player is disappearing.
+@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisAppearPercent);
 
-/// The block invoked When the player will appeared.
+/// The block invoked When the player will appear.
 @property (nonatomic, copy, nullable) void(^zf_playerWillAppearInScrollView)(NSIndexPath *indexPath);
 
 /// The block invoked When the player did appeared.
@@ -116,7 +116,7 @@ typedef NS_ENUM(NSUInteger, ZFPlayerScrollDerection) {
 /// The block invoked When the player will disappear.
 @property (nonatomic, copy, nullable) void(^zf_playerWillDisappearInScrollView)(NSIndexPath *indexPath);
 
-/// The block invoked When the player did disappeared.
+/// The block invoked When the player did disappear.
 @property (nonatomic, copy, nullable) void(^zf_playerDidDisappearInScrollView)(NSIndexPath *indexPath);
 
 @end

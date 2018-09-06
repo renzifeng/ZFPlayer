@@ -283,25 +283,25 @@ NS_ASSUME_NONNULL_BEGIN
 /// 0.0~1.0, defalut is 0.5.
 /// 0.0 is the player will disappear.
 /// 1.0 is the player did disappear.
-@property (nonatomic) CGFloat playerDisapperaPercent;
+@property (nonatomic) CGFloat playerDisAppearPercent;
 
 /// The current player scroll to the screen percent.
 /// the property is only used when the `stopWhileNotVisible` is NO.
 /// 0.0~1.0, defalut is 0.0.
 /// 0.0 is the player will appear.
 /// 1.0 is the player did appear.
-@property (nonatomic) CGFloat playerApperaPercent;
+@property (nonatomic) CGFloat playerAppearPercent;
 
 /// if tableView or collectionView has more section, use sectionAssetURLs.
 @property (nonatomic, copy, nullable) NSArray <NSArray <NSURL *>*>*sectionAssetURLs;
 
-/// The block invoked When the player appearing.
-@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerApperaPercent);
+/// The block invoked When the player is appearing.
+@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerAppearPercent);
 
-/// The block invoked When the player disappearing.
-@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisapperaPercent);
+/// The block invoked When the player is disappearing.
+@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisAppearPercent);
 
-/// The block invoked When the player will appeared.
+/// The block invoked When the player will appear.
 @property (nonatomic, copy, nullable) void(^zf_playerWillAppearInScrollView)(NSIndexPath *indexPath);
 
 /// The block invoked When the player did appeared.
@@ -310,7 +310,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The block invoked When the player will disappear.
 @property (nonatomic, copy, nullable) void(^zf_playerWillDisappearInScrollView)(NSIndexPath *indexPath);
 
-/// The block invoked When the player did disappeared.
+/// The block invoked When the player did disappear.
 @property (nonatomic, copy, nullable) void(^zf_playerDidDisappearInScrollView)(NSIndexPath *indexPath);
 
 /// stop the current playing video on cell.

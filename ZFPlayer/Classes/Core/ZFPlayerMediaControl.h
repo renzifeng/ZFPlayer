@@ -183,14 +183,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)playerDidDisappearInScrollView:(ZFPlayerController *)videoPlayer;
 
 /**
- When the player appearing in scrollView.
+ When the player is appearing in scrollView.
  */
-- (void)playerAppearingInScrollView:(ZFPlayerController *)videoPlayer playerApperaPercent:(CGFloat)playerApperaPercent;
+- (void)playerAppearingInScrollView:(ZFPlayerController *)videoPlayer playerAppearPercent:(CGFloat)playerAppearPercent;
 
 /**
- When the player disappearing in scrollView.
+ When the player is disappearing in scrollView.
  */
-- (void)playerDisappearingInScrollView:(ZFPlayerController *)videoPlayer playerDisapperaPercent:(CGFloat)playerDisapperaPercent;
+- (void)playerDisappearingInScrollView:(ZFPlayerController *)videoPlayer playerDisAppearPercent:(CGFloat)playerDisAppearPercent;
 
 @end
 
