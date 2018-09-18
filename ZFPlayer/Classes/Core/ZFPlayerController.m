@@ -841,27 +841,27 @@
         }
     };
     
-    scrollView.zf_playerAppearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerApperaPercent) {
+    scrollView.zf_playerAppearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerAppearPercent) {
         @strongify(self)
         if (self.isFullScreen) return;
-        if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(indexPath, playerApperaPercent);
-        if ([self.controlView respondsToSelector:@selector(playerAppearingInScrollView:playerApperaPercent:)]) {
-            [self.controlView playerAppearingInScrollView:self playerApperaPercent:playerApperaPercent];
+        if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(indexPath, playerAppearPercent);
+        if ([self.controlView respondsToSelector:@selector(playerAppearingInScrollView:playerAppearPercent:)]) {
+            [self.controlView playerAppearingInScrollView:self playerAppearPercent:playerAppearPercent];
         }
-        if (!self.stopWhileNotVisible && playerApperaPercent >= self.playerApperaPercent) [self addPlayerViewToCell];
+        if (!self.stopWhileNotVisible && playerAppearPercent >= self.playerAppearPercent) [self addPlayerViewToCell];
     };
     
-    scrollView.zf_playerDisappearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerDisapperaPercent) {
+    scrollView.zf_playerDisappearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerDisAppearPercent) {
         @strongify(self)
         if (self.isFullScreen) return;
-        if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(indexPath, playerDisapperaPercent);
-        if ([self.controlView respondsToSelector:@selector(playerDisappearingInScrollView:playerDisapperaPercent:)]) {
-            [self.controlView playerDisappearingInScrollView:self playerDisapperaPercent:playerDisapperaPercent];
+        if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(indexPath, playerDisAppearPercent);
+        if ([self.controlView respondsToSelector:@selector(playerDisappearingInScrollView:playerDisAppearPercent:)]) {
+            [self.controlView playerDisappearingInScrollView:self playerDisAppearPercent:playerDisAppearPercent];
         }
         /// stop playing
-        if (self.stopWhileNotVisible && playerDisapperaPercent >= self.playerDisapperaPercent) [self stopCurrentPlayingCell];
+        if (self.stopWhileNotVisible && playerDisAppearPercent >= self.playerDisAppearPercent) [self stopCurrentPlayingCell];
         /// add to window
-        if (!self.stopWhileNotVisible && playerDisapperaPercent >= self.playerDisapperaPercent) [self addPlayerViewToKeyWindow];
+        if (!self.stopWhileNotVisible && playerDisAppearPercent >= self.playerDisAppearPercent) [self addPlayerViewToKeyWindow];
     };
 }
 
@@ -909,12 +909,12 @@
     objc_setAssociatedObject(self, @selector(isSmallFloatViewShow), @(isSmallFloatViewShow), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerDisapperaPercent:(CGFloat)playerDisapperaPercent {
-    objc_setAssociatedObject(self, @selector(playerDisapperaPercent), @(playerDisapperaPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setPlayerDisAppearPercent:(CGFloat)playerDisAppearPercent {
+    objc_setAssociatedObject(self, @selector(playerDisAppearPercent), @(playerDisAppearPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerApperaPercent:(CGFloat)playerApperaPercent {
-    objc_setAssociatedObject(self, @selector(playerApperaPercent), @(playerApperaPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setPlayerAppearPercent:(CGFloat)playerAppearPercent {
+    objc_setAssociatedObject(self, @selector(playerAppearPercent), @(playerAppearPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setZf_playerAppearingInScrollView:(void (^)(NSIndexPath * _Nonnull, CGFloat))zf_playerAppearingInScrollView {
@@ -994,17 +994,17 @@
     return self.scrollView.zf_shouldAutoPlay;
 }
 
-- (CGFloat)playerDisapperaPercent {
+- (CGFloat)playerDisAppearPercent {
     NSNumber *number = objc_getAssociatedObject(self, _cmd);
     if (number) return number.floatValue;
-    self.playerDisapperaPercent = 0.5;
+    self.playerDisAppearPercent = 0.5;
     return 0.5;
 }
 
-- (CGFloat)playerApperaPercent {
+- (CGFloat)playerAppearPercent {
     NSNumber *number = objc_getAssociatedObject(self, _cmd);
     if (number) return number.floatValue;
-    self.playerApperaPercent = 0.0;
+    self.playerAppearPercent = 0.0;
     return 0.0;
 }
 

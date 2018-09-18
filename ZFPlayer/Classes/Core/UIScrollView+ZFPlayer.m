@@ -108,15 +108,15 @@
     /// The height of the content area.
     CGFloat contentInsetHeight = CGRectGetMaxY(self.frame) - CGRectGetMinY(self.frame) - self.contentInset.top - self.contentInset.bottom;
     
-    CGFloat playerDisapperaPercent = 0;
-    CGFloat playerApperaPercent = 0;
+    CGFloat playerDisAppearPercent = 0;
+    CGFloat playerAppearPercent = 0;
     
     if (self.zf_scrollDerection == ZFPlayerScrollDerectionUp) { /// Scroll up
         /// Player is disappearing.
         if (topSpacing <= 0 && CGRectGetHeight(rect) != 0) {
-            playerDisapperaPercent = -topSpacing/CGRectGetHeight(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisAppearPercent = -topSpacing/CGRectGetHeight(rect);
+            if (playerDisAppearPercent > 1.0) playerDisAppearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisAppearPercent);
         }
         
         /// Top area
@@ -124,14 +124,14 @@
             /// When the player will disappear.
             if (self.zf_playerWillDisappearInScrollView) self.zf_playerWillDisappearInScrollView(self.zf_playingIndexPath);
         } else if (topSpacing <= -CGRectGetHeight(rect)) {
-            /// When the player did disappeared.
+            /// When the player did disappear.
             if (self.zf_playerDidDisappearInScrollView) self.zf_playerDidDisappearInScrollView(self.zf_playingIndexPath);
         } else if (topSpacing > 0 && topSpacing <= contentInsetHeight) {
             /// Player is appearing.
             if (CGRectGetHeight(rect) != 0) {
-                playerApperaPercent = -(topSpacing-contentInsetHeight)/CGRectGetHeight(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(topSpacing-contentInsetHeight)/CGRectGetHeight(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (topSpacing <= contentInsetHeight && topSpacing > contentInsetHeight-CGRectGetHeight(rect)/2) {
@@ -146,9 +146,9 @@
     } else if (self.zf_scrollDerection == ZFPlayerScrollDerectionDown) { /// Scroll Down
         /// Player is disappearing.
         if (bottomSpacing <= 0 && CGRectGetHeight(rect) != 0) {
-            playerDisapperaPercent = -bottomSpacing/CGRectGetHeight(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisAppearPercent = -bottomSpacing/CGRectGetHeight(rect);
+            if (playerDisAppearPercent > 1.0) playerDisAppearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisAppearPercent);
         }
         
         /// Bottom area
@@ -156,14 +156,14 @@
             /// When the player will disappear.
             if (self.zf_playerWillDisappearInScrollView) self.zf_playerWillDisappearInScrollView(self.zf_playingIndexPath);
         } else if (bottomSpacing <= -CGRectGetHeight(rect)) {
-            /// When the player did disappeared.
+            /// When the player did disappear.
             if (self.zf_playerDidDisappearInScrollView) self.zf_playerDidDisappearInScrollView(self.zf_playingIndexPath);
         } else if (bottomSpacing > 0 && bottomSpacing <= contentInsetHeight) {
             /// Player is appearing.
             if (CGRectGetHeight(rect) != 0) {
-                playerApperaPercent = -(bottomSpacing-contentInsetHeight)/CGRectGetHeight(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(bottomSpacing-contentInsetHeight)/CGRectGetHeight(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (bottomSpacing <= contentInsetHeight && bottomSpacing > contentInsetHeight-CGRectGetHeight(rect)/2) {
@@ -439,7 +439,7 @@
 
 @end
 
-@implementation UIScrollView (ZFPlayerCannotCalled)
+@implementation UIScrollView (ZFPlayerCannotBeCalled)
 
 #pragma mark - getter
 

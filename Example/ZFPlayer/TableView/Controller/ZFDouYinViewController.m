@@ -57,7 +57,7 @@ static NSString *kIdentifier = @"kIdentifier";
     self.player.allowOrentitaionRotation = NO;
     self.player.WWANAutoPlay = YES;
     /// 1.0是完全消失时候
-    self.player.playerDisapperaPercent = 1.0;
+    self.player.playerDisAppearPercent = 1.0;
     
     @weakify(self)
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {

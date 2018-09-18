@@ -51,9 +51,9 @@ static NSString *kIdentifier = @"kIdentifier";
     self.player.WWANAutoPlay = YES;
     
     /// 1.0是完全消失的时候 
-    self.player.playerDisapperaPercent = 1.0;
+    self.player.playerDisAppearPercent = 1.0;
     /// 0.0是刚开始显示的时候
-    self.player.playerApperaPercent = 0.0;
+    self.player.playerAppearPercent = 0.0;
 
     @weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {

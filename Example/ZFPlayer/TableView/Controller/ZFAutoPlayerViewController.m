@@ -46,7 +46,7 @@ static NSString *kIdentifier = @"kIdentifier";
     self.player.controlView = self.controlView;
     self.player.assetURLs = self.urls;
     /// 0.8是消失80%时候，默认0.5
-    self.player.playerDisapperaPercent = 0.8;
+    self.player.playerDisAppearPercent = 0.8;
     /// 移动网络依然自动播放
     self.player.WWANAutoPlay = YES;
     
