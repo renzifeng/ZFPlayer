@@ -25,15 +25,9 @@
 #import "ZFPortraitControlView.h"
 #import "UIView+ZFFrame.h"
 #import "ZFUtilities.h"
-#if __has_include(<ZFPlayer/ZFPlayer.h>)
 #import <ZFPlayer/ZFPlayer.h>
-#else
-#import "ZFPlayer.h"
-#endif
 
 @interface ZFPortraitControlView () <ZFSliderViewDelegate>
-/// 返回按钮
-@property (nonatomic, strong) UIButton *backBtn;
 /// 底部工具栏
 @property (nonatomic, strong) UIView *bottomToolView;
 /// 顶部工具栏
@@ -79,7 +73,6 @@
 }
 
 - (void)makeSubViewsAction {
-    [self.backBtn addTarget:self action:@selector(backBtnClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playOrPauseBtn addTarget:self action:@selector(playPauseButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.fullScreenBtn addTarget:self action:@selector(fullScreenButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -135,10 +128,6 @@
 }
 
 #pragma mark - action
-
-- (void)backBtnClickAction:(UIButton *)sender {
-
-}
 
 - (void)playPauseButtonClickAction:(UIButton *)sender {
     [self playOrPause];
@@ -222,7 +211,7 @@
     min_h = 30;
     self.slider.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.slider.centerY = self.currentTimeLabel.centerY;
- 
+    
     if (!self.isShow) {
         self.topToolView.y = -self.topToolView.height;
         self.bottomToolView.y = self.height;
@@ -245,32 +234,32 @@
     self.totalTimeLabel.text         = @"00:00";
     self.backgroundColor             = [UIColor clearColor];
     self.playOrPauseBtn.selected     = YES;
-    self.backBtn.alpha               = 1;
     self.titleLabel.text             = @"";
 }
 
 - (void)showControlView {
-    self.topToolView.alpha = 1;
-    self.bottomToolView.alpha = 1;
-    self.isShow = YES;
-    self.topToolView.y = 0;
-    self.bottomToolView.y = self.height - self.bottomToolView.height;
-    self.playOrPauseBtn.alpha = 1;
-    self.player.statusBarHidden = NO;
+    self.topToolView.alpha           = 1;
+    self.bottomToolView.alpha        = 1;
+    self.isShow                      = YES;
+    self.topToolView.y               = 0;
+    self.bottomToolView.y            = self.height - self.bottomToolView.height;
+    self.playOrPauseBtn.alpha        = 1;
+    self.player.statusBarHidden      = NO;
 }
 
 - (void)hideControlView {
-    self.isShow = NO;
-    self.topToolView.y = -self.topToolView.height;
-    self.bottomToolView.y = self.height;
-    self.playOrPauseBtn.alpha = 0;
-    self.player.statusBarHidden = NO;
-    self.topToolView.alpha = 0;
-    self.bottomToolView.alpha = 0;
+    self.isShow                      = NO;
+    self.topToolView.y               = -self.topToolView.height;
+    self.bottomToolView.y            = self.height;
+    self.player.statusBarHidden      = NO;
+    self.playOrPauseBtn.alpha        = 0;
+    self.topToolView.alpha           = 0;
+    self.bottomToolView.alpha        = 0;
 }
 
 - (BOOL)shouldResponseGestureWithPoint:(CGPoint)point withGestureType:(ZFPlayerGestureType)type touch:(nonnull UITouch *)touch {
-    if (point.y > self.bottomToolView.y || [touch.view isKindOfClass:[UIButton class]]) {
+    CGRect sliderRect = [self.bottomToolView convertRect:self.slider.frame toView:self];
+    if (CGRectContainsPoint(sliderRect, point)) {
         return NO;
     }
     if (type == ZFPlayerGestureTypePan && self.player.scrollView) {
@@ -298,15 +287,25 @@
     self.player.orientationObserver.fullScreenMode = fullScreenMode;
 }
 
-#pragma mark - getter
-
-- (UIButton *)backBtn {
-    if (!_backBtn) {
-        _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_backBtn setImage:ZFPlayer_Image(@"ZFPlayer_back_full") forState:UIControlStateNormal];
-    }
-    return _backBtn;
+/// 调节播放进度slider和当前时间更新
+- (void)sliderValueChanged:(CGFloat)value currentTimeString:(NSString *)timeString {
+    self.slider.value = value;
+    self.currentTimeLabel.text = timeString;
+    self.slider.isdragging = YES;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.slider.sliderBtn.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    }];
 }
+
+/// 滑杆结束滑动
+- (void)sliderChangeEnded {
+    self.slider.isdragging = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.slider.sliderBtn.transform = CGAffineTransformIdentity;
+    }];
+}
+
+#pragma mark - getter
 
 - (UIView *)topToolView {
     if (!_topToolView) {
@@ -350,7 +349,6 @@
         _currentTimeLabel.textColor = [UIColor whiteColor];
         _currentTimeLabel.font = [UIFont systemFontOfSize:14.0f];
         _currentTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _currentTimeLabel.text = @"00:00";
     }
     return _currentTimeLabel;
 }
@@ -374,7 +372,6 @@
         _totalTimeLabel.textColor = [UIColor whiteColor];
         _totalTimeLabel.font = [UIFont systemFontOfSize:14.0f];
         _totalTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _totalTimeLabel.text = @"00:00";
     }
     return _totalTimeLabel;
 }

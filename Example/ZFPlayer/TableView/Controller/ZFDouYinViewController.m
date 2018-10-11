@@ -27,6 +27,8 @@ static NSString *kIdentifier = @"kIdentifier";
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, strong) NSMutableArray *urls;
 
+@property (nonatomic, strong) UIButton *backBtn;
+
 @end
 
 @implementation ZFDouYinViewController
@@ -35,6 +37,7 @@ static NSString *kIdentifier = @"kIdentifier";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.backBtn];
     self.fd_prefersNavigationBarHidden = YES;
     [self requestData];
     
@@ -61,6 +64,11 @@ static NSString *kIdentifier = @"kIdentifier";
         @strongify(self)
         [self.player.currentPlayerManager replay];
     };
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.backBtn.frame = CGRectMake(15, CGRectGetMaxY([UIApplication sharedApplication].statusBarFrame), 36, 36);
 }
 
 - (void)loadNewData {
@@ -132,6 +140,28 @@ static NSString *kIdentifier = @"kIdentifier";
     return UIStatusBarAnimationSlide;
 }
 
+#pragma mark - UIScrollViewDelegate  列表播放必须实现
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidEndDecelerating];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [scrollView zf_scrollViewDidEndDraggingWillDecelerate:decelerate];
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScrollToTop];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScroll];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewWillBeginDragging];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -155,6 +185,10 @@ static NSString *kIdentifier = @"kIdentifier";
 }
 
 #pragma mark - private method
+
+- (void)backClick:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 /// play the video
 - (void)playTheVideoAtIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop {
@@ -222,6 +256,15 @@ static NSString *kIdentifier = @"kIdentifier";
         _urls = @[].mutableCopy;
     }
     return _urls;
+}
+
+- (UIButton *)backBtn {
+    if (!_backBtn) {
+        _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_backBtn setImage:[UIImage imageNamed:@"zfplayer_back"] forState:UIControlStateNormal];
+        [_backBtn addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backBtn;
 }
 
 @end

@@ -146,7 +146,7 @@
 }
 
 - (void)setZf_cacheFaileTimes:(NSMutableDictionary *)zf_cacheFaileTimes {
-     objc_setAssociatedObject(self, @selector(zf_cacheFaileTimes), zf_cacheFaileTimes, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(zf_cacheFaileTimes), zf_cacheFaileTimes, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)zf_clearCache {

@@ -33,7 +33,8 @@ static NSString *kIdentifier = @"kIdentifier";
                     @"多种cell混合样式",
                     @"抖音样式",
                     @"CollectionView",
-                    @"瀑布流"];
+                    @"瀑布流",
+                    @"横屏播放"];
     
     self.viewControllers = @[@"ZFKeyboardViewController",
                              @"ZFNoramlViewController",
@@ -44,7 +45,8 @@ static NSString *kIdentifier = @"kIdentifier";
                              @"ZFMixViewController",
                              @"ZFDouYinViewController",
                              @"ZFCollectionViewController",
-                             @"ZFCollectionViewListController"];
+                             @"ZFCollectionViewListController",
+                             @"ZFFullScreenViewController"];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -53,7 +55,11 @@ static NSString *kIdentifier = @"kIdentifier";
 }
 
 - (BOOL)shouldAutorotate {
-    return NO;
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma mark - UITableViewDataSource
@@ -76,7 +82,11 @@ static NSString *kIdentifier = @"kIdentifier";
         [(ZFDouYinViewController *)viewController playTheIndex:0];
     }
     viewController.navigationItem.title = self.titles[indexPath.row];
-    [self.navigationController pushViewController:viewController animated:YES];
+    if ([vcString isEqualToString:@"ZFFullScreenViewController"]) {
+        [self.navigationController pushViewController:viewController animated:NO];
+    } else {
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
 }
 
 - (UITableView *)tableView {

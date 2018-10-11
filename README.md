@@ -28,6 +28,7 @@ Before this, you used ZFPlayer, are you worried about encapsulating avplayer ins
 ## Installation
 
 ZFPlayer is available through [CocoaPods](https://cocoapods.org). To install it,use player template simply add the following line to your Podfile:
+只有Core文件夹下代码，使用AVPlayer、IJK、KSY都需要pod单独模块，或者使用自定义播放器管理类，从3.2.0版本开始只提供framework版本，如需定制功能请单独联系作者。
 
 ```objc
 pod 'ZFPlayer', '~> 3.0'
@@ -140,13 +141,16 @@ Rotate the video the viewController must implement
 
 - Weibo: [@任子丰](https://weibo.com/zifeng1300)
 - Email: zifeng1300@gmail.com
-- QQ群: 213375947（付费群）   286529196（免费群）
+- QQ群: (付费群)
+
+![](https://upload-images.jianshu.io/upload_images/635942-c20708c913c591a0.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 打赏作者
 
-如果ZFPlayer在开发中有帮助到你、如果你需要技术支持或者你有什么需求，都可以拼命打赏我！
-![](http://upload-images.jianshu.io/upload_images/635942-8fc0c357df8c4433.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-                  
+如果ZFPlayer在开发中有帮助到你、如果你需要技术支持或者你需要定制功能，都可以拼命打赏我！
+
+![支付.jpg](https://upload-images.jianshu.io/upload_images/635942-b9b836cfbb7a5e44.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ## License
 
 ZFPlayer is available under the MIT license. See the LICENSE file for more info.

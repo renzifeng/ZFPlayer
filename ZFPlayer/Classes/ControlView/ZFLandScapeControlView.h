@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "ZFPlayerController.h"
+#import <ZFPlayer/ZFPlayerController.h>
 #import "ZFSliderView.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) void(^sliderValueChanging)(CGFloat value,BOOL forward);
 /// slider滑动结束
 @property (nonatomic, copy, nullable) void(^sliderValueChanged)(CGFloat value);
+/// 返回按钮点击回调
+@property (nonatomic, copy) void(^backBtnClickCallback)(void);
 
 /// 重置控制层
 - (void)resetControlView;
@@ -72,6 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)playOrPause;
 /// 播放按钮状态
 - (void)playBtnSelectedState:(BOOL)selected;
+/// 调节播放进度slider和当前时间更新
+- (void)sliderValueChanged:(CGFloat)value currentTimeString:(NSString *)timeString;
+/// 滑杆结束滑动
+- (void)sliderChangeEnded;
 
 @end
 

@@ -1,6 +1,6 @@
 {
   "name": "ZFPlayer",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "summary": "A good player made by renzifeng",
   "homepage": "https://github.com/renzifeng/ZFPlayer",
   "license": {
@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/renzifeng/ZFPlayer.git",
-    "tag": "3.1.2"
+    "tag": "3.2.0"
   },
   "social_media_url": "http://weibo.com/zifeng1300",
   "platforms": {
@@ -22,8 +22,7 @@
   "subspecs": [
     {
       "name": "Core",
-      "source_files": "ZFPlayer/Classes/Core/**/*",
-      "public_header_files": "ZFPlayer/Classes/Core/**/*.h",
+      "vendored_frameworks": "ZFPlayer/Classes/Core/ZFPlayer.framework",
       "frameworks": [
         "UIKit",
         "MediaPlayer",

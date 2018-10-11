@@ -11,12 +11,13 @@
 #import <ZFPlayer/UIImageView+ZFCache.h>
 #import <ZFPlayer/ZFUtilities.h>
 #import "ZFLoadingView.h"
+#import <ZFPlayer/ZFSliderView.h>
 
 @interface ZFDouYinControlView ()
 /// 封面图
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UIButton *playBtn;
-
+@property (nonatomic, strong) ZFSliderView *sliderView;
 /// 加载loading
 @property (nonatomic, strong) ZFLoadingView *activity;
 
@@ -30,6 +31,7 @@
     if (self) {
         [self addSubview:self.activity];
         [self addSubview:self.playBtn];
+        [self addSubview:self.sliderView];
         [self resetControlView];
     }
     return self;
@@ -43,6 +45,8 @@
     CGFloat min_y = 0;
     CGFloat min_w = 0;
     CGFloat min_h = 0;
+    CGFloat min_view_w = self.width;
+    CGFloat min_view_h = self.height;
     
     min_w = 44;
     min_h = 44;
@@ -53,23 +57,42 @@
     min_h = 44;
     self.playBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.playBtn.center = self.center;
+    
+    min_x = 0;
+    min_y = min_view_h - 1;
+    min_w = min_view_w;
+    min_h = 1;
+    self.sliderView.frame = CGRectMake(min_x, min_y, min_w, min_h);
 }
 
 - (void)resetControlView {
     self.playBtn.hidden = YES;
+    self.sliderView.value = 0;
+    self.sliderView.bufferValue = 0;
 }
 
+/// 加载状态改变
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer loadStateChanged:(ZFPlayerLoadState)state {
     if (state == ZFPlayerLoadStatePrepare) {
         self.coverImageView.hidden = NO;
     } else if (state == ZFPlayerLoadStatePlaythroughOK) {
         self.coverImageView.hidden = YES;
     }
-    if (state == ZFPlayerLoadStateStalled || state == ZFPlayerLoadStatePrepare) {
+    if (state == ZFPlayerLoadStateStalled) {
         [self.activity startAnimating];
     } else {
         [self.activity stopAnimating];
     }
+}
+
+/// 播放进度改变回调
+- (void)videoPlayer:(ZFPlayerController *)videoPlayer currentTime:(NSTimeInterval)currentTime totalTime:(NSTimeInterval)totalTime {
+    self.sliderView.value = videoPlayer.progress;
+}
+
+/// 缓冲改变回调
+- (void)videoPlayer:(ZFPlayerController *)videoPlayer bufferTime:(NSTimeInterval)bufferTime {
+    self.sliderView.bufferValue = videoPlayer.bufferProgress;
 }
 
 - (void)gestureSingleTapped:(ZFPlayerGestureControl *)gestureControl {
@@ -108,6 +131,18 @@
         [_playBtn setImage:[UIImage imageNamed:@"new_allPlay_44x44_"] forState:UIControlStateNormal];
     }
     return _playBtn;
+}
+
+- (ZFSliderView *)sliderView {
+    if (!_sliderView) {
+        _sliderView = [[ZFSliderView alloc] init];
+        _sliderView.maximumTrackTintColor = [UIColor clearColor];
+        _sliderView.minimumTrackTintColor = [UIColor whiteColor];
+        _sliderView.bufferTrackTintColor  = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+        _sliderView.sliderHeight = 1;
+        _sliderView.isHideSliderBlock = NO;
+    }
+    return _sliderView;
 }
 
 - (UIImageView *)coverImageView {

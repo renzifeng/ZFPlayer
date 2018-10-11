@@ -23,12 +23,7 @@
 // THE SOFTWARE.
 
 #import "ZFIJKPlayerManager.h"
-#if __has_include(<ZFPlayer/ZFPlayer.h>)
 #import <ZFPlayer/ZFPlayer.h>
-#else
-#import "ZFPlayer.h"
-#endif
-
 #if __has_include(<IJKMediaFramework/IJKMediaFramework.h>)
 
 @interface ZFIJKPlayerManager ()
@@ -51,8 +46,9 @@
 @synthesize loadState                      = _loadState;
 @synthesize assetURL                       = _assetURL;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
-@synthesize playerPlayStatChanged          = _playerPlayStatChanged;
-@synthesize playerLoadStatChanged          = _playerLoadStatChanged;
+@synthesize playerReadyToPlay              = _playerReadyToPlay;
+@synthesize playerPlayStateChanged         = _playerPlayStateChanged;
+@synthesize playerLoadStateChanged         = _playerLoadStateChanged;
 @synthesize seekTime                       = _seekTime;
 @synthesize muted                          = _muted;
 @synthesize volume                         = _volume;
@@ -112,7 +108,7 @@
     self.player = nil;
     _assetURL = nil;
     [self.timer invalidate];
-
+    
     self.timer = nil;
     _isPlaying = NO;
     _isPreparedToPlay = NO;
@@ -156,14 +152,6 @@
     self.scalingMode = _scalingMode;
     
     [self addPlayerNotificationObservers];
-    
-#ifdef DEBUG
-    [IJKFFMoviePlayerController setLogReport:YES];
-    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
-#else
-    [IJKFFMoviePlayerController setLogReport:NO];
-    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
-#endif
 }
 
 - (void)addPlayerNotificationObservers {
@@ -253,6 +241,7 @@
     [self play];
     self.muted = self.muted;
     ZFPlayerLog(@"mediaIsPrepareToPlayDidChange");
+    if (self.playerPrepareToPlay) self.playerReadyToPlay(self, self.assetURL);
 }
 
 
@@ -362,16 +351,20 @@
     return _options;
 }
 
+- (CGSize)presentationSize {
+    return self.player.naturalSize;
+}
+
 #pragma mark - setter
 
 - (void)setPlayState:(ZFPlayerPlaybackState)playState {
     _playState = playState;
-    if (self.playerPlayStatChanged) self.playerPlayStatChanged(self, playState);
+    if (self.playerPlayStateChanged) self.playerPlayStateChanged(self, playState);
 }
 
 - (void)setLoadState:(ZFPlayerLoadState)loadState {
     _loadState = loadState;
-    if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
+    if (self.playerLoadStateChanged) self.playerLoadStateChanged(self, loadState);
 }
 
 - (void)setAssetURL:(NSURL *)assetURL {
@@ -393,6 +386,8 @@
         self.lastVolume = self.player.playbackVolume;
         self.player.playbackVolume = 0;
     } else {
+        /// Fix first called the lastVolume is 0.
+        if (self.lastVolume == 0) self.lastVolume = self.player.playbackVolume;
         self.player.playbackVolume = self.lastVolume;
     }
 }

@@ -23,7 +23,6 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
 @property (nonatomic, strong) NSMutableArray *urls;
 @property (nonatomic, strong) ZFPlayerController *player;
 @property (nonatomic, strong) ZFPlayerControlView *controlView;
-@property (nonatomic, strong) ZFAVPlayerManager *playerManager;
 
 @end
 
@@ -36,10 +35,12 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
     [self requestData];
     
     /// playerManager
-    self.playerManager = [[ZFAVPlayerManager alloc] init];
+    ZFAVPlayerManager *playerManager = [[ZFAVPlayerManager alloc] init];
+//    KSMediaPlayerManager *playerManager = [[KSMediaPlayerManager alloc] init];
+//    ZFIJKPlayerManager *playerManager = [[ZFIJKPlayerManager alloc] init];
     
-    /// player
-    self.player = [ZFPlayerController playerWithScrollView:self.collectionView playerManager:self.playerManager containerViewTag:100];
+    /// player的tag值必须在cell里设置
+    self.player = [ZFPlayerController playerWithScrollView:self.collectionView playerManager:playerManager containerViewTag:100];
     self.player.controlView = self.controlView;
     self.player.assetURLs = self.urls;
     self.player.shouldAutoPlay = YES;
@@ -93,6 +94,7 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
 }
 
 - (BOOL)prefersStatusBarHidden {
+    /// 如果只是支持iOS9+ 那直接return NO即可，这里为了适配iOS8
     return self.player.isStatusBarHidden;
 }
 
@@ -128,7 +130,29 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
                  fullScreenMode:ZFFullScreenModeLandscape];
 }
 
-#pragma mark <UICollectionViewDataSource>
+#pragma mark - UIScrollViewDelegate  列表播放必须实现
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidEndDecelerating];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [scrollView zf_scrollViewDidEndDraggingWillDecelerate:decelerate];
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScrollToTop];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScroll];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewWillBeginDragging];
+}
+
+#pragma mark UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.dataSource.count;

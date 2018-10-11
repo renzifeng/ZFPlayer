@@ -25,7 +25,7 @@
 #import <UIKit/UIKit.h>
 #import "ZFPortraitControlView.h"
 #import "ZFLandScapeControlView.h"
-#import "ZFPlayerMediaControl.h"
+#import <ZFPlayer/ZFPlayerMediaControl.h>
 #import "ZFSpeedLoadingView.h"
 
 @interface ZFPlayerControlView : UIView <ZFPlayerMediaControl>
@@ -51,9 +51,19 @@
 @property (nonatomic, strong, readonly) UIImageView *coverImageView;
 /// 占位图，默认是灰色
 @property (nonatomic, strong) UIImage *placeholderImage;
+/// 快进视图是否显示动画，默认NO。
+@property (nonatomic, assign) BOOL fastViewAnimated;
+/// 直接进入全屏模式，只支持全屏模式
+@property (nonatomic, assign) BOOL fullScreenOnly;
+/// 返回按钮点击回调
+@property (nonatomic, copy) void(^backBtnClickCallback)(void);
 
 /// 设置标题、封面、全屏模式
 - (void)showTitle:(NSString *)title coverURLString:(NSString *)coverUrl fullScreenMode:(ZFFullScreenMode)fullScreenMode;
+
+/// 设置标题、UIImage封面、全屏模式
+- (void)showTitle:(NSString *)title coverImage:(UIImage *)image fullScreenMode:(ZFFullScreenMode)fullScreenMode;
+
 /// 重置控制层
 - (void)resetControlView;
 

@@ -23,12 +23,8 @@
 // THE SOFTWARE.
 
 #import "KSMediaPlayerManager.h"
-#import "ZFPlayerView.h"
-#if __has_include(<ZFPlayer/ZFPlayer.h>)
+#import <ZFPlayer/ZFPlayerView.h>
 #import <ZFPlayer/ZFPlayer.h>
-#else
-#import "ZFPlayer.h"
-#endif
 
 #if __has_include(<KSYMediaPlayer/KSYMediaPlayer.h>)
 #import <KSYMediaPlayer/KSYMediaPlayer.h>
@@ -55,8 +51,9 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 @synthesize loadState                      = _loadState;
 @synthesize assetURL                       = _assetURL;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
-@synthesize playerPlayStatChanged          = _playerPlayStatChanged;
-@synthesize playerLoadStatChanged          = _playerLoadStatChanged;
+@synthesize playerReadyToPlay              = _playerReadyToPlay;
+@synthesize playerPlayStateChanged         = _playerPlayStateChanged;
+@synthesize playerLoadStateChanged         = _playerLoadStateChanged;
 @synthesize seekTime                       = _seekTime;
 @synthesize muted                          = _muted;
 @synthesize volume                         = _volume;
@@ -154,7 +151,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 
 - (void)initializePlayer {
     self.player = [[KSYMoviePlayerController alloc] initWithContentURL:_assetURL];
-    self.player.shouldAutoplay = NO;
+    self.player.shouldAutoplay = YES;
     [self addPlayerNotification];
     
     [self.view insertSubview:self.player.view atIndex:1];
@@ -244,6 +241,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
     }
     [self play];
     self.player.shouldMute = self.muted;
+    if (self.playerPrepareToPlay) self.playerReadyToPlay(self, self.assetURL);
     /// 需要延迟改为ok状态，不然显示会有一点问题。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.loadState = ZFPlayerLoadStatePlaythroughOK;
@@ -287,7 +285,7 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
 
 /// 播放器首帧出现
 - (void)videoFirstFrame:(NSNotification *)notify {
-    
+
 }
 
 /// 播放状态改变
@@ -329,16 +327,20 @@ static NSString *const kCurrentPlaybackTime = @"currentPlaybackTime";
     return _rate == 0 ?1:_rate;
 }
 
+- (CGSize)presentationSize {
+    return self.player.naturalSize;
+}
+
 #pragma mark - setter
 
 - (void)setPlayState:(ZFPlayerPlaybackState)playState {
     _playState = playState;
-    if (self.playerPlayStatChanged) self.playerPlayStatChanged(self, playState);
+    if (self.playerPlayStateChanged) self.playerPlayStateChanged(self, playState);
 }
 
 - (void)setLoadState:(ZFPlayerLoadState)loadState {
     _loadState = loadState;
-    if (self.playerLoadStatChanged) self.playerLoadStatChanged(self, loadState);
+    if (self.playerLoadStateChanged) self.playerLoadStateChanged(self, loadState);
 }
 
 - (void)setAssetURL:(NSURL *)assetURL {

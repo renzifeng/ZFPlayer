@@ -12,6 +12,7 @@
 #import <ZFPlayer/ZFPlayerControlView.h>
 #import <ZFPlayer/ZFIJKPlayerManager.h>
 #import <ZFPlayer/KSMediaPlayerManager.h>
+#import "ZFPlayerDetailViewController.h"
 #import "ZFUtilities.h"
 #import "ZFTableViewCell.h"
 #import "ZFTableData.h"
@@ -43,7 +44,7 @@ static NSString *kIdentifier = @"kIdentifier";
 //    KSMediaPlayerManager *playerManager = [[KSMediaPlayerManager alloc] init];
 //    ZFIJKPlayerManager *playerManager = [[ZFIJKPlayerManager alloc] init];
     
-    /// player,tag值必须在cell里设置
+    /// player的tag值必须在cell里设置
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:100];
     self.player.controlView = self.controlView;
 //    self.player.assetURLs = self.urls;
@@ -68,9 +69,10 @@ static NSString *kIdentifier = @"kIdentifier";
         [self.controlView resetControlView];
         [self.player stopCurrentPlayingCell];
     };
-    
+  
     /// 以下设置滑出屏幕后不停止播放
     self.player.stopWhileNotVisible = NO;
+    
     CGFloat margin = 20;
     CGFloat w = ZFPlayer_ScreenWidth/2;
     CGFloat h = w * 9/16;
@@ -81,7 +83,8 @@ static NSString *kIdentifier = @"kIdentifier";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.player stopCurrentPlayingCell];
+//    self.tableView.delegate = nil;
+//    [self.player stopCurrentPlayingCell];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -90,6 +93,13 @@ static NSString *kIdentifier = @"kIdentifier";
     CGFloat h = CGRectGetMaxY(self.view.frame)-y;
     self.tableView.frame = CGRectMake(0, y, self.view.frame.size.width, h);
     self.activity.center = self.view.center;
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent {
+    if (!parent) {
+        self.tableView.delegate = nil;
+        [self.player stopCurrentPlayingCell];
+    }
 }
 
 - (void)requestData {
@@ -144,11 +154,34 @@ static NSString *kIdentifier = @"kIdentifier";
 }
 
 - (BOOL)prefersStatusBarHidden {
+    /// 如果只是支持iOS9+ 那直接return NO即可，这里为了适配iOS8
     return self.player.isStatusBarHidden;
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
     return UIStatusBarAnimationSlide;
+}
+
+#pragma mark - UIScrollViewDelegate 列表播放必须实现
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidEndDecelerating];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [scrollView zf_scrollViewDidEndDraggingWillDecelerate:decelerate];
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScrollToTop];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewDidScroll];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [scrollView zf_scrollViewWillBeginDragging];
 }
 
 #pragma mark - UITableViewDataSource
@@ -166,7 +199,29 @@ static NSString *kIdentifier = @"kIdentifier";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self playTheVideoAtIndexPath:indexPath scrollToTop:NO];
+    /// 如果正在播放的index和当前点击的index不同，则停止当前播放的index
+    if (self.player.playingIndexPath != indexPath) {
+        [self.player stopCurrentPlayingCell];
+    }
+    /// 如果没有播放，则点击进详情页会自动播放
+    if (!self.player.currentPlayerManager.isPlaying) {
+        [self playTheVideoAtIndexPath:indexPath scrollToTop:NO];
+    }
+    /// 到详情页
+    ZFPlayerDetailViewController *detailVC = [ZFPlayerDetailViewController new];
+    detailVC.player = self.player;
+    @weakify(self)
+    /// 详情页返回的回调
+    detailVC.detailVCPopCallback = ^{
+        @strongify(self)
+        [self.player updateScrollViewPlayerToCell];
+    };
+    /// 详情页点击播放的回调
+    detailVC.detailVCPlayCallback = ^{
+        @strongify(self)
+        [self zf_playTheVideoAtIndexPath:indexPath];
+    };
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

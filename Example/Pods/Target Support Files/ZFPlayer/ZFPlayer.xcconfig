@@ -1,10 +1,11 @@
 ARCHS[sdk=iphonesimulator*] = $(ARCHS_STANDARD_64_BIT)
-CONFIGURATION_BUILD_DIR = $PODS_CONFIGURATION_BUILD_DIR/ZFPlayer
+CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/ZFPlayer
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/../../ZFPlayer/Classes/Core"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ZFPlayer" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/FDFullscreenPopGesture" "${PODS_ROOT}/Headers/Public/MJRefresh" "${PODS_ROOT}/Headers/Public/ZFPlayer"
-OTHER_LDFLAGS = -framework "AVFoundation" -framework "MediaPlayer" -framework "UIKit"
-PODS_BUILD_DIR = $BUILD_DIR
-PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ZFPlayer" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ZFPlayer"
+OTHER_LDFLAGS = -framework "AVFoundation" -framework "MediaPlayer" -framework "UIKit" -framework "ZFPlayer"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}
 PODS_TARGET_SRCROOT = ${PODS_ROOT}/../..
 PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}

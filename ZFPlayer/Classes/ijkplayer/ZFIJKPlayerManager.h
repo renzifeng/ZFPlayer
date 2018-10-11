@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "ZFPlayerMediaPlayback.h"
+#import <ZFPlayer/ZFPlayerMediaPlayback.h>
 #if __has_include(<IJKMediaFramework/IJKMediaFramework.h>)
 #import <IJKMediaFramework/IJKMediaFramework.h>
 

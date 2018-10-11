@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'ZFPlayer'
-    s.version          = '3.1.2'
+    s.version          = '3.2.0'
     s.summary          = 'A good player made by renzifeng'
     s.homepage         = 'https://github.com/renzifeng/ZFPlayer'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -18,11 +18,10 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '7.0'
     s.requires_arc = true
     
-    #s.default_subspec = 'Core'
+    s.default_subspec = 'Core'
     
     s.subspec 'Core' do |core|
-        core.source_files = 'ZFPlayer/Classes/Core/**/*'
-        core.public_header_files = 'ZFPlayer/Classes/Core/**/*.h'
+        core.vendored_frameworks = 'ZFPlayer/Classes/Core/ZFPlayer.framework'
         core.frameworks = 'UIKit', 'MediaPlayer', 'AVFoundation'
     end
     
@@ -43,7 +42,7 @@ Pod::Spec.new do |s|
         ijkplayer.source_files = 'ZFPlayer/Classes/ijkplayer/*.{h,m}'
         ijkplayer.public_header_files = 'ZFPlayer/Classes/ijkplayer/*.h'
         ijkplayer.dependency 'ZFPlayer/Core'
-        #ijkplayer.dependency 'IJKMediaFramework'
+        ijkplayer.dependency 'IJKMediaFramework'
         ijkplayer.ios.deployment_target = '8.0'
     end
     
@@ -51,7 +50,7 @@ Pod::Spec.new do |s|
         ksyMediaPlayer.source_files = 'ZFPlayer/Classes/KSYMediaPlayer/*.{h,m}'
         ksyMediaPlayer.public_header_files = 'ZFPlayer/Classes/KSYMediaPlayer/*.h'
         ksyMediaPlayer.dependency 'ZFPlayer/Core'
-        #ksyMediaPlayer.dependency 'KSYMediaPlayer_iOS/KSYMediaPlayer_vod'
+        ksyMediaPlayer.dependency 'KSYMediaPlayer_iOS/KSYMediaPlayer_vod'
         ksyMediaPlayer.pod_target_xcconfig = {
             'ARCHS[sdk=iphonesimulator*]' => '$(ARCHS_STANDARD_64_BIT)'
         }

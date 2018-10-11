@@ -23,14 +23,12 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "ZFPlayerController.h"
+#import <ZFPlayer/ZFPlayerController.h>
 #import "ZFSliderView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZFPortraitControlView : UIView 
-/// 返回按钮
-@property (nonatomic, strong, readonly) UIButton *backBtn;
 /// 底部工具栏
 @property (nonatomic, strong, readonly) UIView *bottomToolView;
 /// 顶部工具栏
@@ -72,6 +70,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)playOrPause;
 /// 播放按钮状态
 - (void)playBtnSelectedState:(BOOL)selected;
+/// 调节播放进度slider和当前时间更新
+- (void)sliderValueChanged:(CGFloat)value currentTimeString:(NSString *)timeString;
+/// 滑杆结束滑动
+- (void)sliderChangeEnded;
 
 @end
 

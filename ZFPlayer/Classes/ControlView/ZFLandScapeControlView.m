@@ -25,11 +25,7 @@
 #import "ZFLandScapeControlView.h"
 #import "UIView+ZFFrame.h"
 #import "ZFUtilities.h"
-#if __has_include(<ZFPlayer/ZFPlayer.h>)
 #import <ZFPlayer/ZFPlayer.h>
-#else
-#import "ZFPlayer.h"
-#endif
 
 @interface ZFLandScapeControlView () <ZFSliderViewDelegate>
 /// 顶部工具栏
@@ -98,11 +94,11 @@
     min_x = 0;
     min_y = 0;
     min_w = min_view_w;
-    min_h = 80;
+    min_h = iPhoneX ? 110 : 80;
     self.topToolView.frame = CGRectMake(min_x, min_y, min_w, min_h);
     
     min_x = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: 15;
-    min_y = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 15: [UIApplication sharedApplication].statusBarFrame.size.height > 0 ? [UIApplication sharedApplication].statusBarFrame.size.height : 20;
+    min_y = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 15: (iPhoneX ? 40 : 20);
     min_w = 40;
     min_h = 40;
     self.backBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
@@ -114,14 +110,15 @@
     self.titleLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.titleLabel.centerY = self.backBtn.centerY;
     
-    min_h = iPhoneX ? 73: 45;
+    min_h = 73;
+    min_h = iPhoneX ? 100 : 73;
     min_x = 0;
     min_y = min_view_h - min_h;
     min_w = min_view_w;
     self.bottomToolView.frame = CGRectMake(min_x, min_y, min_w, min_h);
     
-    min_x = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: min_margin;
-    min_y = 5;
+    min_x = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: 15;
+    min_y = 32;
     min_w = 30;
     min_h = 30;
     self.playOrPauseBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
@@ -153,6 +150,19 @@
     min_h = 40;
     self.lockBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.lockBtn.centerY = self.centerY;
+    
+    if (!self.isShow) {
+        self.topToolView.y = -self.topToolView.height;
+        self.bottomToolView.y = self.height;
+    } else {
+        if (self.player.isLockedScreen) {
+            self.topToolView.y = -self.topToolView.height;
+            self.bottomToolView.y = self.height;
+        } else {
+            self.topToolView.y = 0;
+            self.bottomToolView.y = self.height - self.bottomToolView.height;
+        }
+    }
 }
 
 - (void)makeSubViewsAction {
@@ -216,40 +226,57 @@
     }
 }
 
+#pragma mark -
+
+/// 重置ControlView
+- (void)resetControlView {
+    self.slider.value                = 0;
+    self.slider.bufferValue          = 0;
+    self.currentTimeLabel.text       = @"00:00";
+    self.totalTimeLabel.text         = @"00:00";
+    self.backgroundColor             = [UIColor clearColor];
+    self.playOrPauseBtn.selected     = YES;
+    self.titleLabel.text             = @"";
+    self.topToolView.alpha           = 1;
+    self.bottomToolView.alpha        = 1;
+    self.isShow                      = NO;
+}
+
 - (void)showControlView {
-    self.lockBtn.alpha = 1;
-    self.isShow = YES;
+    self.lockBtn.alpha               = 1;
+    self.isShow                      = YES;
     if (self.player.isLockedScreen) {
-        self.topToolView.y = -self.topToolView.height;
-        self.bottomToolView.y = self.height;
+        self.topToolView.y           = -self.topToolView.height;
+        self.bottomToolView.y        = self.height;
     } else {
-        self.topToolView.y = 0;
-        self.bottomToolView.y = self.height - self.bottomToolView.height;
+        self.topToolView.y           = 0;
+        self.bottomToolView.y        = self.height - self.bottomToolView.height;
     }
-    self.lockBtn.left = iPhoneX ? 50: 18;
-    self.player.statusBarHidden = NO;
+    self.lockBtn.left                = iPhoneX ? 50: 18;
+    self.player.statusBarHidden      = NO;
     if (self.player.isLockedScreen) {
-        self.topToolView.alpha = 0;
-        self.bottomToolView.alpha = 0;
+        self.topToolView.alpha       = 0;
+        self.bottomToolView.alpha    = 0;
     } else {
-        self.topToolView.alpha = 1;
-        self.bottomToolView.alpha = 1;
+        self.topToolView.alpha       = 1;
+        self.bottomToolView.alpha    = 1;
     }
 }
 
 - (void)hideControlView {
-    self.isShow = NO;
-    self.topToolView.y = -self.topToolView.height;
-    self.bottomToolView.y = self.height;
-    self.lockBtn.left = iPhoneX ? -82: -47;
-    self.topToolView.alpha = 0;
-    self.bottomToolView.alpha = 0;
-    self.lockBtn.alpha = 0;
-    self.player.statusBarHidden = YES;
+    self.isShow                      = NO;
+    self.topToolView.y               = -self.topToolView.height;
+    self.bottomToolView.y            = self.height;
+    self.lockBtn.left                = iPhoneX ? -82: -47;
+    self.player.statusBarHidden      = YES;
+    self.topToolView.alpha           = 0;
+    self.bottomToolView.alpha        = 0;
+    self.lockBtn.alpha               = 0;
 }
 
 - (BOOL)shouldResponseGestureWithPoint:(CGPoint)point withGestureType:(ZFPlayerGestureType)type touch:(nonnull UITouch *)touch {
-    if (point.y > self.bottomToolView.y || [touch.view isKindOfClass:[UIButton class]]) {
+    CGRect sliderRect = [self.bottomToolView convertRect:self.slider.frame toView:self];
+    if (CGRectContainsPoint(sliderRect, point)) {
         return NO;
     }
     if (self.player.isLockedScreen && type != ZFPlayerGestureTypeSingleTap) { // 锁定屏幕方向后只相应tap手势
@@ -278,13 +305,36 @@
     self.lockBtn.hidden = fullScreenMode == ZFFullScreenModePortrait;
 }
 
+/// 调节播放进度slider和当前时间更新
+- (void)sliderValueChanged:(CGFloat)value currentTimeString:(NSString *)timeString {
+    self.slider.value = value;
+    self.currentTimeLabel.text = timeString;
+    self.slider.isdragging = YES;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.slider.sliderBtn.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    }];
+}
+
+/// 滑杆结束滑动
+- (void)sliderChangeEnded {
+    self.slider.isdragging = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.slider.sliderBtn.transform = CGAffineTransformIdentity;
+    }];
+}
+
 #pragma mark - action
 
 - (void)backBtnClickAction:(UIButton *)sender {
     self.lockBtn.selected = NO;
-    [self.player enterFullScreen:NO animated:YES];
     self.player.lockedScreen = NO;
     self.lockBtn.selected = NO;
+    if (self.player.orientationObserver.supportInterfaceOrientation & ZFInterfaceOrientationMaskPortrait) {
+        [self.player enterFullScreen:NO animated:YES];
+    }
+    if (self.backBtnClickCallback) {
+        self.backBtnClickCallback();
+    }
 }
 
 - (void)playPauseButtonClickAction:(UIButton *)sender {
@@ -304,21 +354,6 @@
 - (void)lockButtonClickAction:(UIButton *)sender {
     sender.selected = !sender.selected;
     self.player.lockedScreen = sender.selected;
-}
-
-#pragma mark - 
-
-/// 重置ControlView
-- (void)resetControlView {
-    self.slider.value                = 0;
-    self.slider.bufferValue          = 0;
-    self.currentTimeLabel.text       = @"00:00";
-    self.totalTimeLabel.text         = @"00:00";
-    self.backgroundColor             = [UIColor clearColor];
-    self.playOrPauseBtn.selected     = YES;
-    self.titleLabel.text             = @"";
-    self.topToolView.alpha           = 1;
-    self.bottomToolView.alpha        = 1;
 }
 
 #pragma mark - getter
@@ -373,7 +408,6 @@
         _currentTimeLabel.textColor = [UIColor whiteColor];
         _currentTimeLabel.font = [UIFont systemFontOfSize:14.0f];
         _currentTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _currentTimeLabel.text = @"00:00";
     }
     return _currentTimeLabel;
 }
@@ -397,7 +431,6 @@
         _totalTimeLabel.textColor = [UIColor whiteColor];
         _totalTimeLabel.font = [UIFont systemFontOfSize:14.0f];
         _totalTimeLabel.textAlignment = NSTextAlignmentCenter;
-        _totalTimeLabel.text = @"00:00";
     }
     return _totalTimeLabel;
 }

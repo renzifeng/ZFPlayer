@@ -27,7 +27,6 @@
 		CC47EB6B20C969EC0040419D /* ZFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC47EB6A20C969EC0040419D /* ZFViewController.m */; };
 		CCED248820DBF1950077E02A /* ZFCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCED248720DBF1950077E02A /* ZFCollectionViewController.m */; };
 		CCED248B20DBF2740077E02A /* ZFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCED248A20DBF2740077E02A /* ZFCollectionViewCell.m */; };
-		CCED249720ED10000077E02A /* NullSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = CCED249620ED10000077E02A /* NullSafe.m */; };
 		CCF66D7420C57BE5001B6121 /* ZFDouYinControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF66D7320C57BE5001B6121 /* ZFDouYinControlView.m */; };
 		D20935FD20B658AE0002C956 /* ZFTableViewCellLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D20935F020B658AE0002C956 /* ZFTableViewCellLayout.m */; };
 		D20935FE20B658AE0002C956 /* ZFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D20935F120B658AE0002C956 /* ZFTableViewCell.m */; };
@@ -38,8 +37,10 @@
 		D209360320B658AE0002C956 /* ZFLightTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20935FC20B658AE0002C956 /* ZFLightTableViewController.m */; };
 		D209360A20B659190002C956 /* ZFNoramlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D209360920B659190002C956 /* ZFNoramlViewController.m */; };
 		D209365920B79C1E0002C956 /* ZFKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D209365820B79C1E0002C956 /* ZFKeyboardViewController.m */; };
+		D227504D21491289002DE221 /* ZFPlayerDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D227504C21491289002DE221 /* ZFPlayerDetailViewController.m */; };
 		D243FCA020C53F950014F533 /* ZFDouYinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D243FC9F20C53F950014F533 /* ZFDouYinViewController.m */; };
 		D243FCA320C543D30014F533 /* ZFDouYinCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D243FCA220C543D30014F533 /* ZFDouYinCell.m */; };
+		D2B982712136405500B4A0B9 /* ZFFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B982702136405500B4A0B9 /* ZFFullScreenViewController.m */; };
 		D2E520B021006F1500EF4AC9 /* ZFCollectionViewListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E520AF21006F1500EF4AC9 /* ZFCollectionViewListController.m */; };
 		D2EEFE6320BBB03E0097D6D9 /* ZFNotAutoPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EEFE6220BBB03E0097D6D9 /* ZFNotAutoPlayViewController.m */; };
 		D2EEFE6620BBF3890097D6D9 /* ZFSmallPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EEFE6520BBF3890097D6D9 /* ZFSmallPlayViewController.m */; };
@@ -92,7 +93,6 @@
 		CCED248720DBF1950077E02A /* ZFCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFCollectionViewController.m; sourceTree = "<group>"; };
 		CCED248920DBF2740077E02A /* ZFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFCollectionViewCell.h; sourceTree = "<group>"; };
 		CCED248A20DBF2740077E02A /* ZFCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFCollectionViewCell.m; sourceTree = "<group>"; };
-		CCED249620ED10000077E02A /* NullSafe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NullSafe.m; sourceTree = "<group>"; };
 		CCF66D7220C57BE5001B6121 /* ZFDouYinControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFDouYinControlView.h; sourceTree = "<group>"; };
 		CCF66D7320C57BE5001B6121 /* ZFDouYinControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFDouYinControlView.m; sourceTree = "<group>"; };
 		D20935F020B658AE0002C956 /* ZFTableViewCellLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFTableViewCellLayout.m; sourceTree = "<group>"; };
@@ -112,10 +112,14 @@
 		D209360920B659190002C956 /* ZFNoramlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFNoramlViewController.m; sourceTree = "<group>"; };
 		D209365720B79C1E0002C956 /* ZFKeyboardViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFKeyboardViewController.h; sourceTree = "<group>"; };
 		D209365820B79C1E0002C956 /* ZFKeyboardViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFKeyboardViewController.m; sourceTree = "<group>"; };
+		D227504B21491289002DE221 /* ZFPlayerDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFPlayerDetailViewController.h; sourceTree = "<group>"; };
+		D227504C21491289002DE221 /* ZFPlayerDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFPlayerDetailViewController.m; sourceTree = "<group>"; };
 		D243FC9E20C53F950014F533 /* ZFDouYinViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFDouYinViewController.h; sourceTree = "<group>"; };
 		D243FC9F20C53F950014F533 /* ZFDouYinViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFDouYinViewController.m; sourceTree = "<group>"; };
 		D243FCA120C543D30014F533 /* ZFDouYinCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFDouYinCell.h; sourceTree = "<group>"; };
 		D243FCA220C543D30014F533 /* ZFDouYinCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFDouYinCell.m; sourceTree = "<group>"; };
+		D2B9826F2136405500B4A0B9 /* ZFFullScreenViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFFullScreenViewController.h; sourceTree = "<group>"; };
+		D2B982702136405500B4A0B9 /* ZFFullScreenViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFFullScreenViewController.m; sourceTree = "<group>"; };
 		D2E520AE21006F1500EF4AC9 /* ZFCollectionViewListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFCollectionViewListController.h; sourceTree = "<group>"; };
 		D2E520AF21006F1500EF4AC9 /* ZFCollectionViewListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFCollectionViewListController.m; sourceTree = "<group>"; };
 		D2EEFE6120BBB03E0097D6D9 /* ZFNotAutoPlayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZFNotAutoPlayViewController.h; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 		6003F593195388D20070C39A /* Example for ZFPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				D2B9826E2136403E00B4A0B9 /* FullScreenViewController */,
 				CCED248520DBF1730077E02A /* CollectionView */,
 				D209365620B79BCC0002C956 /* Keyboard */,
 				D209360720B659070002C956 /* Normal */,
@@ -194,7 +199,6 @@
 				6003F59D195388D20070C39A /* ZFAppDelegate.m */,
 				CC47EB6920C969EC0040419D /* ZFViewController.h */,
 				CC47EB6A20C969EC0040419D /* ZFViewController.m */,
-				CCED249620ED10000077E02A /* NullSafe.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
@@ -272,6 +276,8 @@
 				CC112E9920DBD45E0051EE60 /* ZFMixViewController.m */,
 				D243FC9E20C53F950014F533 /* ZFDouYinViewController.h */,
 				D243FC9F20C53F950014F533 /* ZFDouYinViewController.m */,
+				D227504B21491289002DE221 /* ZFPlayerDetailViewController.h */,
+				D227504C21491289002DE221 /* ZFPlayerDetailViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -341,6 +347,15 @@
 			path = Keyboard;
 			sourceTree = "<group>";
 		};
+		D2B9826E2136403E00B4A0B9 /* FullScreenViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D2B9826F2136405500B4A0B9 /* ZFFullScreenViewController.h */,
+				D2B982702136405500B4A0B9 /* ZFFullScreenViewController.m */,
+			);
+			path = FullScreenViewController;
+			sourceTree = "<group>";
+		};
 		E3FD7B3AA53BD2041778220B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,7 +376,6 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				E3B84DB4FE89BBD0C66897BE /* [CP] Embed Pods Frameworks */,
 				750670929024C714EAC9777A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -404,6 +418,11 @@
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = R2U8SE68WE;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
@@ -465,7 +484,8 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ZFPlayer.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -490,30 +510,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E3B84DB4FE89BBD0C66897BE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ZFPlayer_Example/Pods-ZFPlayer_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/KTVCocoaHTTPServer/KTVCocoaHTTPServer.framework",
-				"${BUILT_PRODUCTS_DIR}/KTVHTTPCache/KTVHTTPCache.framework",
-				"${BUILT_PRODUCTS_DIR}/ZFPlayer/ZFPlayer.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KTVCocoaHTTPServer.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KTVHTTPCache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFPlayer.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZFPlayer_Example/Pods-ZFPlayer_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -526,9 +522,10 @@
 				CCF66D7420C57BE5001B6121 /* ZFDouYinControlView.m in Sources */,
 				D209360320B658AE0002C956 /* ZFLightTableViewController.m in Sources */,
 				D20935FD20B658AE0002C956 /* ZFTableViewCellLayout.m in Sources */,
-				CCED249720ED10000077E02A /* NullSafe.m in Sources */,
 				D209360A20B659190002C956 /* ZFNoramlViewController.m in Sources */,
+				D227504D21491289002DE221 /* ZFPlayerDetailViewController.m in Sources */,
 				CC112E9D20DBD6600051EE60 /* ZFOtherCell.m in Sources */,
+				D2B982712136405500B4A0B9 /* ZFFullScreenViewController.m in Sources */,
 				D2EEFE6620BBF3890097D6D9 /* ZFSmallPlayViewController.m in Sources */,
 				D209360020B658AE0002C956 /* ZFTableData.m in Sources */,
 				D2E520B021006F1500EF4AC9 /* ZFCollectionViewListController.m in Sources */,

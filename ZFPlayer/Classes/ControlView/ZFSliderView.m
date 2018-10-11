@@ -34,10 +34,6 @@ static const CGFloat kProgressH = 2.0;
 /** 拖动slider动画的时间*/
 static const CGFloat kAnimate = 0.3;
 
-@interface ZFSliderButton : UIButton
-
-@end
-
 @implementation ZFSliderButton
 
 // 重写此方法将按钮的点击范围扩大
@@ -101,9 +97,11 @@ static const CGFloat kAnimate = 0.3;
     self.sliderProgressView.centerY = self.height * 0.5;
     self.sliderBtn.centerY          = self.height * 0.5;
     
-    /// 修复slider  bufferProgressP错位问题
+    /// 修复slider  bufferProgress错位问题
     CGFloat finishValue = self.bgProgressView.width * self.bufferValue;
     self.bufferProgressView.width = finishValue;
+    self.sliderProgressView.left = kProgressMargin;
+    self.bufferProgressView.left = kProgressMargin;
     
     CGFloat progressValue  = self.bgProgressView.width * self.value;
     self.sliderProgressView.width = progressValue;
@@ -128,6 +126,10 @@ static const CGFloat kAnimate = 0.3;
     // 添加点击手势
     self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [self addGestureRecognizer:self.tapGesture];
+    
+    // 添加滑动手势
+    UIPanGestureRecognizer *sliderGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderGesture:)];
+    [self addGestureRecognizer:sliderGesture];
 }
 
 #pragma mark - Setter
@@ -166,14 +168,16 @@ static const CGFloat kAnimate = 0.3;
 }
 
 - (void)setValue:(float)value {
+    if (isnan(value)) return;
     _value = value;
-    CGFloat finishValue  = self.bgProgressView.width * value;
+    CGFloat finishValue = self.bgProgressView.width * value;
     self.sliderProgressView.width = finishValue;
     self.sliderBtn.left = (self.width - self.sliderBtn.width) * value;
     self.lastPoint = self.sliderBtn.center;
 }
 
 - (void)setBufferValue:(float)bufferValue {
+    if (isnan(bufferValue)) return;
     _bufferValue = bufferValue;
     CGFloat finishValue = self.bgProgressView.width * bufferValue;
     self.bufferProgressView.width = finishValue;
@@ -197,6 +201,7 @@ static const CGFloat kAnimate = 0.3;
 }
 
 - (void)setSliderHeight:(CGFloat)sliderHeight {
+    if (isnan(sliderHeight)) return;
     _sliderHeight = sliderHeight;
     self.bgProgressView.height     = sliderHeight;
     self.bufferProgressView.height = sliderHeight;
@@ -216,6 +221,25 @@ static const CGFloat kAnimate = 0.3;
 }
 
 #pragma mark - User Action
+
+- (void)sliderGesture:(UIGestureRecognizer *)gesture {
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan: {
+            [self sliderBtnTouchBegin:self.sliderBtn];
+        }
+            break;
+        case UIGestureRecognizerStateChanged: {
+            [self sliderBtnDragMoving:self.sliderBtn point:[gesture locationInView:self]];
+        }
+            break;
+        case UIGestureRecognizerStateEnded: {
+            [self sliderBtnTouchEnded:self.sliderBtn];
+        }
+            break;
+        default:
+            break;
+    }
+}
 
 - (void)sliderBtnTouchBegin:(UIButton *)btn {
     if ([self.delegate respondsToSelector:@selector(sliderTouchBegan:)]) {
@@ -239,9 +263,9 @@ static const CGFloat kAnimate = 0.3;
     }
 }
 
-- (void)sliderBtnDragMoving:(UIButton *)btn event:(UIEvent *)event {
+- (void)sliderBtnDragMoving:(UIButton *)btn point:(CGPoint)touchPoint {
     // 点击的位置
-    CGPoint point = [event.allTouches.anyObject locationInView:self];
+    CGPoint point = touchPoint;
     // 获取进度值 由于btn是从 0-(self.width - btn.width)
     float value = (point.x - btn.width * 0.5) / (self.width - btn.width);
     // value的值需在0-1之间
@@ -301,11 +325,6 @@ static const CGFloat kAnimate = 0.3;
     if (!_sliderBtn) {
         _sliderBtn = [ZFSliderButton buttonWithType:UIButtonTypeCustom];
         [_sliderBtn setAdjustsImageWhenHighlighted:NO];
-        [_sliderBtn addTarget:self action:@selector(sliderBtnTouchBegin:) forControlEvents:UIControlEventTouchDown];
-        [_sliderBtn addTarget:self action:@selector(sliderBtnTouchEnded:) forControlEvents:UIControlEventTouchCancel];
-        [_sliderBtn addTarget:self action:@selector(sliderBtnTouchEnded:) forControlEvents:UIControlEventTouchUpInside];
-        [_sliderBtn addTarget:self action:@selector(sliderBtnTouchEnded:) forControlEvents:UIControlEventTouchUpOutside];
-        [_sliderBtn addTarget:self action:@selector(sliderBtnDragMoving:event:) forControlEvents:UIControlEventTouchDragInside];
     }
     return _sliderBtn;
 }
