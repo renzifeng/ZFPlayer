@@ -121,6 +121,9 @@ typedef NS_ENUM(NSInteger, ZFPlayerScalingMode) {
 /// The block invoked when the player is Ready to play.
 @property (nonatomic, copy, nullable) void(^playerReadyToPlay)(id<ZFPlayerMediaPlayback> asset, NSURL *assetURL);
 
+// The block invoked when video size changed.
+@property (nonatomic, copy, nullable) void(^presentationSizeChanged)(id<ZFPlayerMediaPlayback> asset, CGSize size);
+
 /// The block invoked when the player play progress changed.
 @property (nonatomic, copy, nullable) void(^playerPlayTimeChanged)(id<ZFPlayerMediaPlayback> asset, NSTimeInterval currentTime, NSTimeInterval duration);
 

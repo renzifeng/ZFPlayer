@@ -138,6 +138,19 @@
         if (self.playerReadyToPlay) self.playerReadyToPlay(asset,assetURL);
     };
     
+    self.currentPlayerManager.presentationSizeChanged = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, CGSize size){
+        @strongify(self)
+        NSLog(@"presentation size changed: (%d,%d)", (int)size.width, (int)size.height);
+
+        if (self.orientationObserver.fullScreenMode == ZFFullScreenModeAutomatic) {
+            if (size.width > size.height) {
+                self.orientationObserver.fullScreenMode = ZFFullScreenModeLandscape;
+            }else{
+                self.orientationObserver.fullScreenMode = ZFFullScreenModePortrait;
+            }
+        }
+    };
+    
     self.currentPlayerManager.playerPlayTimeChanged = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, NSTimeInterval currentTime, NSTimeInterval duration) {
         @strongify(self)
         if (self.playerPlayTimeChanged) self.playerPlayTimeChanged(asset,currentTime,duration);
@@ -418,6 +431,10 @@
     return objc_getAssociatedObject(self, _cmd);
 }
 
+- (void (^)(id<ZFPlayerMediaPlayback> _Nonnull, CGSize ))presentationSizeChanged {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
 - (void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSTimeInterval, NSTimeInterval))playerPlayTimeChanged {
     return objc_getAssociatedObject(self, _cmd);
 }
@@ -505,6 +522,10 @@
 
 - (void)setPlayerReadyToPlay:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSURL * _Nonnull))playerReadyToPlay {
     objc_setAssociatedObject(self, @selector(playerReadyToPlay), playerReadyToPlay, OBJC_ASSOCIATION_COPY);
+}
+
+- (void)setPresentationSizeChanged:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSURL * _Nonnull))presentationSizeChanged{
+    objc_setAssociatedObject(self, @selector(presentationSizeChanged), presentationSizeChanged, OBJC_ASSOCIATION_COPY);
 }
 
 - (void)setPlayerPlayTimeChanged:(void (^)(id<ZFPlayerMediaPlayback> _Nonnull, NSTimeInterval, NSTimeInterval))playerPlayTimeChanged {

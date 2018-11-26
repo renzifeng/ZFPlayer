@@ -109,6 +109,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
 @synthesize assetURL                       = _assetURL;
 @synthesize playerPrepareToPlay            = _playerPrepareToPlay;
 @synthesize playerReadyToPlay              = _playerReadyToPlay;
+@synthesize presentationSizeChanged        = _presentationSizeChanged;
 @synthesize playerPlayStateChanged         = _playerPlayStateChanged;
 @synthesize playerLoadStateChanged         = _playerLoadStateChanged;
 @synthesize seekTime                       = _seekTime;
@@ -379,6 +380,9 @@ static NSString *const kPresentationSize         = @"presentationSize";
             if (self.playerBufferTimeChanged) self.playerBufferTimeChanged(self, bufferTime);
         } else if ([keyPath isEqualToString:kPresentationSize]) {
             self->_presentationSize = self.playerItem.presentationSize;
+            if (self.presentationSizeChanged) {
+                self.presentationSizeChanged(self, self->_presentationSize);
+            }
         } else {
             [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         }
