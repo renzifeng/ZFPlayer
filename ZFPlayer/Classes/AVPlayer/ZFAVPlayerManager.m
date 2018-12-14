@@ -371,9 +371,9 @@ static NSString *const kPresentationSize         = @"presentationSize";
             // When the buffer is good
             if (self.playerItem.playbackLikelyToKeepUp) {
                 self.loadState = ZFPlayerLoadStatePlayable;
+                if (self.isPlaying) [self play];
             }
         } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
-            if (self.isPlaying && self.playerItem.playbackLikelyToKeepUp) [self play];
             NSTimeInterval bufferTime = [self availableDuration];
             self->_bufferTime = bufferTime;
             if (self.playerBufferTimeChanged) self.playerBufferTimeChanged(self, bufferTime);
