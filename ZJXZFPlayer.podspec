@@ -10,10 +10,10 @@ Pod::Spec.new do |s|
 s.name             = 'ZJX_ZFPlayer'
 s.version          = '3.2.6'
 s.summary          = 'A good player made by renzifeng'
-s.homepage         = 'https://github.com/oldBlackComing/ZJX_ZFPlayer'
+s.homepage         = 'https://github.com/oldBlackComing/ZFPlayer'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'zhoujiaxing' => '884548958@qq.com' }
-s.source           = { :git => 'https://github.com/oldBlackComing/ZJX_ZFPlayer.git', :tag => s.version.to_s }
+s.source           = { :git => 'https://github.com/oldBlackComing/ZFPlayer.git', :tag => s.version.to_s }
 s.social_media_url = 'http://weibo.com/zifeng1300'
 s.ios.deployment_target = '7.0'
 s.requires_arc = true
