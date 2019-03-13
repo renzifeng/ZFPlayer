@@ -452,6 +452,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
             CGFloat totalTime     = (CGFloat)currentItem.duration.value / currentItem.duration.timescale;
             CGFloat value         = CMTimeGetSeconds([currentItem currentTime]) / totalTime;
             [weakSelf.controlView zf_playerCurrentTime:currentTime totalTime:totalTime sliderValue:value];
+            if ([weakSelf.delegate respondsToSelector:@selector(zf_playerCurrentTime:totalTime:sliderValue:)]) {
+                [weakSelf.delegate zf_playerCurrentTime:currentTime totalTime:totalTime sliderValue:value];
+            }
         }
     }];
 }
