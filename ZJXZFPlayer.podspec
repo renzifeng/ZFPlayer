@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-s.name             = 'ZJX_ZFPlayer'
+s.name             = 'ZJXZFPlayer'
 s.version          = '3.2.6'
 s.summary          = 'A good player made by renzifeng'
 s.homepage         = 'https://github.com/oldBlackComing/ZFPlayer'
