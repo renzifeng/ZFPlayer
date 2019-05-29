@@ -27,6 +27,8 @@ Before this, you used ZFPlayer, are you worried about encapsulating avplayer ins
 
 ## Installation
 
+### CocoaPods
+
 ZFPlayer is available through [CocoaPods](https://cocoapods.org). To install it,use player template simply add the following line to your Podfile:
 
 ```objc
@@ -58,6 +60,25 @@ Use KSYMediaPlayer simply add the following line to your Podfile:
 pod 'ZFPlayer/KSYMediaPlayer', '~> 3.0'
 ```
 [KSYMediaPlayer SDK](https://github.com/ksvc/KSYMediaPlayer_iOS) support cocoapods
+
+### Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```
+$ brew update
+$ brew install carthage
+```
+
+To integrate ZFPlayer into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```
+github "renzifeng/ZFPlayer"
+```
+
+Run `carthage update` to build the framework
 
 ## Usage introduce
 
