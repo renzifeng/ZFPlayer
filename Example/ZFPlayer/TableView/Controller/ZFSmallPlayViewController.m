@@ -13,7 +13,7 @@
 #import <ZFPlayer/ZFIJKPlayerManager.h>
 #import <ZFPlayer/KSMediaPlayerManager.h>
 #import "ZFPlayerDetailViewController.h"
-#import "ZFUtilities.h"
+#import <ZFPlayer/ZFUtilities.h>
 #import "ZFTableViewCell.h"
 #import "ZFTableData.h"
 #import "ZFAutoPlayerViewController.h"

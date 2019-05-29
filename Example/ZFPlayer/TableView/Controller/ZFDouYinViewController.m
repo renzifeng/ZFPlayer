@@ -17,7 +17,12 @@
 #import "ZFDouYinCell.h"
 #import "ZFDouYinControlView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
+
+#if __has_include(<MJRefresh/MJRefresh.h>)
 #import <MJRefresh/MJRefresh.h>
+#else
+#import "MJRefresh.h"
+#endif
 
 static NSString *kIdentifier = @"kIdentifier";
 @interface ZFDouYinViewController ()  <UITableViewDelegate,UITableViewDataSource>

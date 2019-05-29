@@ -12,9 +12,9 @@
 #import <ZFPlayer/ZFIJKPlayerManager.h>
 #import <ZFPlayer/KSMediaPlayerManager.h>
 #import <ZFPlayer/ZFPlayerControlView.h>
+#import <ZFPlayer/UIImageView+ZFCache.h>
+#import <ZFPlayer/ZFUtilities.h>
 #import "ZFSmallPlayViewController.h"
-#import "UIImageView+ZFCache.h"
-#import "ZFUtilities.h"
 
 static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/635942-14593722fe3f0695.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
 

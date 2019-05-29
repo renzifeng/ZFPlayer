@@ -13,10 +13,10 @@
 #import <ZFPlayer/ZFPlayerControlView.h>
 #import <ZFPlayer/KSMediaPlayerManager.h>
 #import <ZFPlayer/ZFIJKPlayerManager.h>
+#import <ZFPlayer/ZFUtilities.h>
 #import "ZFPlayerDetailViewController.h"
 #import "ZFTableData.h"
 #import "ZFOtherCell.h"
-#import "ZFUtilities.h"
 
 static NSString *kIdentifier = @"kIdentifier";
 
