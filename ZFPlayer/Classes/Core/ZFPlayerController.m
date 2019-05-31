@@ -695,12 +695,12 @@
 
 - (void)enterPortraitFullScreen:(BOOL)fullScreen animated:(BOOL)animated {
     self.orientationObserver.fullScreenMode = ZFFullScreenModePortrait;
-    [self.orientationObserver enterPortraitFullScreen:fullScreen animated:YES];
+    [self.orientationObserver enterPortraitFullScreen:fullScreen animated:animated];
 }
 
 - (void)enterFullScreen:(BOOL)fullScreen animated:(BOOL)animated {
     if (self.orientationObserver.fullScreenMode == ZFFullScreenModePortrait) {
-        [self.orientationObserver enterPortraitFullScreen:fullScreen animated:YES];
+        [self.orientationObserver enterPortraitFullScreen:fullScreen animated:animated];
     } else {
         UIInterfaceOrientation orientation = UIInterfaceOrientationUnknown;
         orientation = fullScreen? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait;

@@ -336,7 +336,7 @@
     self.player.lockedScreen = NO;
     self.lockBtn.selected = NO;
     if (self.player.orientationObserver.supportInterfaceOrientation & ZFInterfaceOrientationMaskPortrait) {
-        [self.player enterFullScreen:NO animated:YES];
+        [self.player enterFullScreen:NO animated:self.player.orientationObserver.isAnimated];
     }
     if (self.backBtnClickCallback) {
         self.backBtnClickCallback();

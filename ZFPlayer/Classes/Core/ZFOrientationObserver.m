@@ -65,6 +65,8 @@
 
 @property (nonatomic, assign, getter=isFullScreen) BOOL fullScreen;
 
+@property (nonatomic, assign, getter=isAnimated) BOOL animated;
+
 @property (nonatomic, strong) UIView *cell;
 
 @property (nonatomic, assign) NSInteger playerViewTag;
@@ -195,6 +197,7 @@
                 }
                 if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
             }];
+            self.animated = YES;
         } else {
             self.view.frame = superview.bounds;
             [self.view layoutIfNeeded];
@@ -205,6 +208,7 @@
                 [superview insertSubview:self.blackView belowSubview:self.view];
                 self.blackView.frame = superview.bounds;
             }
+            self.animated = NO;
             if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
         }
         return;
@@ -338,10 +342,12 @@
             self.view.frame = superview.bounds;
             if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
         }];
+        self.animated = YES;
     } else {
         [superview addSubview:self.view];
         self.view.frame = superview.bounds;
         [self.view layoutIfNeeded];
+        self.animated = NO;
         if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
     }
 }

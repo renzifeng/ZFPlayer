@@ -76,6 +76,9 @@ typedef NS_OPTIONS(NSUInteger, ZFInterfaceOrientationMask) {
 /// If the full screen.
 @property (nonatomic, readonly, getter=isFullScreen) BOOL fullScreen;
 
+/// If enter full screen is animated, then exit full screen is also animated
+@property (nonatomic, readonly, getter=isAnimated) BOOL animated;
+
 /// Use device orientation, default NO.
 @property (nonatomic, assign) BOOL forceDeviceOrientation;
 
