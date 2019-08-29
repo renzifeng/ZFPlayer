@@ -238,6 +238,17 @@ static const CGFloat kAnimate = 0.3;
     self.sliderProgressView.zf_height = sliderHeight;
 }
 
+- (void)setSliderRadius:(CGFloat)sliderRadius {
+    if (isnan(sliderRadius)) return;
+    _sliderRadius = sliderRadius;
+    self.bgProgressView.layer.cornerRadius      = sliderRadius;
+    self.bufferProgressView.layer.cornerRadius  = sliderRadius;
+    self.sliderProgressView.layer.cornerRadius  = sliderRadius;
+    self.bgProgressView.layer.masksToBounds     = YES;
+    self.bufferProgressView.layer.masksToBounds = YES;
+    self.sliderProgressView.layer.masksToBounds = YES;
+}
+
 - (void)setIsHideSliderBlock:(BOOL)isHideSliderBlock {
     _isHideSliderBlock = isHideSliderBlock;
     // 隐藏滑块，滑杆不可点击
