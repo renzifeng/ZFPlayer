@@ -293,7 +293,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     [self.player pause];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 如果此时用户已经暂停了，则不再需要开启播放了
-        if (!self.isPlaying) {
+        if (!self.isPlaying && self.loadState == ZFPlayerLoadStateStalled) {
             self.isBuffering = NO;
             return;
         }
@@ -339,7 +339,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
             self.isReadyToPlay = YES;
             self.loadState = ZFPlayerLoadStatePlaythroughOK;
         }
-        if (self.isPlaying) self.player.rate = self.rate;
+        if (self.isPlaying && self.loadState != ZFPlayerLoadStateStalled) self.player.rate = self.rate;
         if (loadedRanges.count > 0) {
             if (self.playerPlayTimeChanged) self.playerPlayTimeChanged(self, self.currentTime, self.totalTime);
         }
