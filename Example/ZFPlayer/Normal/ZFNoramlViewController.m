@@ -142,6 +142,9 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 }
 
 - (BOOL)prefersStatusBarHidden {
+    if (@available(iOS 13.0, *)) {
+        return NO;
+    }
     /// 如果只是支持iOS9+ 那直接return NO即可，这里为了适配iOS8
     return self.player.isStatusBarHidden;
 }
@@ -151,10 +154,16 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 }
 
 - (BOOL)shouldAutorotate {
+    if (@available(iOS 13.0, *)) {
+        return YES;
+    }
     return self.player.shouldAutorotate;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    if (@available(iOS 13.0, *)) {
+        return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskLandscape;
+    }
     if (self.player.isFullScreen) {
         return UIInterfaceOrientationMaskLandscape;
     }

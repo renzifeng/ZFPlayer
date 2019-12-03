@@ -291,6 +291,9 @@
     NSArray<NSString *> *versionStrArr = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
     int firstVer = [[versionStrArr objectAtIndex:0] intValue];
     int secondVer = [[versionStrArr objectAtIndex:1] intValue];
+    if (firstVer == 13) {
+        return YES;
+    }
     if (firstVer == 8) {
         if (secondVer >= 1 && secondVer <= 3) {
             return YES;
