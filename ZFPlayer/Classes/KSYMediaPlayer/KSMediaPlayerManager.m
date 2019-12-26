@@ -286,6 +286,8 @@
     } else {
         if (self.player.currentPlaybackTime > 0) {
             self.loadState = ZFPlayerLoadStatePlayable;
+        } else {
+            self.loadState = ZFPlayerLoadStateUnknown;
         }
     }
 }
