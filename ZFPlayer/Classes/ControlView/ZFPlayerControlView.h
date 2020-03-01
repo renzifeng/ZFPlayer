@@ -146,4 +146,13 @@
  */
 - (void)resetControlView;
 
+#pragma mark - volcano expand
+// 播放或暂停按钮
+@property (nonatomic, strong) UIButton *playOrPauseBtn;
+// 播放完成后，将view设置成再一次播放的状态
+- (void)restarControlView;
+@property (nonatomic,   copy) void(^blockBtnPlayOrPause)(void);
+// 当竖屏的时候，隐藏顶部控制栏, 默认 NO
+@property (nonatomic, assign) BOOL hiddenTopToolViewInPortrait;
+
 @end

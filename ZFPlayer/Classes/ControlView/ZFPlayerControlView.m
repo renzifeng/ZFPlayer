@@ -116,7 +116,13 @@
     self.coverImageView.frame = self.bounds;
     self.bgImgView.frame = self.bounds;
     self.effectView.frame = self.bounds;
-    
+
+    min_w = 44;
+    min_h = 44;
+    self.playOrPauseBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
+    self.playOrPauseBtn.zf_centerX = self.zf_centerX;
+    self.playOrPauseBtn.zf_centerY = self.zf_centerY;
+
     min_w = 80;
     min_h = 80;
     self.activity.frame = CGRectMake(min_x, min_y, min_w, min_h);
@@ -183,6 +189,7 @@
     [self.fastView addSubview:self.fastProgressView];
     [self addSubview:self.bottomPgrogress];
     [self addSubview:self.volumeBrightnessView];
+    [self addSubview:self.playOrPauseBtn];
 }
 
 - (void)autoFadeOutControlView {
@@ -258,7 +265,6 @@
 }
 
 #pragma mark - Public Method
-
 /// 重置控制层
 - (void)resetControlView {
     [self.portraitControlView resetControlView];
@@ -280,7 +286,8 @@
 
 /// 设置标题、封面、全屏模式
 - (void)showTitle:(NSString *)title coverURLString:(NSString *)coverUrl fullScreenMode:(ZFFullScreenMode)fullScreenMode {
-    UIImage *placeholder = [ZFUtilities imageWithColor:[UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1] size:self.bgImgView.bounds.size];
+//    UIImage *placeholder = [ZFUtilities imageWithColor:[UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1] size:self.bgImgView.bounds.size];
+    UIImage *placeholder = [ZFUtilities imageWithColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1] size:self.bgImgView.bounds.size];
     [self showTitle:title coverURLString:coverUrl placeholderImage:placeholder fullScreenMode:fullScreenMode];
 }
 
@@ -332,7 +339,7 @@
         return [self.landScapeControlView shouldResponseGestureWithPoint:point withGestureType:gestureType touch:touch];
     } else {
         if (!self.customDisablePanMovingDirection) {
-            if (self.player.scrollView) {  /// 列表时候禁止上下滑动（防止和列表滑动冲突）
+            if (self.player.scrollView) {  /// 列表时候禁止左右滑动
                 self.player.disablePanMovingDirection = ZFPlayerDisablePanMovingDirectionVertical;
             } else { /// 不禁用滑动方向
                 self.player.disablePanMovingDirection = ZFPlayerDisablePanMovingDirectionNone;
@@ -371,6 +378,7 @@
 - (void)gestureBeganPan:(ZFPlayerGestureControl *)gestureControl panDirection:(ZFPanDirection)direction panLocation:(ZFPanLocation)location {
     if (direction == ZFPanDirectionH) {
         self.sumTime = self.player.currentTime;
+        self.playOrPauseBtn.hidden = YES;
     }
 }
 
@@ -433,6 +441,7 @@
 
 /// 准备播放
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(NSURL *)assetURL {
+    self.playOrPauseBtn.hidden = YES;
     [self hideControlViewWithAnimated:NO];
 }
 
@@ -504,6 +513,9 @@
 
 /// 视频view即将旋转
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer orientationWillChange:(ZFOrientationObserver *)observer {
+    if (!observer.isFullScreen && _hiddenTopToolViewInPortrait) {
+        self.portraitControlView.topToolView.hidden = YES;
+    }
     self.portraitControlView.hidden = observer.isFullScreen;
     self.landScapeControlView.hidden = !observer.isFullScreen;
     if (videoPlayer.isSmallFloatViewShow) {
@@ -802,7 +814,6 @@
     if (!_volumeBrightnessView) {
         _volumeBrightnessView = [[ZFVolumeBrightnessView alloc] init];
         _volumeBrightnessView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
-        _volumeBrightnessView.hidden = YES;
     }
     return _volumeBrightnessView;
 }
@@ -810,6 +821,48 @@
 - (void)setBackBtnClickCallback:(void (^)(void))backBtnClickCallback {
     _backBtnClickCallback = [backBtnClickCallback copy];
     self.landScapeControlView.backBtnClickCallback = _backBtnClickCallback;
+}
+
+#pragma mark - volcano expand
+- (void)playPauseButtonClickAction:(UIButton *)btn {
+    btn.hidden = YES;
+    !_blockBtnPlayOrPause?:_blockBtnPlayOrPause();
+    self.portraitControlView.hidden = self.player.isFullScreen;
+    self.landScapeControlView.hidden = !self.player.isFullScreen;
+    self.landScapeControlView.topToolView.hidden = NO;
+    self.landScapeControlView.bottomToolView.hidden = NO;
+    self.landScapeControlView.playOrPauseBtn.hidden = NO;
+    [self.portraitControlView hiddenSlider:NO];
+    [self.landScapeControlView hiddenSlider:NO];
+
+}
+
+- (UIButton *)playOrPauseBtn {
+    if (!_playOrPauseBtn) {
+        _playOrPauseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_playOrPauseBtn setImage:ZFPlayer_Image(@"new_allPlay_44x44_") forState:UIControlStateNormal];
+//        [_playOrPauseBtn setImage:ZFPlayer_Image(@"new_allPause_44x44_") forState:UIControlStateSelected];
+        _playOrPauseBtn.hidden = NO;
+        [_playOrPauseBtn addTarget:self action:@selector(playPauseButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _playOrPauseBtn;
+}
+
+// 当竖屏的时候，隐藏顶部控制栏
+- (void)setHiddenTopToolViewInPortrait:(BOOL)hiddenTopToolViewInPortrait {
+    _hiddenTopToolViewInPortrait = hiddenTopToolViewInPortrait;
+    if (_hiddenTopToolViewInPortrait) {
+        self.portraitControlView.topToolView.hidden = YES;
+    }
+}
+// 播放完成后，将view设置成再一次播放的状态
+- (void)restarControlView {
+    _playOrPauseBtn.hidden = NO;
+    self.portraitControlView.hidden = YES;
+    [self.landScapeControlView hiddenAllButTopView];
+//    [self.portraitControlView hiddenSlider:YES];
+//    [self.landScapeControlView hiddenSlider:YES];
+
 }
 
 @end
