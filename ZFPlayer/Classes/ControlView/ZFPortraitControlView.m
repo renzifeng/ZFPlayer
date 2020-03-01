@@ -387,4 +387,10 @@
     return _fullScreenBtn;
 }
 
+#pragma mark - volcano expand
+// 播放结束，隐藏快进快退
+- (void)hiddenSlider:(BOOL)isHidden {
+    _slider.hidden = isHidden;
+}
+
 @end

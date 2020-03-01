@@ -103,6 +103,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 滑杆结束滑动
 - (void)sliderChangeEnded;
 
+#pragma mark - volcano expand
+// 播放结束，隐藏快进快退
+- (void)hiddenSlider:(BOOL)isHidden;
+
 @end
 
 NS_ASSUME_NONNULL_END
