@@ -87,16 +87,11 @@
     if (target == nil) return;
     
     BOOL removed = [self removeEntryOfObserver:observer forKeyPath:keyPath];
-    if (removed) {
-        // duplicated register
-        NSLog(@"duplicated observer");
-    }
+    if (removed == false) return;
     
     @try {
-        if (removed) {
-            [target removeObserver:observer
+        [target removeObserver:observer
                         forKeyPath:keyPath];
-        }
     } @catch (NSException *e) {
         NSLog(@"ZFKVO: failed to remove observer for %@\n", keyPath);
     }
