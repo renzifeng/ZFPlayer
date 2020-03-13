@@ -123,7 +123,7 @@
 
 - (BOOL)removeEntryOfObserver:(NSObject *)observer
                    forKeyPath:(NSString *)keyPath {
-    __block NSInteger foundIndex = -1;
+    __block NSInteger foundIndex = NSNotFound;
     [_observerArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         ZFKVOEntry *entry = (ZFKVOEntry *)obj;
         if (entry.observer == observer &&
@@ -133,11 +133,11 @@
         }
     }];
     
-    if (foundIndex >= 0) {
-        [_observerArray removeObjectAtIndex:foundIndex];
-        return YES;
+    if (foundIndex == NSNotFound) {
+        return NO;
     }
-    return NO;
+    [_observerArray removeObjectAtIndex:foundIndex];
+    return YES;
 }
 
 @end
