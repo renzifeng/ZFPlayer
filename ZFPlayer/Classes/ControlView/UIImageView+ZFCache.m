@@ -159,8 +159,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath isDirectory:nil]) {
         dispatch_queue_t ioQueue = dispatch_queue_create("com.hackemist.SDWebImageCache", DISPATCH_QUEUE_SERIAL);
         dispatch_async(ioQueue, ^{
-            NSError *error = nil;
-            [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:&error];
+            [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:directoryPath
                                       withIntermediateDirectories:YES
                                                        attributes:nil
