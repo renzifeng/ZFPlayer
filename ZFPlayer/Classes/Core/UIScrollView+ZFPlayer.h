@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, ZFPlayerContainerType) {
 
 /// The scroll direction of scrollView while scrolling.
 /// When the ZFPlayerScrollViewDirection is ZFPlayerScrollViewDirectionVertical，this value can only be ZFPlayerScrollDirectionUp or ZFPlayerScrollDirectionDown.
-/// When the ZFPlayerScrollViewDirection is ZFPlayerScrollViewDirectionVertical，this value can only be ZFPlayerScrollDirectionLeft or ZFPlayerScrollDirectionRight.
+/// When the ZFPlayerScrollViewDirection is ZFPlayerScrollViewDirectionHorizontal，this value can only be ZFPlayerScrollDirectionLeft or ZFPlayerScrollDirectionRight.
 @property (nonatomic, readonly) ZFPlayerScrollDirection zf_scrollDirection;
 
 /// Get the cell according to indexPath.
