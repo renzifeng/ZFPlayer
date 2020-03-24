@@ -412,9 +412,9 @@
                 if (scene.activationState == UISceneActivationStateForegroundActive) {
                     windowScene = (UIWindowScene *)scene;
                 }
-                if (!windowScene && [UIApplication sharedApplication].connectedScenes.count == 1) {
-                    windowScene = (UIWindowScene *)scene;
-                }
+            }
+            if (!windowScene && [UIApplication sharedApplication].connectedScenes.count == 1) {
+                windowScene = (UIWindowScene *)([UIApplication sharedApplication].connectedScenes.anyObject);
             }
             if (windowScene) {
                 _customWindow = [[UIWindow alloc] initWithWindowScene:windowScene];
