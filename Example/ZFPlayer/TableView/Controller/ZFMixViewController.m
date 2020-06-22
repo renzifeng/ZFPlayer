@@ -50,14 +50,14 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
     /// 播放器view露出一半时候开始播放
     self.player.playerApperaPercent = .5;
     
-    @weakify(self)
+    @zf_weakify(self)
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         [self.player stopCurrentPlayingCell];
     };
     
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {
@@ -69,7 +69,7 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
     
     /// 停止的时候找出最合适的播放(只能找到设置了tag值cell)
     self.player.zf_scrollViewDidEndScrollingCallback = ^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if (!self.player.playingIndexPath) {
             [self playTheVideoAtIndexPath:indexPath scrollAnimated:NO];
         }
@@ -80,7 +80,7 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
     /// 如果是停止后再寻找播放可以忽略这个回调
     /// 如果在滑动中就要寻找到播放的indexPath，并且开始播放，那就要这样写
     self.player.zf_playerShouldPlayInScrollView = ^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if ([indexPath compare:self.player.playingIndexPath] != NSOrderedSame) {
             [self playTheVideoAtIndexPath:indexPath scrollAnimated:NO];
         }
@@ -97,9 +97,9 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    @weakify(self)
+    @zf_weakify(self)
     [self.player zf_filterShouldPlayCellWhileScrolled:^(NSIndexPath *indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         [self playTheVideoAtIndexPath:indexPath scrollAnimated:NO];
     }];
 }
@@ -199,15 +199,15 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
     /// 到详情页
     ZFPlayerDetailViewController *detailVC = [ZFPlayerDetailViewController new];
     detailVC.player = self.player;
-    @weakify(self)
+    @zf_weakify(self)
     /// 详情页返回的回调
     detailVC.detailVCPopCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self.player addPlayerViewToCell];
     };
     /// 详情页点击播放的回调
     detailVC.detailVCPlayCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self zf_playTheVideoAtIndexPath:indexPath];
     };
     [self.navigationController pushViewController:detailVC animated:YES];

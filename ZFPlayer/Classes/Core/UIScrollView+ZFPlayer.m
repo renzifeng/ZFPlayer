@@ -180,9 +180,9 @@ Scroll to indexPath with position.
 
 - (void)_scrollViewDidStopScroll {
     self.zf_scrollDirection = ZFPlayerScrollDirectionNone;
-    @weakify(self)
+    @zf_weakify(self)
     [self zf_filterShouldPlayCellWhileScrolled:^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if (self.zf_scrollViewDidStopScrollCallback) self.zf_scrollViewDidStopScrollCallback(indexPath);
         if (self.zf_scrollViewDidEndScrollingCallback) self.zf_scrollViewDidEndScrollingCallback(indexPath);
     }];
@@ -504,9 +504,9 @@ Scroll to indexPath with position.
     __block NSIndexPath *finalIndexPath = nil;
     /// The final distance from the center line.
     __block CGFloat finalSpace = 0;
-    @weakify(self)
+    @zf_weakify(self)
     [cells enumerateObjectsUsingBlock:^(UIView *cell, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self)
+        @zf_strongify(self)
         UIView *playerView = [cell viewWithTag:self.zf_containerViewTag];
         if (!playerView || playerView.hidden || playerView.alpha <= 0.01) return;
         CGRect rect1 = [playerView convertRect:playerView.frame toView:self];
@@ -634,9 +634,9 @@ Scroll to indexPath with position.
     __block NSIndexPath *finalIndexPath = nil;
     /// The final distance from the center line.
     __block CGFloat finalSpace = 0;
-    @weakify(self)
+    @zf_weakify(self)
     [cells enumerateObjectsUsingBlock:^(UIView *cell, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self)
+        @zf_strongify(self)
         UIView *playerView = [cell viewWithTag:self.zf_containerViewTag];
         if (!playerView || playerView.hidden || playerView.alpha <= 0.01) return;
         CGRect rect1 = [playerView convertRect:playerView.frame toView:self];
@@ -722,9 +722,9 @@ Scroll to indexPath with position.
 
 - (void)zf_filterShouldPlayCellWhileScrolled:(void (^ __nullable)(NSIndexPath *indexPath))handler {
     if (!self.zf_shouldAutoPlay) return;
-    @weakify(self)
+    @zf_weakify(self)
     [self zf_filterShouldPlayCellWhileScrolling:^(NSIndexPath *indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         /// 如果当前控制器已经消失，直接return
         if (self.zf_viewControllerDisappear) return;
         if ([ZFReachabilityManager sharedManager].isReachableViaWWAN && !self.zf_WWANAutoPlay) {

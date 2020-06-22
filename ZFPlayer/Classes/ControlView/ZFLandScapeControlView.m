@@ -226,9 +226,9 @@
     if (self.player.totalTime > 0) {
         self.slider.isdragging = YES;
         if (self.sliderValueChanging) self.sliderValueChanging(value, self.slider.isForward);
-        @weakify(self)
+        @zf_weakify(self)
         [self.player seekToTime:self.player.totalTime*value completionHandler:^(BOOL finished) {
-            @strongify(self)
+            @zf_strongify(self)
             if (finished) {
                 self.slider.isdragging = NO;
                 if (self.sliderValueChanged) self.sliderValueChanged(value);

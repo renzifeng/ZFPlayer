@@ -54,9 +54,9 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 移动网络依然自动播放
     self.player.WWANAutoPlay = YES;
     
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {
@@ -67,7 +67,7 @@ static NSString *kIdentifier = @"kIdentifier";
     };
     
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         if (self.player.playingIndexPath.row < self.urls.count - 1) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.player.playingIndexPath.row+1 inSection:0];
             [self playTheVideoAtIndexPath:indexPath scrollAnimated:YES];
@@ -77,7 +77,7 @@ static NSString *kIdentifier = @"kIdentifier";
     };
     
     self.player.zf_playerShouldPlayInScrollView = ^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if (indexPath == nil) { /// 没有找到可以播放视频
             /// 显示黑色蒙版
             ZFTableViewCell *cell1 = [self.tableView cellForRowAtIndexPath:self.player.shouldPlayIndexPath];
@@ -104,7 +104,7 @@ static NSString *kIdentifier = @"kIdentifier";
     
     /// 停止的时候找出最合适的播放
     self.player.zf_scrollViewDidEndScrollingCallback = ^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if (!self.player.playingIndexPath) {
             [self playTheVideoAtIndexPath:indexPath scrollAnimated:NO];
         }
@@ -121,9 +121,9 @@ static NSString *kIdentifier = @"kIdentifier";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    @weakify(self)
+    @zf_weakify(self)
     [self.player zf_filterShouldPlayCellWhileScrolled:^(NSIndexPath *indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         [self playTheVideoAtIndexPath:indexPath scrollAnimated:NO];
     }];
 }
@@ -220,15 +220,15 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 到详情页
     ZFPlayerDetailViewController *detailVC = [ZFPlayerDetailViewController new];
     detailVC.player = self.player;
-    @weakify(self)
+    @zf_weakify(self)
     /// 详情页返回的回调
     detailVC.detailVCPopCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self.player addPlayerViewToCell];
     };
     /// 详情页点击播放的回调
     detailVC.detailVCPlayCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self zf_playTheVideoAtIndexPath:indexPath];
     };
     [self.navigationController pushViewController:detailVC animated:YES];

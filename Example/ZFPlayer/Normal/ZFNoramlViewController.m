@@ -51,9 +51,9 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     self.player.pauseWhenAppResignActive = NO;
     self.player.resumePlayRecord = YES;
     
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {
@@ -64,7 +64,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     
     /// 播放完成
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         if (!self.player.isLastAssetURL) {
             [self.player playTheNext];
             NSString *title = [NSString stringWithFormat:@"视频标题%zd",self.player.currentPlayIndex];

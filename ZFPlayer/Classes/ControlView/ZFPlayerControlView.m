@@ -188,9 +188,9 @@
 - (void)autoFadeOutControlView {
     self.controlViewAppeared = YES;
     [self cancelAutoFadeOutControlView];
-    @weakify(self)
+    @zf_weakify(self)
     self.afterBlock = dispatch_block_create(0, ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self hideControlViewWithAnimated:YES];
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.autoHiddenTimeInterval * NSEC_PER_SEC)), dispatch_get_main_queue(),self.afterBlock);
@@ -404,11 +404,11 @@
 
 /// 滑动结束手势事件
 - (void)gestureEndedPan:(ZFPlayerGestureControl *)gestureControl panDirection:(ZFPanDirection)direction panLocation:(ZFPanLocation)location {
-    @weakify(self)
+    @zf_weakify(self)
     if (direction == ZFPanDirectionH && self.sumTime >= 0 && self.player.totalTime > 0) {
         [self.player seekToTime:self.sumTime completionHandler:^(BOOL finished) {
             if (finished) {
-                @strongify(self)
+                @zf_strongify(self)
                 /// 左右滑动调节播放进度
                 [self.portraitControlView sliderChangeEnded];
                 [self.landScapeControlView sliderChangeEnded];
@@ -677,10 +677,10 @@
 
 - (ZFPortraitControlView *)portraitControlView {
     if (!_portraitControlView) {
-        @weakify(self)
+        @zf_weakify(self)
         _portraitControlView = [[ZFPortraitControlView alloc] init];
         _portraitControlView.sliderValueChanging = ^(CGFloat value, BOOL forward) {
-            @strongify(self)
+            @zf_strongify(self)
             NSString *draggedTime = [ZFUtilities convertTimeSecond:self.player.totalTime*value];
             /// 更新滑杆和时间
             [self.landScapeControlView sliderValueChanged:value currentTimeString:draggedTime];
@@ -690,7 +690,7 @@
             [self cancelAutoFadeOutControlView];
         };
         _portraitControlView.sliderValueChanged = ^(CGFloat value) {
-            @strongify(self)
+            @zf_strongify(self)
             [self.landScapeControlView sliderChangeEnded];
             self.fastProgressView.value = value;
             self.bottomPgrogress.isdragging = NO;
@@ -703,10 +703,10 @@
 
 - (ZFLandScapeControlView *)landScapeControlView {
     if (!_landScapeControlView) {
-        @weakify(self)
+        @zf_weakify(self)
         _landScapeControlView = [[ZFLandScapeControlView alloc] init];
         _landScapeControlView.sliderValueChanging = ^(CGFloat value, BOOL forward) {
-            @strongify(self)
+            @zf_strongify(self)
             NSString *draggedTime = [ZFUtilities convertTimeSecond:self.player.totalTime*value];
             /// 更新滑杆和时间
             [self.portraitControlView sliderValueChanged:value currentTimeString:draggedTime];
@@ -716,7 +716,7 @@
             [self cancelAutoFadeOutControlView];
         };
         _landScapeControlView.sliderValueChanged = ^(CGFloat value) {
-            @strongify(self)
+            @zf_strongify(self)
             [self.portraitControlView sliderChangeEnded];
             self.fastProgressView.value = value;
             self.bottomPgrogress.isdragging = NO;
@@ -811,9 +811,9 @@
 - (ZFSmallFloatControlView *)floatControlView {
     if (!_floatControlView) {
         _floatControlView = [[ZFSmallFloatControlView alloc] init];
-        @weakify(self)
+        @zf_weakify(self)
         _floatControlView.closeClickCallback = ^{
-            @strongify(self)
+            @zf_strongify(self)
             if (self.player.containerType == ZFPlayerContainerTypeCell) {
                 [self.player stopCurrentPlayingCell];
             } else if (self.player.containerType == ZFPlayerContainerTypeView) {

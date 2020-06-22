@@ -56,9 +56,9 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 0.0是刚开始显示的时候
     self.player.playerApperaPercent = 0.0;
 
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {
@@ -69,14 +69,14 @@ static NSString *kIdentifier = @"kIdentifier";
     };
     
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         [self.controlView resetControlView];
         [self.player stopCurrentPlayingCell];
     };
     
     /// 停止的时候找出最合适的播放
     self.player.zf_scrollViewDidEndScrollingCallback = ^(NSIndexPath * _Nonnull indexPath) {
-        @strongify(self)
+        @zf_strongify(self)
         if (!self.player.playingIndexPath) {
             [self playTheVideoAtIndexPath:indexPath];
         }
@@ -123,7 +123,7 @@ static NSString *kIdentifier = @"kIdentifier";
 - (void)requestData {
     self.urls = @[].mutableCopy;
     [self.activity startAnimating];
-    @weakify(self)
+    @zf_weakify(self)
     /// 模拟网络请求
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.activity stopAnimating];
@@ -147,7 +147,7 @@ static NSString *kIdentifier = @"kIdentifier";
         
         /// 找到可播放的cell
         [self.player zf_filterShouldPlayCellWhileScrolled:^(NSIndexPath *indexPath) {
-            @strongify(self)
+            @zf_strongify(self)
             [self playTheVideoAtIndexPath:indexPath];
         }];
     });
@@ -233,15 +233,15 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 到详情页
     ZFPlayerDetailViewController *detailVC = [ZFPlayerDetailViewController new];
     detailVC.player = self.player;
-    @weakify(self)
+    @zf_weakify(self)
     /// 详情页返回的回调
     detailVC.detailVCPopCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self.player addPlayerViewToCell];
     };
     /// 详情页点击播放的回调
     detailVC.detailVCPlayCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self zf_playTheVideoAtIndexPath:indexPath];
     };
     [self.navigationController pushViewController:detailVC animated:YES];

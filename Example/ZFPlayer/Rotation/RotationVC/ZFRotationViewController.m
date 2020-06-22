@@ -33,9 +33,9 @@
     /// 播放器相关
     self.player = [[ZFPlayerController alloc] initWithPlayerManager:playerManager containerView:self.containerView];
     self.player.controlView = self.controlView;
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {

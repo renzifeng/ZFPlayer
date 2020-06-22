@@ -50,9 +50,9 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 1.0是完全消失的时候
     self.player.playerDisapperaPercent = 1.0;
     
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         self.tableView.scrollsToTop = !isFullScreen;
@@ -63,7 +63,7 @@ static NSString *kIdentifier = @"kIdentifier";
     };
     
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         [self.player stopCurrentPlayingCell];
     };
 }
@@ -168,10 +168,10 @@ static NSString *kIdentifier = @"kIdentifier";
     /// 到详情页
     ZFPlayerDetailViewController *detailVC = [ZFPlayerDetailViewController new];
     detailVC.player = self.player;
-    @weakify(self)
+    @zf_weakify(self)
     /// 详情页返回的回调
     detailVC.detailVCPopCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         if (self.player.currentPlayerManager.playState == ZFPlayerPlayStatePlayStopped) {
             [self.player stopCurrentPlayingCell];
         } else {
@@ -180,7 +180,7 @@ static NSString *kIdentifier = @"kIdentifier";
     };
     /// 详情页点击播放的回调
     detailVC.detailVCPlayCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self zf_playTheVideoAtIndexPath:indexPath];
     };
     [self.navigationController pushViewController:detailVC animated:YES];

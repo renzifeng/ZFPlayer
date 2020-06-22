@@ -95,9 +95,9 @@
 
 - (void)sliderTouchEnded:(float)value {
     if (self.player.totalTime > 0) {
-        @weakify(self)
+        @zf_weakify(self)
         [self.player seekToTime:self.player.totalTime*value completionHandler:^(BOOL finished) {
-            @strongify(self)
+            @zf_strongify(self)
             if (finished) {
                 self.slider.isdragging = NO;
             }
@@ -120,9 +120,9 @@
 - (void)sliderTapped:(float)value {
     if (self.player.totalTime > 0) {
         self.slider.isdragging = YES;
-        @weakify(self)
+        @zf_weakify(self)
         [self.player seekToTime:self.player.totalTime*value completionHandler:^(BOOL finished) {
-            @strongify(self)
+            @zf_strongify(self)
             if (finished) {
                 self.slider.isdragging = NO;
                 [self.player.currentPlayerManager play];
@@ -283,9 +283,9 @@
 - (void)autoFadeOutControlView {
     self.controlViewAppeared = YES;
     [self cancelAutoFadeOutControlView];
-    @weakify(self)
+    @zf_weakify(self)
     self.afterBlock = dispatch_block_create(0, ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self hideControlViewWithAnimated:YES];
     });
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.autoHiddenTimeInterval * NSEC_PER_SEC)), dispatch_get_main_queue(),self.afterBlock);

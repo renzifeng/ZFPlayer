@@ -28,9 +28,9 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     kAPPDelegate.allowOrentitaionRotation = YES;
-    @weakify(self)
+    @zf_weakify(self)
     self.controlView.backBtnClickCallback = ^{
-        @strongify(self)
+        @zf_strongify(self)
         [self.player enterFullScreen:NO animated:NO];
         [self.player stop];
         [self.navigationController popViewControllerAnimated:NO];

@@ -44,9 +44,9 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     /// 设置退到后台继续播放
     self.player.pauseWhenAppResignActive = NO;
     
-    @weakify(self)
+    @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         kAPPDelegate.allowOrentitaionRotation = isFullScreen;
         [self setNeedsStatusBarAppearanceUpdate];
         if (!isFullScreen) {
@@ -57,7 +57,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     
     /// 播放完成
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         [self.player.currentPlayerManager replay];
         [self.player playTheNext];
         if (!self.player.isLastAssetURL) {
@@ -78,11 +78,11 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     self.adPlayer.assetURL = [NSURL URLWithString:@"https://fcvideo.cdn.bcebos.com/smart/f103c4fc97d2b2e63b15d2d5999d6477.mp4"];
     self.adPlayer.exitFullScreenWhenStop = NO;
     self.adPlayer.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {
-        @strongify(self)
+        @zf_strongify(self)
         [self setNeedsStatusBarAppearanceUpdate];
     };
     self.adPlayer.playerDidToEnd = ^(id  _Nonnull asset) {
-        @strongify(self)
+        @zf_strongify(self)
         [self.adPlayer stopCurrentPlayingView];
         self.player.currentPlayerManager.shouldAutoPlay = YES;
         [self.player.currentPlayerManager play];
@@ -149,9 +149,9 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
 - (ZFADControlView *)adControlView {
     if (!_adControlView) {
         _adControlView = [[ZFADControlView alloc] init];
-        @weakify(self)
+        @zf_weakify(self)
         _adControlView.skipCallback = ^{
-            @strongify(self)
+            @zf_strongify(self)
             [self.adPlayer stopCurrentPlayingView];
             self.player.currentPlayerManager.shouldAutoPlay = YES;
             [self.player.currentPlayerManager play];
@@ -159,7 +159,7 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
         };
         
         _adControlView.fullScreenCallback = ^{
-            @strongify(self)
+            @zf_strongify(self)
             if (self.player.isFullScreen) {
                 [self.player enterFullScreen:NO animated:YES];
             } else {
