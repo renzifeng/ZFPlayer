@@ -56,5 +56,14 @@ Pod::Spec.new do |s|
             'ARCHS[sdk=iphonesimulator*]' => '$(ARCHS_STANDARD_64_BIT)'
         }
     end
+    s.subspec 'TXLivePlayer' do |TXLivePlayer|
+        ksyMediaPlayer.source_files = 'ZFPlayer/Classes/TXLivePlayer/*.{h,m}'
+        ksyMediaPlayer.public_header_files = 'ZFPlayer/Classes/TXLivePlayer/*.h'
+        ksyMediaPlayer.dependency 'ZFPlayer/Core'
+        ksyMediaPlayer.dependency 'TXLiteAVSDK_Professional'
+        ksyMediaPlayer.pod_target_xcconfig = {
+            'ARCHS[sdk=iphonesimulator*]' => '$(ARCHS_STANDARD_64_BIT)'
+        }
+    end
     
 end
