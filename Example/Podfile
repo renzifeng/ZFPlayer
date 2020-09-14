@@ -1,9 +1,8 @@
-source 'https://github.com/CocoaPods/Specs.git'
 platform:ios, '8.0'
 
 target 'ZFPlayer_Example' do
     pod 'FDFullscreenPopGesture'
     pod 'MJRefresh'
-    pod 'ZFPlayer', :path => '../'
+    pod 'ZFPlayer', :path => '../', :subspecs => ["AVPlayer", "ijkplayer", "ControlView"]
 
 end
