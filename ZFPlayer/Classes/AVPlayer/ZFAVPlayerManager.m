@@ -169,7 +169,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     [_playerItemKVO safelyRemoveAllObservers];
     self.loadState = ZFPlayerLoadStateUnknown;
     self.playState = ZFPlayerPlayStatePlayStopped;
-    if (self.player.rate != 0) [self.player pause];
+    if (self.player.rate != 0) [self pause];
     [_playerItem cancelPendingSeeks];
     [_asset cancelLoading];
     [self.player removeTimeObserver:_timeObserver];
@@ -267,6 +267,12 @@ static NSString *const kPresentationSize         = @"presentationSize";
     _asset = [AVURLAsset URLAssetWithURL:self.assetURL options:self.requestHeader];
     _playerItem = [AVPlayerItem playerItemWithAsset:_asset];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
+    
+    if (@available(iOS 10.0, *)) {
+        //关闭AVPlayer默认的缓冲延迟播放策略，提高首屏播放速度
+        _player.automaticallyWaitsToMinimizeStalling = NO;
+    }
+    
     _imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];
 
     [self enableAudioTracks:YES inPlayerItem:_playerItem];
@@ -305,7 +311,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
     self.isBuffering = YES;
     
     // 需要先暂停一小会之后再播放，否则网络状况不好的时候时间在走，声音播放不出来
-    [self.player pause];
+    [self pause];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 如果此时用户已经暂停了，则不再需要开启播放了
         if (!self.isPlaying && self.loadState == ZFPlayerLoadStateStalled) {
@@ -373,7 +379,7 @@ static NSString *const kPresentationSize         = @"presentationSize";
                     if (self.playerReadyToPlay) self.playerReadyToPlay(self, self.assetURL);
                 }
                 if (self.seekTime) {
-                    if (self.shouldAutoPlay) [self.player pause];
+                    if (self.shouldAutoPlay) [self pause];
                     @zf_weakify(self)
                     [self seekToTime:self.seekTime completionHandler:^(BOOL finished) {
                         @zf_strongify(self)
