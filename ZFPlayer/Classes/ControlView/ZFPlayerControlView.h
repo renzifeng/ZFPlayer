@@ -62,9 +62,6 @@
 /// 底部播放进度
 @property (nonatomic, strong, readonly) ZFSliderView *bottomPgrogress;
 
-/// 封面图
-@property (nonatomic, strong, readonly) UIImageView *coverImageView;
-
 /// 高斯模糊的背景图
 @property (nonatomic, strong, readonly) UIImageView *bgImgView;
 
