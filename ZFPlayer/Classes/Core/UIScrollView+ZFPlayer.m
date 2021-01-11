@@ -441,18 +441,14 @@ Scroll to indexPath with position.
     } else if ([self _isCollectionView]) {
         UICollectionView *collectionView = (UICollectionView *)self;
         visiableCells = [collectionView visibleCells];
-        NSArray *sortedIndexPaths = [collectionView.indexPathsForVisibleItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [obj1 compare:obj2];
-        }];
-        
         visiableCells = [visiableCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSIndexPath *path1 = (NSIndexPath *)[collectionView indexPathForCell:obj1];
             NSIndexPath *path2 = (NSIndexPath *)[collectionView indexPathForCell:obj2];
             return [path1 compare:path2];
         }];
         
-        // First visible cell indexPath
-        indexPath = sortedIndexPaths.firstObject;
+        CGPoint center = CGPointMake(collectionView.frame.size.width / 2, collectionView.contentOffset.y + (collectionView.frame.size.height / 2));
+        indexPath = [collectionView indexPathForItemAtPoint:center];
         if ((self.contentOffset.y <= 0 || self.contentOffset.y + self.frame.size.height >= self.contentSize.height) && (!self.zf_playingIndexPath || [indexPath compare:self.zf_playingIndexPath] == NSOrderedSame)) {
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             UIView *playerView = [cell viewWithTag:self.zf_containerViewTag];
@@ -545,18 +541,14 @@ Scroll to indexPath with position.
     } else if ([self _isCollectionView]) {
         UICollectionView *collectionView = (UICollectionView *)self;
         visiableCells = [collectionView visibleCells];
-        NSArray *sortedIndexPaths = [collectionView.indexPathsForVisibleItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [obj1 compare:obj2];
-        }];
-        
         visiableCells = [visiableCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSIndexPath *path1 = (NSIndexPath *)[collectionView indexPathForCell:obj1];
             NSIndexPath *path2 = (NSIndexPath *)[collectionView indexPathForCell:obj2];
             return [path1 compare:path2];
         }];
         
-        // First visible cell indexPath
-        indexPath = sortedIndexPaths.firstObject;
+        CGPoint center = CGPointMake(collectionView.contentOffset.x + (collectionView.frame.size.width / 2), collectionView.frame.size.height / 2);
+        indexPath = [collectionView indexPathForItemAtPoint:center];
         if ((self.contentOffset.x <= 0 || self.contentOffset.x + self.frame.size.width >= self.contentSize.width) && (!self.zf_playingIndexPath || [indexPath compare:self.zf_playingIndexPath] == NSOrderedSame)) {
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             UIView *playerView = [cell viewWithTag:self.zf_containerViewTag];
