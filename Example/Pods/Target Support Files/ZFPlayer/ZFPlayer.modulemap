@@ -1,6 +1,0 @@
-framework module ZFPlayer {
-  umbrella header "ZFPlayer-umbrella.h"
-
-  export *
-  module * { export * }
-}
