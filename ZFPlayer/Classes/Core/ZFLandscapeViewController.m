@@ -89,7 +89,6 @@
         [self.delegate ls_didRotateFromOrientation:self.currentOrientation];
         self.rotating = NO;
     }];
-    
 }
 
 - (BOOL)isFullscreen {
