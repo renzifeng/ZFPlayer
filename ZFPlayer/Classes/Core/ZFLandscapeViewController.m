@@ -27,7 +27,7 @@
 @interface ZFLandscapeViewController ()
 
 @property (nonatomic, assign) UIInterfaceOrientation currentOrientation;
-@property (nonatomic, getter=isRotating) BOOL rotating;
+//@property (nonatomic, getter=isRotating) BOOL rotating;
 
 @end
 
