@@ -451,9 +451,10 @@ Scroll to indexPath with position.
             NSIndexPath *path2 = (NSIndexPath *)[collectionView indexPathForCell:obj2];
             return [path1 compare:path2];
         }];
+        BOOL isLast = self.contentOffset.y + self.frame.size.height >= self.contentSize.height;
         
         // First visible cell indexPath
-        indexPath = sortedIndexPaths.firstObject;
+        indexPath = isLast ? sortedIndexPaths.lastObject: sortedIndexPaths.firstObject;
         if ((self.contentOffset.y <= 0 || isLast) && (!self.zf_playingIndexPath || [indexPath compare:self.zf_playingIndexPath] == NSOrderedSame)) {
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             UIView *playerView = [cell viewWithTag:self.zf_containerViewTag];
