@@ -27,6 +27,7 @@
 
 /// iPhoneX  iPhoneXS  iPhoneXS Max  iPhoneXR 机型判断
 #define iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? ((NSInteger)(([[UIScreen mainScreen] currentMode].size.height/[[UIScreen mainScreen] currentMode].size.width)*100) == 216) : NO)
+#define BottomSafeHeight iPhoneX ? 34 : 0
 
 #define ZFPlayer_Image(file)                 [ZFUtilities imageNamed:file]
 

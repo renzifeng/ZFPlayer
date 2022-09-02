@@ -145,7 +145,7 @@
         self.playOrPauseBtn.alpha = 0;
     } else {
         self.topToolView.zf_y = 0;
-        self.bottomToolView.zf_y = self.zf_height - self.bottomToolView.zf_height;
+        self.bottomToolView.zf_y = self.zf_height - self.bottomToolView.zf_height - (iPhoneX && (self.zf_height > ZFPlayerScreenHeight - BottomSafeHeight)) ? (BottomSafeHeight - ZFPlayerScreenHeight + self.zf_height) : 0;
         self.playOrPauseBtn.alpha = 1;
     }
 }
@@ -238,7 +238,7 @@
     self.bottomToolView.alpha        = 1;
     self.isShow                      = YES;
     self.topToolView.zf_y            = 0;
-    self.bottomToolView.zf_y         = self.zf_height - self.bottomToolView.zf_height;
+    self.bottomToolView.zf_y         = self.zf_height - self.bottomToolView.zf_height - (iPhoneX && (self.zf_height > ZFPlayerScreenHeight - BottomSafeHeight)) ? (BottomSafeHeight - ZFPlayerScreenHeight + self.zf_height) : 0;
     self.playOrPauseBtn.alpha        = 1;
     self.player.statusBarHidden      = NO;
 }
