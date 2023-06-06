@@ -44,9 +44,9 @@ static NSString *kDouYinIdentifier = @"douYinIdentifier";
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:kPlayerViewTag];
     self.player.controlView = self.controlView;
     /// 1.0是消失100%时候
-    self.player.playerDisapperaPercent = 0.8;
+    self.player.playerDisappearPercent = 0.8;
     /// 播放器view露出一半时候开始播放
-    self.player.playerApperaPercent = .5;
+    self.player.playerAppearPercent = .5;
     
     @zf_weakify(self)
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {

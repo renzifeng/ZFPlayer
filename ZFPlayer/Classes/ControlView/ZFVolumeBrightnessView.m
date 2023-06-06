@@ -112,7 +112,7 @@
         } else {
             playerImage = ZFPlayer_Image(@"ZFPlayer_volume_high");
         }
-    } else if (volumeBrightnessType == ZFVolumeBrightnessTypeumeBrightness) {
+    } else if (volumeBrightnessType == ZFVolumeBrightnessTypeBrightness) {
         if (progress >= 0 && progress < 0.5) {
             playerImage = ZFPlayer_Image(@"ZFPlayer_brightness_low");
         } else {

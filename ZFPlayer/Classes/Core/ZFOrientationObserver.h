@@ -116,7 +116,7 @@ typedef NS_OPTIONS(NSUInteger, ZFDisablePortraitGestureTypes) {
 /// default is  UIStatusBarStyleLightContent.
 @property (nonatomic, assign) UIStatusBarStyle fullScreenStatusBarStyle;
 
-/// defalut is UIStatusBarAnimationSlide.
+/// default is UIStatusBarAnimationSlide.
 @property (nonatomic, assign) UIStatusBarAnimation fullScreenStatusBarAnimation;
 
 @property (nonatomic, assign) CGSize presentationSize;

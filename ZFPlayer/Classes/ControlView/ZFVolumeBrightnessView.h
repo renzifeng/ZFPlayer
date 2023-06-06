@@ -26,7 +26,7 @@
 
 typedef NS_ENUM(NSInteger, ZFVolumeBrightnessType) {
     ZFVolumeBrightnessTypeVolume,       // volume
-    ZFVolumeBrightnessTypeumeBrightness // brightness
+    ZFVolumeBrightnessTypeBrightness // brightness
 };
 
 @interface ZFVolumeBrightnessView : UIView

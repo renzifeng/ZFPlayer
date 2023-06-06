@@ -231,15 +231,15 @@ Scroll to indexPath with position.
     /// The height of the content area.
     CGFloat contentInsetHeight = CGRectGetMaxY(self.frame) - CGRectGetMinY(self.frame);
     
-    CGFloat playerDisapperaPercent = 0;
-    CGFloat playerApperaPercent = 0;
+    CGFloat playerDisappearPercent = 0;
+    CGFloat playerAppearPercent = 0;
     
     if (self.zf_scrollDirection == ZFPlayerScrollDirectionUp) { /// Scroll up
         /// Player is disappearing.
         if (topSpacing <= 0 && CGRectGetHeight(rect) != 0) {
-            playerDisapperaPercent = -topSpacing/CGRectGetHeight(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisappearPercent = -topSpacing/CGRectGetHeight(rect);
+            if (playerDisappearPercent > 1.0) playerDisappearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisappearPercent);
         }
         
         /// Top area
@@ -252,9 +252,9 @@ Scroll to indexPath with position.
         } else if (topSpacing > 0 && topSpacing <= contentInsetHeight) {
             /// Player is appearing.
             if (CGRectGetHeight(rect) != 0) {
-                playerApperaPercent = -(topSpacing-contentInsetHeight)/CGRectGetHeight(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(topSpacing-contentInsetHeight)/CGRectGetHeight(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (topSpacing <= contentInsetHeight && topSpacing > contentInsetHeight-CGRectGetHeight(rect)/2) {
@@ -269,9 +269,9 @@ Scroll to indexPath with position.
     } else if (self.zf_scrollDirection == ZFPlayerScrollDirectionDown) { /// Scroll Down
         /// Player is disappearing.
         if (bottomSpacing <= 0 && CGRectGetHeight(rect) != 0) {
-            playerDisapperaPercent = -bottomSpacing/CGRectGetHeight(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisappearPercent = -bottomSpacing/CGRectGetHeight(rect);
+            if (playerDisappearPercent > 1.0) playerDisappearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisappearPercent);
         }
         
         /// Bottom area
@@ -284,9 +284,9 @@ Scroll to indexPath with position.
         } else if (bottomSpacing > 0 && bottomSpacing <= contentInsetHeight) {
             /// Player is appearing.
             if (CGRectGetHeight(rect) != 0) {
-                playerApperaPercent = -(bottomSpacing-contentInsetHeight)/CGRectGetHeight(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(bottomSpacing-contentInsetHeight)/CGRectGetHeight(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (bottomSpacing <= contentInsetHeight && bottomSpacing > contentInsetHeight-CGRectGetHeight(rect)/2) {
@@ -335,15 +335,15 @@ Scroll to indexPath with position.
     /// The height of the content area.
     CGFloat contentInsetWidth = CGRectGetMaxX(self.frame) - CGRectGetMinX(self.frame);
     
-    CGFloat playerDisapperaPercent = 0;
-    CGFloat playerApperaPercent = 0;
+    CGFloat playerDisappearPercent = 0;
+    CGFloat playerAppearPercent = 0;
     
     if (self.zf_scrollDirection == ZFPlayerScrollDirectionLeft) { /// Scroll left
         /// Player is disappearing.
         if (leftSpacing <= 0 && CGRectGetWidth(rect) != 0) {
-            playerDisapperaPercent = -leftSpacing/CGRectGetWidth(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisappearPercent = -leftSpacing/CGRectGetWidth(rect);
+            if (playerDisappearPercent > 1.0) playerDisappearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisappearPercent);
         }
         
         /// Top area
@@ -356,9 +356,9 @@ Scroll to indexPath with position.
         } else if (leftSpacing > 0 && leftSpacing <= contentInsetWidth) {
             /// Player is appearing.
             if (CGRectGetWidth(rect) != 0) {
-                playerApperaPercent = -(leftSpacing-contentInsetWidth)/CGRectGetWidth(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(leftSpacing-contentInsetWidth)/CGRectGetWidth(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (leftSpacing <= contentInsetWidth && leftSpacing > contentInsetWidth-CGRectGetWidth(rect)/2) {
@@ -373,9 +373,9 @@ Scroll to indexPath with position.
     } else if (self.zf_scrollDirection == ZFPlayerScrollDirectionRight) { /// Scroll right
         /// Player is disappearing.
         if (rightSpacing <= 0 && CGRectGetWidth(rect) != 0) {
-            playerDisapperaPercent = -rightSpacing/CGRectGetWidth(rect);
-            if (playerDisapperaPercent > 1.0) playerDisapperaPercent = 1.0;
-            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisapperaPercent);
+            playerDisappearPercent = -rightSpacing/CGRectGetWidth(rect);
+            if (playerDisappearPercent > 1.0) playerDisappearPercent = 1.0;
+            if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(self.zf_playingIndexPath, playerDisappearPercent);
         }
         
         /// Bottom area
@@ -388,9 +388,9 @@ Scroll to indexPath with position.
         } else if (rightSpacing > 0 && rightSpacing <= contentInsetWidth) {
             /// Player is appearing.
             if (CGRectGetWidth(rect) != 0) {
-                playerApperaPercent = -(rightSpacing-contentInsetWidth)/CGRectGetWidth(rect);
-                if (playerApperaPercent > 1.0) playerApperaPercent = 1.0;
-                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerApperaPercent);
+                playerAppearPercent = -(rightSpacing-contentInsetWidth)/CGRectGetWidth(rect);
+                if (playerAppearPercent > 1.0) playerAppearPercent = 1.0;
+                if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(self.zf_playingIndexPath, playerAppearPercent);
             }
             /// In visable area
             if (rightSpacing <= contentInsetWidth && rightSpacing > contentInsetWidth-CGRectGetWidth(rect)/2) {
@@ -421,12 +421,12 @@ Scroll to indexPath with position.
             return;
         }
     }
-    NSArray *visiableCells = nil;
+    NSArray *visibleCells = nil;
     NSIndexPath *indexPath = nil;
     BOOL isLast = self.contentOffset.y + self.frame.size.height >= self.contentSize.height;
     if ([self _isTableView]) {
         UITableView *tableView = (UITableView *)self;
-        visiableCells = [tableView visibleCells];
+        visibleCells = [tableView visibleCells];
         // First visible cell indexPath
         indexPath = tableView.indexPathsForVisibleRows.firstObject;
         if ((self.contentOffset.y <= 0 || isLast) && (!self.zf_playingIndexPath || [indexPath compare:self.zf_playingIndexPath] == NSOrderedSame)) {
@@ -441,12 +441,12 @@ Scroll to indexPath with position.
         }
     } else if ([self _isCollectionView]) {
         UICollectionView *collectionView = (UICollectionView *)self;
-        visiableCells = [collectionView visibleCells];
+        visibleCells = [collectionView visibleCells];
         NSArray *sortedIndexPaths = [collectionView.indexPathsForVisibleItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1 compare:obj2];
         }];
         
-        visiableCells = [visiableCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        visibleCells = [visibleCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSIndexPath *path1 = (NSIndexPath *)[collectionView indexPathForCell:obj1];
             NSIndexPath *path2 = (NSIndexPath *)[collectionView indexPathForCell:obj2];
             return [path1 compare:path2];
@@ -468,9 +468,9 @@ Scroll to indexPath with position.
     
     NSArray *cells = nil;
     if (self.zf_scrollDirection == ZFPlayerScrollDirectionUp) {
-        cells = visiableCells;
+        cells = visibleCells;
     } else {
-        cells = [visiableCells reverseObjectEnumerator].allObjects;
+        cells = [visibleCells reverseObjectEnumerator].allObjects;
     }
     
     /// Mid line.
@@ -494,7 +494,7 @@ Scroll to indexPath with position.
         NSIndexPath *indexPath = [self zf_getIndexPathForCell:cell];
         
         /// Play when the video playback section is visible.
-        if ((topSpacing >= -(1 - self.zf_playerApperaPercent) * CGRectGetHeight(rect)) && (bottomSpacing >= -(1 - self.zf_playerApperaPercent) * CGRectGetHeight(rect))) {
+        if ((topSpacing >= -(1 - self.zf_playerAppearPercent) * CGRectGetHeight(rect)) && (bottomSpacing >= -(1 - self.zf_playerAppearPercent) * CGRectGetHeight(rect))) {
             if (!finalIndexPath || centerSpacing < finalSpace) {
                 finalIndexPath = indexPath;
                 finalSpace = centerSpacing;
@@ -526,12 +526,12 @@ Scroll to indexPath with position.
         }
     }
     
-    NSArray *visiableCells = nil;
+    NSArray *visibleCells = nil;
     NSIndexPath *indexPath = nil;
     BOOL isLast = self.contentOffset.x + self.frame.size.width >= self.contentSize.width;
     if ([self _isTableView]) {
         UITableView *tableView = (UITableView *)self;
-        visiableCells = [tableView visibleCells];
+        visibleCells = [tableView visibleCells];
         // First visible cell indexPath
         indexPath = tableView.indexPathsForVisibleRows.firstObject;
         if ((self.contentOffset.x <= 0 || isLast) && (!self.zf_playingIndexPath || [indexPath compare:self.zf_playingIndexPath] == NSOrderedSame)) {
@@ -546,12 +546,12 @@ Scroll to indexPath with position.
         }
     } else if ([self _isCollectionView]) {
         UICollectionView *collectionView = (UICollectionView *)self;
-        visiableCells = [collectionView visibleCells];
+        visibleCells = [collectionView visibleCells];
         NSArray *sortedIndexPaths = [collectionView.indexPathsForVisibleItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [obj1 compare:obj2];
         }];
         
-        visiableCells = [visiableCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        visibleCells = [visibleCells sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSIndexPath *path1 = (NSIndexPath *)[collectionView indexPathForCell:obj1];
             NSIndexPath *path2 = (NSIndexPath *)[collectionView indexPathForCell:obj2];
             return [path1 compare:path2];
@@ -573,9 +573,9 @@ Scroll to indexPath with position.
     
     NSArray *cells = nil;
     if (self.zf_scrollDirection == ZFPlayerScrollDirectionUp) {
-        cells = visiableCells;
+        cells = visibleCells;
     } else {
-        cells = [visiableCells reverseObjectEnumerator].allObjects;
+        cells = [visibleCells reverseObjectEnumerator].allObjects;
     }
     
     /// Mid line.
@@ -599,7 +599,7 @@ Scroll to indexPath with position.
         NSIndexPath *indexPath = [self zf_getIndexPathForCell:cell];
         
         /// Play when the video playback section is visible.
-        if ((leftSpacing >= -(1 - self.zf_playerApperaPercent) * CGRectGetWidth(rect)) && (rightSpacing >= -(1 - self.zf_playerApperaPercent) * CGRectGetWidth(rect))) {
+        if ((leftSpacing >= -(1 - self.zf_playerAppearPercent) * CGRectGetWidth(rect)) && (rightSpacing >= -(1 - self.zf_playerAppearPercent) * CGRectGetWidth(rect))) {
             if (!finalIndexPath || centerSpacing < finalSpace) {
                 finalIndexPath = indexPath;
                 finalSpace = centerSpacing;
@@ -725,11 +725,11 @@ Scroll to indexPath with position.
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (CGFloat)zf_playerApperaPercent {
+- (CGFloat)zf_playerAppearPercent {
     return [objc_getAssociatedObject(self, _cmd) floatValue];
 }
 
-- (CGFloat)zf_playerDisapperaPercent {
+- (CGFloat)zf_playerDisappearPercent {
     return [objc_getAssociatedObject(self, _cmd) floatValue];
 }
 
@@ -817,12 +817,12 @@ Scroll to indexPath with position.
     objc_setAssociatedObject(self, @selector(zf_playerShouldPlayInScrollView), zf_playerShouldPlayInScrollView, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (void)setZf_playerApperaPercent:(CGFloat)zf_playerApperaPercent {
-    objc_setAssociatedObject(self, @selector(zf_playerApperaPercent), @(zf_playerApperaPercent), OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setZf_playerAppearPercent:(CGFloat)zf_playerAppearPercent {
+    objc_setAssociatedObject(self, @selector(zf_playerAppearPercent), @(zf_playerAppearPercent), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (void)setZf_playerDisapperaPercent:(CGFloat)zf_playerDisapperaPercent {
-    objc_setAssociatedObject(self, @selector(zf_playerDisapperaPercent), @(zf_playerDisapperaPercent), OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setZf_playerDisappearPercent:(CGFloat)zf_playerDisappearPercent {
+    objc_setAssociatedObject(self, @selector(zf_playerDisappearPercent), @(zf_playerDisappearPercent), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (void)setZf_viewControllerDisappear:(BOOL)zf_viewControllerDisappear {

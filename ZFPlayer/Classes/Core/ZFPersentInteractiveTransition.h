@@ -28,7 +28,7 @@
 
 @interface ZFPersentInteractiveTransition : UIPercentDrivenInteractiveTransition
 
-@property (nonatomic, weak) id<ZFPortraitOrientationDelegate> delagate;
+@property (nonatomic, weak) id<ZFPortraitOrientationDelegate> delegate;
 
 @property (nonatomic, assign) BOOL interation;
 

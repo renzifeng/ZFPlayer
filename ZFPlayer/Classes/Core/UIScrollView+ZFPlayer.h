@@ -138,10 +138,10 @@ Scroll to indexPath with position.
 @interface UIScrollView (ZFPlayerCannotCalled)
 
 /// The block invoked When the player appearing.
-@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerApperaPercent);
+@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerAppearPercent);
 
 /// The block invoked When the player disappearing.
-@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisapperaPercent);
+@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisappearPercent);
 
 /// The block invoked When the player will appeared.
 @property (nonatomic, copy, nullable) void(^zf_playerWillAppearInScrollView)(NSIndexPath *indexPath);
@@ -167,16 +167,16 @@ Scroll to indexPath with position.
 /// The current player scroll slides off the screen percent.
 /// the property used when the `stopWhileNotVisible` is YES, stop the current playing player.
 /// the property used when the `stopWhileNotVisible` is NO, the current playing player add to small container view.
-/// 0.0~1.0, defalut is 0.5.
+/// 0.0~1.0, default is 0.5.
 /// 0.0 is the player will disappear.
 /// 1.0 is the player did disappear.
-@property (nonatomic) CGFloat zf_playerDisapperaPercent;
+@property (nonatomic) CGFloat zf_playerDisappearPercent;
 
 /// The current player scroll to the screen percent to play the video.
-/// 0.0~1.0, defalut is 0.0.
+/// 0.0~1.0, default is 0.0.
 /// 0.0 is the player will appear.
 /// 1.0 is the player did appear.
-@property (nonatomic) CGFloat zf_playerApperaPercent;
+@property (nonatomic) CGFloat zf_playerAppearPercent;
 
 /// The current player controller is disappear, not dealloc
 @property (nonatomic) BOOL zf_viewControllerDisappear;
@@ -184,7 +184,7 @@ Scroll to indexPath with position.
 /// Has stopped playing
 @property (nonatomic, assign) BOOL zf_stopPlay;
 
-/// The currently playing cell stop playing when the cell has out off the screen，defalut is YES.
+/// The currently playing cell stop playing when the cell has out off the screen，default is YES.
 @property (nonatomic, assign) BOOL zf_stopWhileNotVisible;
 
 /// The indexPath is playing.
@@ -202,10 +202,10 @@ Scroll to indexPath with position.
 /// The view tag that the player display in scrollView.
 @property (nonatomic) NSInteger zf_containerViewTag;
 
-/// The video contrainerView in normal model.
+/// The video containerView in normal model.
 @property (nonatomic, strong) UIView *zf_containerView;
 
-/// The video contrainerView type.
+/// The video containerView type.
 @property (nonatomic, assign) ZFPlayerContainerType zf_containerType;
 
 /// Filter the cell that should be played when the scroll is stopped (to play when the scroll is stopped).

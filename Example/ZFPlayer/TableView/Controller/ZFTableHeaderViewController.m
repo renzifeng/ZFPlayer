@@ -46,8 +46,8 @@ static NSString *kIdentifier = @"kIdentifier";
     ZFAVPlayerManager *playerManager = [[ZFAVPlayerManager alloc] init];
     /// player的tag值必须在cell里设置
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerView:self.headerView.coverImageView];
-    self.player.playerDisapperaPercent = 1.0;
-    self.player.playerApperaPercent = 0.0;
+    self.player.playerDisappearPercent = 1.0;
+    self.player.playerAppearPercent = 0.0;
     self.player.stopWhileNotVisible = NO;
     CGFloat margin = 20;
     CGFloat w = ZFPlayer_ScreenWidth/2;

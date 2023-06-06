@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZFPlayerController : NSObject
 
-/// The video contrainerView in normal model.
+/// The video containerView in normal model.
 @property (nonatomic, weak, nullable) UIView *containerView;
 
 /// The currentPlayerManager must conform `ZFPlayerMediaPlayback` protocol.
@@ -290,7 +290,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Whether allow the video orientation rotate.
 /// default is YES.
-@property (nonatomic) BOOL allowOrentitaionRotation;
+@property (nonatomic) BOOL allowOrientationRotation;
 
 /// When ZFFullScreenMode is ZFFullScreenModeLandscape the orientation is LandscapeLeft or LandscapeRight, this value is YES.
 /// When ZFFullScreenMode is ZFFullScreenModePortrait, while the player fullSceen this value is YES.
@@ -311,7 +311,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// default is  UIStatusBarStyleLightContent.
 @property (nonatomic, assign) UIStatusBarStyle fullScreenStatusBarStyle;
 
-/// defalut is UIStatusBarAnimationSlide.
+/// default is UIStatusBarAnimationSlide.
 @property (nonatomic, assign) UIStatusBarAnimation fullScreenStatusBarAnimation;
 
 /// The fullscreen statusbar hidden.
@@ -410,35 +410,35 @@ NS_ASSUME_NONNULL_BEGIN
 /// The view tag that the player display in scrollView.
 @property (nonatomic, readonly) NSInteger containerViewTag;
 
-/// The current playing cell stop playing when the cell has out off the screen，defalut is YES.
+/// The current playing cell stop playing when the cell has out off the screen，default is YES.
 @property (nonatomic) BOOL stopWhileNotVisible;
 
 /**
  The current player scroll slides off the screen percent.
  the property used when the `stopWhileNotVisible` is YES, stop the current playing player.
  the property used when the `stopWhileNotVisible` is NO, the current playing player add to small container view.
- The range is 0.0~1.0, defalut is 0.5.
+ The range is 0.0~1.0, default is 0.5.
  0.0 is the player will disappear.
  1.0 is the player did disappear.
  */
-@property (nonatomic) CGFloat playerDisapperaPercent;
+@property (nonatomic) CGFloat playerDisappearPercent;
 
 /**
  The current player scroll to the screen percent to play the video.
- The range is 0.0~1.0, defalut is 0.0.
+ The range is 0.0~1.0, default is 0.0.
  0.0 is the player will appear.
  1.0 is the player did appear.
  */
-@property (nonatomic) CGFloat playerApperaPercent;
+@property (nonatomic) CGFloat playerAppearPercent;
 
 /// If tableView or collectionView has more sections, use `sectionAssetURLs`.
 @property (nonatomic, copy, nullable) NSArray <NSArray <NSURL *>*>*sectionAssetURLs;
 
 /// The block invoked When the player appearing.
-@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerApperaPercent);
+@property (nonatomic, copy, nullable) void(^zf_playerAppearingInScrollView)(NSIndexPath *indexPath, CGFloat playerAppearPercent);
 
 /// The block invoked When the player disappearing.
-@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisapperaPercent);
+@property (nonatomic, copy, nullable) void(^zf_playerDisappearingInScrollView)(NSIndexPath *indexPath, CGFloat playerDisappearPercent);
 
 /// The block invoked When the player will appeared.
 @property (nonatomic, copy, nullable) void(^zf_playerWillAppearInScrollView)(NSIndexPath *indexPath);
@@ -465,7 +465,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)zf_filterShouldPlayCellWhileScrolling:(void (^ __nullable)(NSIndexPath *indexPath))handler;
 
 /**
- Play the indexPath of url without scroll postion,  while the `assetURLs` or `sectionAssetURLs` is not NULL.
+ Play the indexPath of url without scroll position,  while the `assetURLs` or `sectionAssetURLs` is not NULL.
  
  @param indexPath Play the indexPath of url.
  */
@@ -483,7 +483,7 @@ NS_ASSUME_NONNULL_BEGIN
                 animated:(BOOL)animated;
 
 /**
- Play the indexPath of url with scroll postion, while the `assetURLs` or `sectionAssetURLs` is not NULL.
+ Play the indexPath of url with scroll position, while the `assetURLs` or `sectionAssetURLs` is not NULL.
  
  @param indexPath Play the indexPath of url.
  @param scrollPosition scroll position.
@@ -497,7 +497,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- Play the indexPath of url with scroll postion.
+ Play the indexPath of url with scroll position.
  
  @param indexPath Play the indexPath of url
  @param assetURL The player URL.
@@ -506,7 +506,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- Play the indexPath of url with scroll postion.
+ Play the indexPath of url with scroll position.
  
  @param indexPath Play the indexPath of url
  @param assetURL The player URL.
@@ -519,7 +519,7 @@ NS_ASSUME_NONNULL_BEGIN
                 animated:(BOOL)animated;
 
 /**
- Play the indexPath of url with scroll postion.
+ Play the indexPath of url with scroll position.
  
  @param indexPath Play the indexPath of url
  @param assetURL The player URL.
@@ -548,7 +548,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param containerView The playerView containerView.
  */
-- (void)updateNoramlPlayerWithContainerView:(UIView *)containerView __attribute__((deprecated("use `addPlayerViewToContainerView:` instead.")));
+- (void)updateNormalPlayerWithContainerView:(UIView *)containerView __attribute__((deprecated("use `addPlayerViewToContainerView:` instead.")));
 
 /**
  Play the indexPath of url ,while the `assetURLs` or `sectionAssetURLs` is not NULL.
@@ -559,7 +559,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)playTheIndexPath:(NSIndexPath *)indexPath scrollToTop:(BOOL)scrollToTop  __attribute__((deprecated("use `playTheIndexPath:scrollPosition:animated:` instead.")));
 
 /**
- Play the indexPath of url with scroll postion.
+ Play the indexPath of url with scroll position.
  
  @param indexPath Play the indexPath of url
  @param assetURL The player URL.

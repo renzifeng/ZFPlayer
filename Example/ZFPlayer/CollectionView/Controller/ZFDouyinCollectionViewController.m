@@ -47,10 +47,10 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
     self.player = [ZFPlayerController playerWithScrollView:self.collectionView playerManager:playerManager containerViewTag:kPlayerViewTag];
     self.player.controlView = self.controlView;
     self.player.shouldAutoPlay = YES;
-    self.player.allowOrentitaionRotation = NO;
+    self.player.allowOrientationRotation = NO;
     self.player.disablePanMovingDirection = ZFPlayerDisablePanMovingDirectionAll;
     /// 1.0是消失100%时候
-    self.player.playerDisapperaPercent = 1.0;
+    self.player.playerDisappearPercent = 1.0;
     
     @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {

@@ -53,10 +53,10 @@ static NSString *kIdentifier = @"kIdentifier";
     self.player.disableGestureTypes = ZFPlayerDisableGestureTypesPan | ZFPlayerDisableGestureTypesPinch;
     self.player.controlView = self.controlView;
 
-    self.player.allowOrentitaionRotation = NO;
+    self.player.allowOrientationRotation = NO;
     self.player.WWANAutoPlay = YES;
     /// 1.0是完全消失时候
-    self.player.playerDisapperaPercent = 1.0;
+    self.player.playerDisappearPercent = 1.0;
     
     @zf_weakify(self)
     self.player.playerDidToEnd = ^(id  _Nonnull asset) {

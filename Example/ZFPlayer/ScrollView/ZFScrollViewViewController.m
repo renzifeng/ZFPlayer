@@ -42,8 +42,8 @@ static NSString *kVideoCover = @"https://upload-images.jianshu.io/upload_images/
     /// 播放器相关
     self.player = [[ZFPlayerController alloc] initWithScrollView:self.scrollView playerManager:playerManager containerView:self.containerView];
     self.player.controlView = self.controlView;
-    self.player.playerDisapperaPercent = 1.0;
-    self.player.playerApperaPercent = 0.0;
+    self.player.playerDisappearPercent = 1.0;
+    self.player.playerAppearPercent = 0.0;
     /// 播放小窗相关
     self.player.stopWhileNotVisible = NO;
     self.player.shouldAutoPlay = NO;

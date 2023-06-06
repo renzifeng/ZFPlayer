@@ -400,14 +400,14 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
         }
     };
     
-    scrollView.zf_playerAppearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerApperaPercent) {
+    scrollView.zf_playerAppearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerAppearPercent) {
         @zf_strongify(self)
         if (self.isFullScreen) return;
-        if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(indexPath, playerApperaPercent);
-        if ([self.controlView respondsToSelector:@selector(playerAppearingInScrollView:playerApperaPercent:)]) {
-            [self.controlView playerAppearingInScrollView:self playerApperaPercent:playerApperaPercent];
+        if (self.zf_playerAppearingInScrollView) self.zf_playerAppearingInScrollView(indexPath, playerAppearPercent);
+        if ([self.controlView respondsToSelector:@selector(playerAppearingInScrollView:playerAppearPercent:)]) {
+            [self.controlView playerAppearingInScrollView:self playerAppearPercent:playerAppearPercent];
         }
-        if (!self.stopWhileNotVisible && playerApperaPercent >= self.playerApperaPercent) {
+        if (!self.stopWhileNotVisible && playerAppearPercent >= self.playerAppearPercent) {
             if (self.containerType == ZFPlayerContainerTypeView) {
                 if (self.isSmallFloatViewShow) {
                     [self addPlayerViewToContainerView:self.containerView];
@@ -420,14 +420,14 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
         }
     };
     
-    scrollView.zf_playerDisappearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerDisapperaPercent) {
+    scrollView.zf_playerDisappearingInScrollView = ^(NSIndexPath * _Nonnull indexPath, CGFloat playerDisappearPercent) {
         @zf_strongify(self)
         if (self.isFullScreen) return;
-        if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(indexPath, playerDisapperaPercent);
-        if ([self.controlView respondsToSelector:@selector(playerDisappearingInScrollView:playerDisapperaPercent:)]) {
-            [self.controlView playerDisappearingInScrollView:self playerDisapperaPercent:playerDisapperaPercent];
+        if (self.zf_playerDisappearingInScrollView) self.zf_playerDisappearingInScrollView(indexPath, playerDisappearPercent);
+        if ([self.controlView respondsToSelector:@selector(playerDisappearingInScrollView:playerDisappearPercent:)]) {
+            [self.controlView playerDisappearingInScrollView:self playerDisappearPercent:playerDisappearPercent];
         }
-        if (playerDisapperaPercent >= self.playerDisapperaPercent) {
+        if (playerDisappearPercent >= self.playerDisappearPercent) {
             if (self.stopWhileNotVisible) { /// stop playing
                 if (self.containerType == ZFPlayerContainerTypeView) {
                     [self stopCurrentPlayingView];
@@ -830,7 +830,7 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
 @implementation ZFPlayerController (ZFPlayerOrientationRotation)
 
 - (void)addDeviceOrientationObserver {
-    if (self.allowOrentitaionRotation) {
+    if (self.allowOrientationRotation) {
         [self.orientationObserver addDeviceOrientationObserver];
     }
 }
@@ -932,10 +932,10 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
     return NO;
 }
 
-- (BOOL)allowOrentitaionRotation {
+- (BOOL)allowOrientationRotation {
     NSNumber *number = objc_getAssociatedObject(self, _cmd);
     if (number) return number.boolValue;
-    self.allowOrentitaionRotation = YES;
+    self.allowOrientationRotation = YES;
     return YES;
 }
 
@@ -976,9 +976,9 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
     }
 }
 
-- (void)setAllowOrentitaionRotation:(BOOL)allowOrentitaionRotation {
-    objc_setAssociatedObject(self, @selector(allowOrentitaionRotation), @(allowOrentitaionRotation), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    self.orientationObserver.allowOrientationRotation = allowOrentitaionRotation;
+- (void)setAllowOrientationRotation:(BOOL)allowOrientationRotation {
+    objc_setAssociatedObject(self, @selector(allowOrientationRotation), @(allowOrientationRotation), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    self.orientationObserver.allowOrientationRotation = allowOrientationRotation;
 }
 
 - (void)setExitFullScreenWhenStop:(BOOL)exitFullScreenWhenStop {
@@ -1161,16 +1161,16 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
     objc_setAssociatedObject(self, @selector(sectionAssetURLs), sectionAssetURLs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerDisapperaPercent:(CGFloat)playerDisapperaPercent {
-    playerDisapperaPercent = MIN(MAX(0.0, playerDisapperaPercent), 1.0);
-    self.scrollView.zf_playerDisapperaPercent = playerDisapperaPercent;
-    objc_setAssociatedObject(self, @selector(playerDisapperaPercent), @(playerDisapperaPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setPlayerDisappearPercent:(CGFloat)playerDisappearPercent {
+    playerDisappearPercent = MIN(MAX(0.0, playerDisappearPercent), 1.0);
+    self.scrollView.zf_playerDisappearPercent = playerDisappearPercent;
+    objc_setAssociatedObject(self, @selector(playerDisappearPercent), @(playerDisappearPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setPlayerApperaPercent:(CGFloat)playerApperaPercent {
-    playerApperaPercent = MIN(MAX(0.0, playerApperaPercent), 1.0);
-    self.scrollView.zf_playerApperaPercent = playerApperaPercent;
-    objc_setAssociatedObject(self, @selector(playerApperaPercent), @(playerApperaPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setPlayerAppearPercent:(CGFloat)playerAppearPercent {
+    playerAppearPercent = MIN(MAX(0.0, playerAppearPercent), 1.0);
+    self.scrollView.zf_playerAppearPercent = playerAppearPercent;
+    objc_setAssociatedObject(self, @selector(playerAppearPercent), @(playerAppearPercent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)setZf_playerAppearingInScrollView:(void (^)(NSIndexPath * _Nonnull, CGFloat))zf_playerAppearingInScrollView {
@@ -1238,17 +1238,17 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
-- (CGFloat)playerDisapperaPercent {
+- (CGFloat)playerDisappearPercent {
     NSNumber *number = objc_getAssociatedObject(self, _cmd);
     if (number) return number.floatValue;
-    self.playerDisapperaPercent = 0.5;
+    self.playerDisappearPercent = 0.5;
     return 0.5;
 }
 
-- (CGFloat)playerApperaPercent {
+- (CGFloat)playerAppearPercent {
     NSNumber *number = objc_getAssociatedObject(self, _cmd);
     if (number) return number.floatValue;
-    self.playerApperaPercent = 0.0;
+    self.playerAppearPercent = 0.0;
     return 0.0;
 }
 
@@ -1372,7 +1372,7 @@ static NSMutableDictionary <NSString* ,NSNumber *> *_zfPlayRecords;
     }
 }
 
-- (void)updateNoramlPlayerWithContainerView:(UIView *)containerView {
+- (void)updateNormalPlayerWithContainerView:(UIView *)containerView {
     if (self.currentPlayerManager.view && self.containerView) {
         self.containerView = containerView;
         [self.orientationObserver updateRotateView:self.currentPlayerManager.view containerView:self.containerView];

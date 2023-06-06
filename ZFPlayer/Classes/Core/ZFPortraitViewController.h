@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// default is  UIStatusBarStyleLightContent.
 @property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
-/// defalut is UIStatusBarAnimationSlide.
+/// default is UIStatusBarAnimationSlide.
 @property (nonatomic, assign) UIStatusBarAnimation statusBarAnimation;
 
 /// default is ZFDisablePortraitGestureTypesNone.

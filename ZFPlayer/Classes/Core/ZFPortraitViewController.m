@@ -159,7 +159,7 @@
     if (!_transition) {
         _transition = [[ZFPresentTransition alloc] init];
         _transition.contentFullScreenRect = [self contentFullScreenRect];
-        _transition.delagate = self;
+        _transition.delegate = self;
     }
     return _transition;
 }
@@ -169,7 +169,7 @@
         _interactiveTransition = [[ZFPersentInteractiveTransition alloc] init];
         _interactiveTransition.contentFullScreenRect = [self contentFullScreenRect];
         _interactiveTransition.viewController = self;
-        _interactiveTransition.delagate = self;
+        _interactiveTransition.delegate = self;
     }
     return _interactiveTransition;;
 }

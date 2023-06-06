@@ -44,7 +44,7 @@ static NSString * const reuseIdentifier = @"collectionViewCell";
     self.player.shouldAutoPlay = YES;
     self.player.disablePanMovingDirection = ZFPlayerDisablePanMovingDirectionAll;
     /// 1.0是消失100%时候
-    self.player.playerDisapperaPercent = 1.0;
+    self.player.playerDisappearPercent = 1.0;
     
     @zf_weakify(self)
     self.player.orientationWillChange = ^(ZFPlayerController * _Nonnull player, BOOL isFullScreen) {

@@ -44,8 +44,8 @@ static NSString *kIdentifier = @"kIdentifier";
     self.player = [ZFPlayerController playerWithScrollView:self.tableView playerManager:playerManager containerViewTag:kPlayerViewTag];
     self.player.controlView = self.controlView;
     /// 消失比例停止播放
-    self.player.playerDisapperaPercent = 0.2;
-    self.player.playerApperaPercent = 0.8;
+    self.player.playerDisappearPercent = 0.2;
+    self.player.playerAppearPercent = 0.8;
     
     /// 移动网络依然自动播放
     self.player.WWANAutoPlay = YES;

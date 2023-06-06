@@ -238,7 +238,7 @@
     self.contentView.frame = tempImageViewFrame;
     
     CGRect toRect = [self.containerView convertRect:self.containerView.bounds toView:self.containerView.window];
-    [self.delagate zf_orientationWillChange:NO];
+    [self.delegate zf_orientationWillChange:NO];
     [UIView animateWithDuration:0.3f animations:^{
         self.contentView.frame = toRect;
         fromVC.view.alpha = 0;
@@ -251,7 +251,7 @@
         [self.contentView layoutIfNeeded];
         [self.bgView removeFromSuperview];
         fromVC.view.backgroundColor = [UIColor blackColor];
-        [self.delagate zf_orientationDidChanged:NO];
+        [self.delegate zf_orientationDidChanged:NO];
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
 }
@@ -263,8 +263,8 @@
 
 - (void)setInteration:(BOOL)interation {
     _interation = interation;
-    if ([self.delagate respondsToSelector:@selector(zf_interationState:)]) {
-        [self.delagate zf_interationState:interation];
+    if ([self.delegate respondsToSelector:@selector(zf_interationState:)]) {
+        [self.delegate zf_interationState:interation];
     }
 }
 

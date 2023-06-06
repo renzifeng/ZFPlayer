@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, ZFPresentTransitionType) {
 
 @interface ZFPresentTransition : NSObject<UIViewControllerAnimatedTransitioning>
 
-@property (nonatomic, weak) id<ZFPortraitOrientationDelegate> delagate;
+@property (nonatomic, weak) id<ZFPortraitOrientationDelegate> delegate;
 
 @property (nonatomic, assign) CGRect contentFullScreenRect;
 

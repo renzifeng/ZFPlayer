@@ -44,10 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// When the player prepare to play the video.
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer prepareToPlay:(NSURL *)assetURL;
 
-/// When th player playback state changed.
+/// When the player playback state changed.
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer playStateChanged:(ZFPlayerPlaybackState)state;
 
-/// When th player loading state changed.
+/// When the player loading state changed.
 - (void)videoPlayer:(ZFPlayerController *)videoPlayer loadStateChanged:(ZFPlayerLoadState)state;
 
 #pragma mark - progress
@@ -197,12 +197,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  When the player appearing in scrollView.
  */
-- (void)playerAppearingInScrollView:(ZFPlayerController *)videoPlayer playerApperaPercent:(CGFloat)playerApperaPercent;
+- (void)playerAppearingInScrollView:(ZFPlayerController *)videoPlayer playerAppearPercent:(CGFloat)playerAppearPercent;
 
 /**
  When the player disappearing in scrollView.
  */
-- (void)playerDisappearingInScrollView:(ZFPlayerController *)videoPlayer playerDisapperaPercent:(CGFloat)playerDisapperaPercent;
+- (void)playerDisappearingInScrollView:(ZFPlayerController *)videoPlayer playerDisappearPercent:(CGFloat)playerDisappearPercent;
 
 /**
  When the small float view show.

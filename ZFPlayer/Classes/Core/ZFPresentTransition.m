@@ -86,7 +86,7 @@
     UIColor *tempColor = toVC.view.backgroundColor;
     toVC.view.backgroundColor = [tempColor colorWithAlphaComponent:0];
     toVC.view.alpha = 1;
-    [self.delagate zf_orientationWillChange:YES];
+    [self.delegate zf_orientationWillChange:YES];
     
     CGRect toRect = self.contentFullScreenRect;
     self.transiting = YES;
@@ -98,7 +98,7 @@
         self.transiting = NO;
         [toVC.view addSubview:self.contentView];
         [transitionContext completeTransition:YES];
-        [self.delagate zf_orientationDidChanged:YES];
+        [self.delegate zf_orientationDidChanged:YES];
         if (!CGRectEqualToRect(toRect, self.contentFullScreenRect)) {
             self.contentView.frame = self.contentFullScreenRect;
             [self.contentView layoutIfNeeded];
@@ -131,7 +131,7 @@
     self.contentView.frame = originRect;
     CGRect toRect = [self.containerView convertRect:self.containerView.bounds toView:toVC.view];
     [fromVC.view convertRect:self.contentView.bounds toView:self.containerView.window];
-    [self.delagate zf_orientationWillChange:NO];
+    [self.delegate zf_orientationWillChange:NO];
     self.transiting = YES;
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         fromVC.view.alpha = 0;
@@ -141,7 +141,7 @@
         [self.containerView addSubview:self.contentView];
         self.contentView.frame = self.containerView.bounds;
         [transitionContext completeTransition:YES];
-        [self.delagate zf_orientationDidChanged:NO];
+        [self.delegate zf_orientationDidChanged:NO];
         self.transiting = NO;
     }];
 }

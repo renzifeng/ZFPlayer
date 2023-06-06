@@ -126,7 +126,7 @@
 
 @interface UIApplication (ZFCacheImage)
 
-@property (nonatomic, strong, readonly) NSMutableDictionary *zf_cacheFaileTimes;
+@property (nonatomic, strong, readonly) NSMutableDictionary *zf_cacheFailedTimes;
 
 - (UIImage *)zf_cacheImageForRequest:(NSURLRequest *)request;
 - (void)zf_cacheImage:(UIImage *)image forRequest:(NSURLRequest *)request;
@@ -137,7 +137,7 @@
 
 @implementation UIApplication (ZFCacheImage)
 
-- (NSMutableDictionary *)zf_cacheFaileTimes {
+- (NSMutableDictionary *)zf_cacheFailedTimes {
     NSMutableDictionary *dict = objc_getAssociatedObject(self, _cmd);
     if (!dict) {
         dict = [[NSMutableDictionary alloc] init];
@@ -145,13 +145,13 @@
     return dict;
 }
 
-- (void)setZf_cacheFaileTimes:(NSMutableDictionary *)zf_cacheFaileTimes {
-    objc_setAssociatedObject(self, @selector(zf_cacheFaileTimes), zf_cacheFaileTimes, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setZf_cacheFailedTimes:(NSMutableDictionary *)zf_cacheFailedTimes {
+    objc_setAssociatedObject(self, @selector(zf_cacheFailedTimes), zf_cacheFailedTimes, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)zf_clearCache {
-    [self.zf_cacheFaileTimes removeAllObjects];
-    self.zf_cacheFaileTimes = nil;
+    [self.zf_cacheFailedTimes removeAllObjects];
+    self.zf_cacheFailedTimes = nil;
 }
 
 - (void)zf_clearDiskCaches {
@@ -179,23 +179,23 @@
 }
 
 - (NSUInteger)zf_failTimesForRequest:(NSURLRequest *)request {
-    NSNumber *faileTimes = [self.zf_cacheFaileTimes objectForKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
-    if (faileTimes && [faileTimes respondsToSelector:@selector(integerValue)]) {
-        return faileTimes.integerValue;
+    NSNumber *failedTimes = [self.zf_cacheFailedTimes objectForKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
+    if (failedTimes && [failedTimes respondsToSelector:@selector(integerValue)]) {
+        return failedTimes.integerValue;
     }
     return 0;
 }
 
 - (void)zf_cacheFailRequest:(NSURLRequest *)request {
-    NSNumber *faileTimes = [self.zf_cacheFaileTimes objectForKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
+    NSNumber *failedTimes = [self.zf_cacheFailedTimes objectForKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
     NSUInteger times = 0;
-    if (faileTimes && [faileTimes respondsToSelector:@selector(integerValue)]) {
-        times = [faileTimes integerValue];
+    if (failedTimes && [failedTimes respondsToSelector:@selector(integerValue)]) {
+        times = [failedTimes integerValue];
     }
     
     times++;
     
-    [self.zf_cacheFaileTimes setObject:@(times) forKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
+    [self.zf_cacheFailedTimes setObject:@(times) forKey:[NSString cachedFileNameForKey:[NSString zf_keyForRequest:request]]];
 }
 
 - (void)zf_cacheImage:(UIImage *)image forRequest:(NSURLRequest *)request {
@@ -299,12 +299,12 @@
     }
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [self downloadWithReqeust:request holder:placeholderImageName];
+    [self downloadWithRequest:request holder:placeholderImageName];
 }
 
 #pragma mark - private method
 
-- (void)downloadWithReqeust:(NSURLRequest *)theRequest holder:(UIImage *)holder {
+- (void)downloadWithRequest:(NSURLRequest *)theRequest holder:(UIImage *)holder {
     UIImage *cachedImage = [[UIApplication sharedApplication] zf_cacheImageForRequest:theRequest];
     
     if (cachedImage) {
